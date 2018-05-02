@@ -26,7 +26,7 @@ use RuntimeException;
  * @since 2017.07.10
  * @version 1.0
  */
-class ModelNotFound extends RuntimeException
+class ModelNotFoundException extends RuntimeException
 {
 
     /**
