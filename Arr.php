@@ -47,7 +47,7 @@ class Arr
                 $inputs = explode($delimiter, $inputs);
             }
 
-            $inputs = array_filter($inputs); // 过滤null
+            $inputs = array_filter($inputs);
 
             if (true === $allowedEmpty) {
                 return $inputs;
@@ -59,45 +59,5 @@ class Arr
         }
 
         return $inputs;
-    }
-
-    /**
-     * 数组合并支持 + 算法.
-     *
-     * @param array $option
-     * @param bool  $recursion
-     *
-     * @return array
-     */
-    public static function merge(array $option, bool $recursion = true): array
-    {
-        $extend = [];
-
-        foreach ($option as $key => $value) {
-            if (0 === strpos($key, '+')) {
-                $extend[ltrim($key, '+')] = $value;
-                unset($option[$key]);
-            }
-        }
-
-        foreach ($extend as $key => $value) {
-            if (isset($option[$key]) &&
-                is_array($option[$key]) &&
-                is_array($value)) {
-                $option[$key] = array_merge($option[$key], $value);
-            } else {
-                $option[$key] = $value;
-            }
-        }
-
-        if (true === $recursion) {
-            foreach ($option as $key => $value) {
-                if (is_array($value)) {
-                    $option[$key] = static::merge($value);
-                }
-            }
-        }
-
-        return $option;
     }
 }
