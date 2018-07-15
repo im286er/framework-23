@@ -40,8 +40,6 @@ class Dump
      *
      * @param mixed $var
      * @param bool  $simple
-     *
-     * @return string|void
      */
     public static function dump($var, bool $simple = false)
     {
@@ -55,38 +53,7 @@ class Dump
 
             $dump->dump($varCloner->cloneVar($var));
         } else {
-            $args = func_get_args();
-            array_shift($args);
-            array_shift($args);
-            array_unshift($args, $var);
-
-            return self::varDump(...$args);
-        }
-    }
-
-    /**
-     * 调试变量.
-     *
-     * @param mixed $var
-     * @param bool  $echo
-     *
-     * @return mixed
-     */
-    public static function varDump($var, bool $echo = true)
-    {
-        ob_start();
-        var_dump($var);
-        $output = ob_get_clean();
-
-        if (!extension_loaded('xdebug')) {
-            $output = preg_replace("/\\]\\=\\>\n(\\s+)/m", '] => ', $output);
-            $output = 'cli' === PHP_SAPI ? $output : '<pre>'.htmlspecialchars($output, ENT_COMPAT, 'UTF-8').'</pre>';
-        }
-
-        if ($echo) {
-            echo $output;
-        } else {
-            return $output;
+            var_dump($var);
         }
     }
 }
