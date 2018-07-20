@@ -20,9 +20,8 @@ declare(strict_types=1);
 
 namespace Leevel\Router\Match;
 
-use Leevel\Http\Request;
+use Leevel\Http\IRequest;
 use Leevel\Router\IRouter;
-use Leevel\Router\Router;
 
 /**
  * 路由 pathInfo 匹配.
@@ -38,39 +37,29 @@ class PathInfo implements IMatch
     /**
      * Router.
      *
-     * @var \Leevel\Router\Router
+     * @var \Leevel\Router\IRouter
      */
     protected $router;
 
     /**
      * HTTP Request.
      *
-     * @var \Leevel\Http\Request
+     * @var \Leevel\Http\IRequest
      */
     protected $request;
 
     /**
      * 匹配数据项.
      *
-     * @param \Leevel\Router\Router $router
-     * @param \Leevel\Http\Request  $request
+     * @param \Leevel\Router\IRouter $router
+     * @param \Leevel\Http\IRequest  $request
      *
      * @return array
      */
-    public function matche(Router $router, Request $request): array
+    public function matche(IRouter $router, IRequest $request): array
     {
         $pathInfo = $request->getPathInfo();
-        $pathInfo = trim($pathInfo, '/');
-
-        // 首页
-        if (!$pathInfo) {
-            return [
-                IRouter::CONTROLLER => IRouter::DEFAULT_HOME_CONTROLLER,
-                IRouter::ACTION     => IRouter::DEFAULT_HOME_ACTION,
-            ];
-        }
-
-        $pathInfo = '/'.$pathInfo;
+        $pathInfo = '/'.trim($pathInfo, '/');
 
         return $router->matchePath($pathInfo);
     }
