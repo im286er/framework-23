@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Bootstrap;
 
+use Composer\Autoload\ClassLoader;
 use Leevel\Di\Container;
 use Leevel\Di\Provider;
 use Leevel\Event\Provider\Register as EventProvider;
@@ -132,15 +133,13 @@ class Project extends Container implements IProject
 
     /**
      * 构造函数
-     * 受保护的禁止外部通过 new 实例化，只能通过 singletons 生成单一实例.
+     * 项目中通过 singletons 生成单一实例.
      *
      * @param string $path
      */
-    protected function __construct(?string $path = null)
+    public function __construct(string $path)
     {
-        if ($path) {
-            $this->setPath($path);
-        }
+        $this->setPath($path);
 
         $this->registerBaseServices();
 
@@ -150,7 +149,7 @@ class Project extends Container implements IProject
     /**
      * 禁止克隆.
      */
-    protected function __clone()
+    public function __clone()
     {
         throw new RuntimeException('Project disallowed clone.');
     }
@@ -227,15 +226,6 @@ class Project extends Container implements IProject
     public function setPath(string $path)
     {
         $this->path = $path;
-
-        if (!is_writable($this->runtimePath())) {
-            throw new RuntimeException(
-                sprintf(
-                    'Runtime path %s is not writeable.',
-                    $this->runtimePath()
-                )
-            );
-        }
     }
 
     /**
@@ -251,6 +241,20 @@ class Project extends Container implements IProject
     }
 
     /**
+     * 设置应用路径.
+     *
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function setAppPath(string $path)
+    {
+        $this->appPath = $path;
+
+        return $this;
+    }
+
+    /**
      * 应用路径.
      *
      * @param bool|string $app
@@ -263,20 +267,6 @@ class Project extends Container implements IProject
         return ($this->appPath ?? $this->path.DIRECTORY_SEPARATOR.'application').
             ($app ? DIRECTORY_SEPARATOR.$this->normalizeApp($app) : $app).
             $this->normalizePath($path);
-    }
-
-    /**
-     * 设置应用路径.
-     *
-     * @param string $path
-     *
-     * @return $this
-     */
-    public function setAppPath(string $path)
-    {
-        $this->appPath = $path;
-
-        return $this;
     }
 
     /**
@@ -434,7 +424,7 @@ class Project extends Container implements IProject
      *
      * @return $this
      */
-    public function setPathEnv(string $path)
+    public function setEnvPath(string $path)
     {
         $this->envPath = $path;
 
@@ -553,8 +543,9 @@ class Project extends Container implements IProject
      * 取得 composer.
      *
      * @return \Composer\Autoload\ClassLoader
+     * @codeCoverageIgnore
      */
-    public function composer()
+    public function composer(): ClassLoader
     {
         return require $this->path.'/vendor/autoload.php';
     }
@@ -565,12 +556,14 @@ class Project extends Container implements IProject
      * @param string $namespaces
      *
      * @return null|string
+     * @codeCoverageIgnore
      */
     public function getPathByComposer(string $namespaces)
     {
         $namespaces = explode('\\', $namespaces);
 
         $prefix = $this->composer()->getPrefixesPsr4();
+
         if (!isset($prefix[$namespaces[0].'\\'])) {
             return;
         }
@@ -617,7 +610,7 @@ class Project extends Container implements IProject
      *
      * @return \Leevel\Di\Provider
      */
-    public function makeProvider($provider)
+    public function makeProvider(string $provider)
     {
         return new $provider($this);
     }
