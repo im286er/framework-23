@@ -43,7 +43,7 @@ class LoadI18n
      */
     public function handle(IProject $project): void
     {
-        $i18nDefault = $project['option']['i18n\default'];
+        $i18nDefault = $project['option']['i18n\\default'];
 
         if ($project->isCachedI18n($i18nDefault)) {
             $data = (array) include $project->i18nCachedPath($i18nDefault);
