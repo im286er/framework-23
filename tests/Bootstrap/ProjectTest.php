@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace Tests\Bootstrap;
 
-use Leevel\Bootstrap\Project;
+use Leevel\Bootstrap\Project as Projects;
 use Leevel\Di\Container;
 use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
@@ -611,6 +611,13 @@ class ProjectTest extends TestCase
     }
 }
 
+class Project extends Projects
+{
+    protected function registerBaseProvider()
+    {
+    }
+}
+
 class ProviderTest1 extends Provider
 {
     public function __construct(Project $project)
@@ -673,6 +680,7 @@ class OptionTest
                 ],
             ];
         }
+
         if ('_composer.providers' === $name) {
             return [];
         }
