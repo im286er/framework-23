@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Kernel;
 
+use Composer\Autoload\ClassLoader;
 use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 
@@ -100,6 +101,15 @@ interface IProject extends IContainer
     public function path(string $path = '');
 
     /**
+     * 设置应用路径.
+     *
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function setAppPath(string $path);
+
+    /**
      * 应用路径.
      *
      * @param bool|string $app
@@ -108,15 +118,6 @@ interface IProject extends IContainer
      * @return string
      */
     public function appPath($app = true, string $path = '');
-
-    /**
-     * 设置应用路径.
-     *
-     * @param string $path
-     *
-     * @return $this
-     */
-    public function setAppPath(string $path);
 
     /**
      * 取得应用主题目录.
@@ -224,7 +225,7 @@ interface IProject extends IContainer
      *
      * @return $this
      */
-    public function setPathEnv(string $path);
+    public function setEnvPath(string $path);
 
     /**
      * 环境变量路径.
@@ -306,8 +307,9 @@ interface IProject extends IContainer
      * 取得 composer.
      *
      * @return \Composer\Autoload\ClassLoader
+     * @codeCoverageIgnore
      */
-    public function composer();
+    public function composer(): ClassLoader;
 
     /**
      * 获取命名空间路径.
@@ -315,6 +317,7 @@ interface IProject extends IContainer
      * @param string $namespaces
      *
      * @return null|string
+     * @codeCoverageIgnore
      */
     public function getPathByComposer(string $namespaces);
 
@@ -346,7 +349,7 @@ interface IProject extends IContainer
      *
      * @return \Leevel\Di\Provider
      */
-    public function makeProvider($provider);
+    public function makeProvider(string $provider);
 
     /**
      * 执行 bootstrap.
