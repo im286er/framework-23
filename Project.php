@@ -137,9 +137,11 @@ class Project extends Container implements IProject
      *
      * @param string $path
      */
-    public function __construct(string $path)
+    public function __construct(?string $path = null)
     {
-        $this->setPath($path);
+        if ($path) {
+            $this->setPath($path);
+        }
 
         $this->registerBaseServices();
 
@@ -763,6 +765,8 @@ class Project extends Container implements IProject
 
     /**
      * 注册基础服务提供者.
+     *
+     * @codeCoverageIgnore
      */
     protected function registerBaseProvider()
     {
