@@ -101,9 +101,6 @@ array (
             1 => 'Leevel\\Page\\PageFactory',
           ),
         ),
-        'Leevel\\Queue\\Provider\\Register' => 
-        array (
-        ),
         'Leevel\\Protocol\\Provider\\Register' => 
         array (
           'swoole.default.server' => 
@@ -141,12 +138,13 @@ array (
         0 => 'Leevel\\Auth\\Provider\\Register',
         1 => 'Leevel\\Cookie\\Provider\\Register',
         2 => 'Leevel\\Mvc\\Provider\\Register',
-        3 => 'Leevel\\Session\\Provider\\Register',
-        4 => 'Leevel\\Validate\\Provider\\Register',
-        5 => 'Leevel\\View\\Provider\\Register',
-        6 => 'Demo\\Provider\\Register',
-        7 => 'Common\\Infra\\Provider\\Event',
-        8 => 'Common\\Infra\\Provider\\Router',
+        3 => 'Leevel\\Queue\\Provider\\Register',
+        4 => 'Leevel\\Session\\Provider\\Register',
+        5 => 'Leevel\\Validate\\Provider\\Register',
+        6 => 'Leevel\\View\\Provider\\Register',
+        7 => 'Demo\\Provider\\Register',
+        8 => 'Common\\Infra\\Provider\\Event',
+        9 => 'Common\\Infra\\Provider\\Router',
       ),
       'ignores' => 
       array (
