@@ -357,7 +357,7 @@ if (!function_exists('__')) {
      */
     function __(string $text, ...$arr)
     {
-        return Leevel::__($text, ...$arr);
+        return Leevel::gettext($text, ...$arr);
     }
 }
 
@@ -372,6 +372,6 @@ if (!function_exists('gettext')) {
      */
     function gettext(string $text, ...$arr)
     {
-        return __($text, ...$arr);
+        return Leevel::gettext($text, ...$arr);
     }
 }
