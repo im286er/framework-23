@@ -600,14 +600,35 @@ class ProjectTest extends TestCase
 
         $project->registerProviders();
 
+        // for deferredAlias
         $this->assertArrayNotHasKey('providerDeferTest1', $_SERVER);
-
         $this->assertSame('bar', $project->make('foo'));
         $this->assertSame('bar', $project->make(ProviderDeferTest1::class));
-
         $this->assertSame(1, $_SERVER['providerDeferTest1']);
 
-        unset($_SERVER['providerDeferTest1']);
+        // for providers
+        $this->assertSame(1, $_SERVER['testRegisterProvidersRegister']);
+        $this->assertArrayNotHasKey('testRegisterProvidersBootstrap', $_SERVER);
+
+        unset(
+            $_SERVER['providerDeferTest1'],
+            $_SERVER['testRegisterProvidersRegister']
+        );
+
+        // bootstrap
+        $this->assertFalse($project->isBootstrap());
+        $project->bootstrapProviders();
+        $this->assertSame(1, $_SERVER['testRegisterProvidersBootstrap']);
+        unset($_SERVER['testRegisterProvidersBootstrap']);
+        $this->assertTrue($project->isBootstrap());
+
+        // bootstrap again but already bootstrap
+        $project->bootstrapProviders();
+        $this->assertArrayNotHasKey('testRegisterProvidersBootstrap', $_SERVER);
+
+        // again but already bootstrap
+        $project->registerProviders();
+        $this->assertArrayNotHasKey('testRegisterProvidersRegister', $_SERVER);
     }
 }
 
@@ -682,7 +703,7 @@ class OptionTest
         }
 
         if ('_composer.providers' === $name) {
-            return [];
+            return [ProviderTest3::class];
         }
     }
 }
@@ -707,5 +728,22 @@ class ProviderDeferTest1 extends Provider
                 'Tests\\Bootstrap\\ProviderDeferTest1',
             ],
         ];
+    }
+}
+
+class ProviderTest3 extends Provider
+{
+    public function __construct(Project $project)
+    {
+    }
+
+    public function bootstrap()
+    {
+        $_SERVER['testRegisterProvidersBootstrap'] = 1;
+    }
+
+    public function register()
+    {
+        $_SERVER['testRegisterProvidersRegister'] = 1;
     }
 }

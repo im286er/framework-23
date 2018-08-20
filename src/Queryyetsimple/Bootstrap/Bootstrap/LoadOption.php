@@ -109,10 +109,12 @@ class LoadOption
             return;
         }
 
+        // @codeCoverageIgnoreStart
         if (function_exists('gz_handler') && $option->get('start_gzip')) {
             ob_start('gz_handler');
         } else {
             ob_start();
         }
+        // @codeCoverageIgnoreEnd
     }
 }

@@ -59,7 +59,7 @@ class Load
     public function __construct(string $dir)
     {
         if (!is_dir($dir)) {
-            throw new RuntimeException('Option load dir is not exits.');
+            throw new RuntimeException(sprintf('Option load dir %s is not exits.', $dir));
         }
 
         $this->dir = $dir;
@@ -116,7 +116,7 @@ class Load
         $_ENV = [];
 
         try {
-            (new Dotenv($project->envPath(), $project->envFile()))->load();
+            (new Dotenv($project->envPath(), $project->envFile()))->overload();
         } catch (InvalidPathException $e) {
             throw new RuntimeException($e->getMessage());
         } catch (InvalidFileException $e) {

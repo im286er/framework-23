@@ -47,6 +47,8 @@ class LoadI18n
 
         if ($project->isCachedI18n($i18nDefault)) {
             $data = (array) include $project->i18nCachedPath($i18nDefault);
+
+            $data = $data[$i18nDefault] ?? [];
         } else {
             $load = (new Load([$project->i18nPath()]))->
 

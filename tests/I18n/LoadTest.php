@@ -265,7 +265,7 @@ eot;
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage(
-            'I18n load dir is not exits.'
+            sprintf('I18n load dir %s is not exits.', __DIR__.'/i18nNotExists/zh-CN')
         );
 
         (new Load([__DIR__.'/i18nNotExists']))->loadData();
