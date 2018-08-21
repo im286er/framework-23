@@ -101,7 +101,11 @@ class RegisterRuntimeTest extends TestCase
             return $runtime;
         });
 
+        $old = error_reporting();
+
         $bootstrap->handle($project);
+
+        error_reporting($old);
 
         $this->assertInstanceof(IContainer::class, $project);
         $this->assertInstanceof(Container::class, $project);
@@ -153,7 +157,11 @@ class RegisterRuntimeTest extends TestCase
             return $runtime;
         });
 
+        $old = error_reporting();
+
         $bootstrap->handle($project);
+
+        error_reporting($old);
 
         $this->assertInstanceof(IContainer::class, $project);
         $this->assertInstanceof(Container::class, $project);
