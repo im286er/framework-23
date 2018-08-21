@@ -30,7 +30,6 @@ use Leevel\Di\IContainer;
 use Leevel\Http\IRequest;
 use Leevel\Http\IResponse;
 use Leevel\Kernel\Runtime\IRuntime;
-use Leevel\Option\Option;
 use Tests\TestCase;
 
 /**
@@ -85,27 +84,13 @@ class RegisterRuntimeTest extends TestCase
             return $request;
         });
 
-        $option = new Option([
-            'app' => [
-                'environment' => 'production',
-            ],
-        ]);
-
-        $project->singleton('option', function () use ($option) {
-            return $option;
-        });
-
         $runtime = $this->createMock(IRuntime::class);
 
         $project->singleton(IRuntime::class, function () use ($runtime) {
             return $runtime;
         });
 
-        $old = error_reporting();
-
-        $bootstrap->handle($project);
-
-        error_reporting($old);
+        $bootstrap->handle($project, true);
 
         $this->assertInstanceof(IContainer::class, $project);
         $this->assertInstanceof(Container::class, $project);
@@ -134,16 +119,6 @@ class RegisterRuntimeTest extends TestCase
             return $request;
         });
 
-        $option = new Option([
-            'app' => [
-                'environment' => 'development',
-            ],
-        ]);
-
-        $project->singleton('option', function () use ($option) {
-            return $option;
-        });
-
         $e = new Exception('foo.');
 
         $response = $this->createMock(IResponse::class);
@@ -157,11 +132,7 @@ class RegisterRuntimeTest extends TestCase
             return $runtime;
         });
 
-        $old = error_reporting();
-
-        $bootstrap->handle($project);
-
-        error_reporting($old);
+        $bootstrap->handle($project, true);
 
         $this->assertInstanceof(IContainer::class, $project);
         $this->assertInstanceof(Container::class, $project);
