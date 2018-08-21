@@ -115,6 +115,7 @@ class LoadOption
         } else {
             ob_start();
         }
+
         // @codeCoverageIgnoreEnd
     }
 }
