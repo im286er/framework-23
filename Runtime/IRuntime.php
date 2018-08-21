@@ -22,6 +22,7 @@ namespace Leevel\Kernel\Runtime;
 
 use Exception;
 use Leevel\Http\IRequest;
+use Leevel\Http\IResponse;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -52,7 +53,7 @@ interface IRuntime
      *
      * @return \Leevel\Http\IResponse
      */
-    public function render(IRequest $request, Exception $e);
+    public function render(IRequest $request, Exception $e): IResponse;
 
     /**
      * 命令行渲染.
