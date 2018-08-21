@@ -54,16 +54,22 @@ class RegisterRuntime
     {
         $this->project = $project;
 
-        error_reporting(E_ALL);
+        $test = 2 === func_num_args();
 
-        set_error_handler([$this, 'setErrorHandle']);
+        if (!$test) {
+            // @codeCoverageIgnoreStart
+            error_reporting(E_ALL);
 
-        set_exception_handler([$this, 'setExceptionHandler']);
+            set_error_handler([$this, 'setErrorHandle']);
 
-        register_shutdown_function([$this, 'registerShutdownFunction']);
+            set_exception_handler([$this, 'setExceptionHandler']);
 
-        if ('production' === $project->environment()) {
-            ini_set('display_errors', 'Off');
+            register_shutdown_function([$this, 'registerShutdownFunction']);
+
+            if ('production' === $project->environment()) {
+                ini_set('display_errors', 'Off');
+            }
+            // @codeCoverageIgnoreEnd
         }
     }
 
