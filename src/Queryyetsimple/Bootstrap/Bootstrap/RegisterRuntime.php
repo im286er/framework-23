@@ -25,6 +25,7 @@ use Exception;
 use Leevel\Kernel\IProject;
 use Leevel\Kernel\Runtime\IRuntime;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Throwable;
 
 /**
  * 注册运行时异常.
@@ -69,24 +70,26 @@ class RegisterRuntime
     /**
      * 设置错误句柄.
      *
-     * @param int      $code
-     * @param string   $description
-     * @param string   $file
-     * @param interger $line
-     * @param mixed    $context
+     * @param int    $code
+     * @param string $description
+     * @param string $file
+     * @param int    $line
+     * @param mixed  $context
      */
-    public function setErrorHandle($code, $description, $file = null, $line = null, $context = null)
+    public function setErrorHandle(int $code, string $description, ?string $file = null, ?int $line = null, $context = null)
     {
         // 根据 error_reporing 等级来确定是否抛出错误
         if (!(error_reporting() & $code)) {
             return;
         }
 
-        throw new ErrorException($description, 0, $code, $file, $line);
+        throw new ErrorException($description, 0, $code, (string) ($file), (int) ($line));
     }
 
     /**
      * 设置退出句柄.
+     *
+     * @codeCoverageIgnore
      */
     public function registerShutdownFunction()
     {
@@ -100,7 +103,7 @@ class RegisterRuntime
      *
      * @param \Throwable $e
      */
-    public function setExceptionHandler($e)
+    public function setExceptionHandler(Throwable $e)
     {
         if (!$e instanceof Exception) {
             $e = new ErrorException(
@@ -115,8 +118,10 @@ class RegisterRuntime
 
         try {
             $this->getRuntime()->report($e);
+            // @codeCoverageIgnoreStart
         } catch (Exception $e) {
         }
+        // @codeCoverageIgnoreEnd
 
         if ($this->project->console()) {
             $this->renderConsoleResponse($e);
@@ -152,10 +157,10 @@ class RegisterRuntime
      *
      * @return \ErrorException
      */
-    protected function formatErrorException(array $error)
+    protected function formatErrorException(array $error): ErrorException
     {
         return new ErrorException(
-            $error['message'], $error['type'], 0, $error['file'], $error['line']
+            (string) ($error['message']), (int) ($error['type']), 0, (string) ($error['file']), (int) ($error['line'])
         );
     }
 
@@ -164,7 +169,7 @@ class RegisterRuntime
      *
      * @return \Leevel\Kernel\Exception\IRuntime
      */
-    protected function getRuntime()
+    protected function getRuntime(): IRuntime
     {
         return $this->project->make(IRuntime::class);
     }

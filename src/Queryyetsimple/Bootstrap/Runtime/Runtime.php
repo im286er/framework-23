@@ -79,16 +79,22 @@ abstract class Runtime implements IRuntime
         }
 
         try {
-            // 系统核心组件遇到异常，直接抛出异常
+            /*
+             * 系统核心组件遇到异常，直接抛出异常
+             * @codeCoverageIgnoreStart
+             */
             if (!is_object($this->container->make('option'))) {
                 echo $this->renderExceptionWithWhoops($e);
                 exit();
             }
-
+            /** @codeCoverageIgnoreEnd */
             $log = $this->container->make(ILog::class);
+
+            // @codeCoverageIgnoreStart
         } catch (Exception $e) {
             throw $e;
         }
+        // @codeCoverageIgnoreEnd
 
         $log->error(
             $e->getMessage(),
@@ -107,7 +113,7 @@ abstract class Runtime implements IRuntime
      *
      * @return \Leevel\Http\IResponse
      */
-    public function render(IRequest $request, Exception $e)
+    public function render(IRequest $request, Exception $e): IResponse
     {
         if (method_exists($e, 'render') && $response = $e->render($request, $e)) {
             if (!($response instanceof IResponse)) {
@@ -380,7 +386,7 @@ abstract class Runtime implements IRuntime
      *
      * @return bool
      */
-    protected function isHttpException(Exception $e)
+    protected function isHttpException(Exception $e): bool
     {
         return $e instanceof HttpException;
     }
