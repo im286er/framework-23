@@ -19,6 +19,7 @@ declare(strict_types=1);
  */
 
 use Leevel\Bootstrap\Project;
+use Leevel\Di\IContainer;
 use Leevel\Log\ILog;
 use Leevel\Support\Debug\Dump;
 
@@ -43,24 +44,11 @@ class Leevel
      */
     public static function __callStatic(string $method, array $args)
     {
-        $instance = Project::singletons();
-
-        $callback = [
-            $instance,
-            $method,
-        ];
-
-        if (!is_callable($callback)) {
-            throw new BadMethodCallException(
-                sprintf('Method %s is not exits.', $method)
-            );
-        }
-
-        return call_user_func_array($callback, $args);
+        return call_user_func_array([static::singletons(), $method], $args);
     }
 
     /**
-     * 语言包别名.
+     * 获取语言.
      *
      * @param string $text
      * @param array  $arr
@@ -69,7 +57,19 @@ class Leevel
      */
     public static function __(string $text, ...$arr)
     {
-        return static::gettext($text, ...$arr);
+        static $i18n;
+
+        if (null === $i18n) {
+            if (!is_object($i18n = static::project('i18n'))) {
+                $i18n = 'sprintf';
+            } else {
+                $i18n = [$i18n, 'gettext'];
+            }
+        }
+
+        array_unshift($arr, $text);
+
+        return call_user_func_array($i18n, $arr);
     }
 
     /**
@@ -78,15 +78,15 @@ class Leevel
      * @param null|string $instance
      * @param array       $args
      *
-     * @return \Leevel\Bootstrap\Project
+     * @return \Leevel\Bootstrap\Project|mixed
      */
     public static function project(?string $instance = null, array $args = [])
     {
         if (null === $instance) {
-            return Project::singletons();
+            return static::singletons();
         }
 
-        return Project::singletons()->make($instance, $args);
+        return static::singletons()->make($instance, $args);
     }
 
     /**
@@ -96,7 +96,7 @@ class Leevel
      * @param null|string $instance
      * @param array       $args
      *
-     * @return \Leevel\Bootstrap\Project
+     * @return \Leevel\Bootstrap\Project|mixed
      */
     public static function app(?string $instance = null, array $args = [])
     {
@@ -117,35 +117,18 @@ class Leevel
     /**
      * 取得项目的环境变量.支持 boolean, empty 和 null.
      *
-     * @param string $name
-     * @param mixed  $defaults
+     * @param mixed $name
+     * @param mixed $defaults
      *
      * @return mixed
      */
     public static function env(string $name, $defaults = null)
     {
-        switch (true) {
-            case array_key_exists($name, $_ENV):
-                $name = $_ENV[$name];
-
-                break;
-            case array_key_exists($name, $_SERVER):
-                $name = $_SERVER[$name];
-
-                break;
-            default:
-                $name = getenv($name);
-
-                if (false === $name) {
-                    $name = static::value($defaults);
-                }
+        if (false === $value = getenv($name)) {
+            $value = static::value($defaults);
         }
 
-        if (is_string($name)) {
-            $name = strtolower($name);
-        }
-
-        switch ($name) {
+        switch ($value) {
             case 'true':
             case '(true)':
                 return true;
@@ -160,13 +143,12 @@ class Leevel
                 return;
         }
 
-        if ($name && strlen($name) > 1 &&
-            '"' === $name[0] &&
-            '"' === $name[strlen($name) - 1]) {
-            return substr($name, 1, -1);
+        if (is_string($value) && strlen($value) > 1 &&
+            '"' === $value[0] && '"' === $value[strlen($value) - 1]) {
+            return substr($value, 1, -1);
         }
 
-        return $name;
+        return $value;
     }
 
     /**
@@ -186,15 +168,20 @@ class Leevel
     /**
      * 日志.
      *
-     * @param string $level
-     * @param mixed  $message
+     * @param string $message = null
      * @param array  $context
      * @param string $level
      * @param bool   $write
+     *
+     * @return mixed
      */
-    public static function log($message, array $context = [], string $level = ILog::INFO, bool $write = false)
+    public static function log(?string $message = null, array $context = [], string $level = ILog::INFO, bool $write = false)
     {
-        static::project('log')->{$write ? 'write' : 'log'}($level, $message, $context);
+        if (null === $message) {
+            return static::project('log');
+        }
+
+        return static::project('log')->{$write ? 'write' : 'log'}($level, $message, $context);
     }
 
     /**
@@ -321,7 +308,7 @@ class Leevel
     }
 
     /**
-     * 语言包.
+     * 获取语言.
      *
      * @param string $text
      * @param array  $arr
@@ -330,25 +317,24 @@ class Leevel
      */
     public static function gettext(string $text, ...$arr)
     {
-        static $i18n;
+        return static::__($text, ...$arr);
+    }
 
-        if (null === $i18n) {
-            if (!is_object($i18n = static::project('i18n'))) {
-                $i18n = 'sprintf';
-            } else {
-                $i18n = [$i18n, 'gettext'];
-            }
-        }
-
-        array_unshift($arr, $text);
-
-        return call_user_func_array($i18n, $arr);
+    /**
+     * 返回容器.
+     *
+     * @return \Leevel\Di\IContainer
+     * @codeCoverageIgnore
+     */
+    protected static function singletons(): IContainer
+    {
+        return Project::singletons();
     }
 }
 
 if (!function_exists('__')) {
     /**
-     * 语言包.
+     * 获取语言.
      *
      * @param string $text
      * @param array  $arr
@@ -357,13 +343,13 @@ if (!function_exists('__')) {
      */
     function __(string $text, ...$arr)
     {
-        return Leevel::gettext($text, ...$arr);
+        return Leevel::__($text, ...$arr);
     }
 }
 
 if (!function_exists('gettext')) {
     /**
-     * 语言包.
+     * 获取语言.
      *
      * @param string $text
      * @param array  $arr
@@ -372,6 +358,6 @@ if (!function_exists('gettext')) {
      */
     function gettext(string $text, ...$arr)
     {
-        return Leevel::gettext($text, ...$arr);
+        return Leevel::__($text, ...$arr);
     }
 }

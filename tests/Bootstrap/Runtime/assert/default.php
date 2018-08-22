@@ -18,27 +18,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\Bootstrap\Runtime;
-
-use Whoops\Exception\Inspector as BaseInspector;
-
 /**
- * Inspector.
- *
- * @author Xiangmin Liu <635750556@qq.com>
- *
- * @since 2018.05.01
- *
- * @version 1.0
- * @codeCoverageIgnore
+ * 默认模板
  */
-class Inspector extends BaseInspector
-{
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTrace($e)
-    {
-        return $e->getTrace();
-    }
+$title = isset($type) ? $type : 'Whoops!';
+
+if (!isset($message)) {
+    $message = 'Unknown error.';
 }
+
+if (isset($file, $line)) {
+    $title .= sprintf('<div class="file">#FILE %s #LINE %s</div>', $file, $line);
+}
+
+require __DIR__.'/layout.php';

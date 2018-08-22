@@ -62,19 +62,6 @@ class ProjectTest extends TestCase
         $project2 = clone $project;
     }
 
-    public function testSingletons()
-    {
-        $project = Project::singletons($appPath = __DIR__.'/app');
-
-        $this->assertInstanceof(IContainer::class, $project);
-        $this->assertInstanceof(Container::class, $project);
-
-        $this->assertSame($appPath, $project->path());
-        $this->assertSame($appPath.'/foobar', $project->path('foobar'));
-
-        $this->assertSame($project, Project::singletons());
-    }
-
     public function testVersion()
     {
         $project = new Project($appPath = __DIR__.'/app');
@@ -689,13 +676,13 @@ class OptionTest
     {
         if ('_deferred_providers' === $name) {
             return [
-                0 => [
+                [
                     'foo' => 'Tests\\Bootstrap\\ProviderDeferTest1',
                 ],
-                1 => [
+                [
                     'Tests\\Bootstrap\\ProviderDeferTest1' => [
                         'foo' => [
-                            0 => 'Tests\\Bootstrap\\ProviderDeferTest1',
+                            'Tests\\Bootstrap\\ProviderDeferTest1',
                         ],
                     ],
                 ],

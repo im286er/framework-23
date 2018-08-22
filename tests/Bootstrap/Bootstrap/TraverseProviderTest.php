@@ -87,13 +87,13 @@ class OptionTest
     {
         if ('_deferred_providers' === $name) {
             return [
-                0 => [
+                [
                     'foo' => 'Tests\\Bootstrap\\Bootstrap\\ProviderDeferTest1',
                 ],
-                1 => [
+                [
                     'Tests\\Bootstrap\\Bootstrap\\ProviderDeferTest1' => [
                         'foo' => [
-                            0 => 'Tests\\Bootstrap\\Bootstrap\\ProviderDeferTest1',
+                            'Tests\\Bootstrap\\Bootstrap\\ProviderDeferTest1',
                         ],
                     ],
                 ],

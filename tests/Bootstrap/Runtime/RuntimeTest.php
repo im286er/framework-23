@@ -23,12 +23,15 @@ namespace Tests\Bootstrap\Runtime;
 use Exception;
 use Leevel\Bootstrap\Project as Projects;
 use Leevel\Bootstrap\Runtime\Runtime;
+use Leevel\Database\Ddd\EntityNotFoundException;
 use Leevel\Di\Container;
-// use Leevel\Di\Provider;
-// use Leevel\Filesystem\Fso;
 use Leevel\Di\IContainer;
 use Leevel\Http\IRequest;
 use Leevel\Http\IResponse;
+use Leevel\Http\Response;
+use Leevel\Kernel\Exception\InternalServerErrorHttpException;
+use Leevel\Kernel\Exception\MethodNotAllowedHttpException;
+use Leevel\Kernel\Exception\NotFoundHttpException;
 use Leevel\Log\ILog;
 use Leevel\Option\Option;
 use Tests\TestCase;
@@ -107,8 +110,8 @@ class RuntimeTest extends TestCase
 
         $request = $this->createMock(IRequest::class);
 
-        $request->method('isCli')->willReturn(true);
-        $this->assertTrue($request->isCli());
+        $request->method('isAcceptJson')->willReturn(false);
+        $this->assertFalse($request->isAcceptJson());
 
         $project->singleton('request', function () use ($request) {
             return $request;
@@ -130,8 +133,353 @@ class RuntimeTest extends TestCase
 
         $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->render($request, $e));
 
-        $this->assertContains('Tests\Bootstrap\Runtime\Exception1: hello world in file', $resultResponse->getContent());
+        $this->assertContains('Tests\\Bootstrap\\Runtime\\Exception1: hello world in file', $resultResponse->getContent());
         $this->assertSame(500, $resultResponse->getStatusCode());
+    }
+
+    public function testRenderWithCustomRenderMethod()
+    {
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $request = $this->createMock(IRequest::class);
+
+        $request->method('isAcceptJson')->willReturn(false);
+        $this->assertFalse($request->isAcceptJson());
+
+        $project->singleton('request', function () use ($request) {
+            return $request;
+        });
+
+        $option = new Option([
+            'app' => [
+                'debug' => true,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime1($project);
+
+        $e = new Exception3('hello world');
+
+        $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->render($request, $e));
+
+        $this->assertSame('hello world', $resultResponse->getContent());
+        $this->assertSame(500, $resultResponse->getStatusCode());
+    }
+
+    public function testRenderWithCustomRenderMethod2()
+    {
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $request = $this->createMock(IRequest::class);
+
+        $request->method('isAcceptJson')->willReturn(false);
+        $this->assertFalse($request->isAcceptJson());
+
+        $project->singleton('request', function () use ($request) {
+            return $request;
+        });
+
+        $option = new Option([
+            'app' => [
+                'debug' => true,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime1($project);
+
+        $e = new Exception4('hello world');
+
+        $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->render($request, $e));
+
+        $this->assertSame('foo bar', $resultResponse->getContent());
+        $this->assertSame(500, $resultResponse->getStatusCode());
+    }
+
+    public function testRenderWithCustomRenderMethodToJson()
+    {
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $request = $this->createMock(IRequest::class);
+
+        $request->method('isAcceptJson')->willReturn(true);
+        $this->assertTrue($request->isAcceptJson());
+
+        $project->singleton('request', function () use ($request) {
+            return $request;
+        });
+
+        $option = new Option([
+            'app' => [
+                'debug' => true,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime1($project);
+
+        $e = new Exception5('hello world');
+
+        $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->render($request, $e));
+
+        $this->assertSame('{"foo":"bar"}', $resultResponse->getContent());
+        $this->assertSame(500, $resultResponse->getStatusCode());
+    }
+
+    public function testRenderToJson()
+    {
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $request = $this->createMock(IRequest::class);
+
+        $request->method('isAcceptJson')->willReturn(true);
+        $this->assertTrue($request->isAcceptJson());
+
+        $project->singleton('request', function () use ($request) {
+            return $request;
+        });
+
+        $option = new Option([
+            'app' => [
+                'debug' => true,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime1($project);
+
+        $e = new Exception1('hello world');
+
+        $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->render($request, $e));
+
+        $this->assertInternalType('array', $content = json_decode($resultResponse->getContent(), true));
+        $this->assertArrayHasKey('error', $content);
+        $this->assertSame('Tests\\Bootstrap\\Runtime\\Exception1', $content['error']['type']);
+        $this->assertSame('hello world', $content['error']['message']);
+        $this->assertSame(500, $resultResponse->getStatusCode());
+    }
+
+    public function testRendorWithHttpExceptionView()
+    {
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $option = new Option([
+            'app' => [
+                'debug' => true,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime2($project);
+
+        $e = new Exception6('hello world');
+
+        $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->rendorWithHttpExceptionView($e));
+
+        $content = $resultResponse->getContent();
+
+        $this->assertContains('<div id="status-code">500</div>', $content);
+        $this->assertContains('<p id="title">服务器内部错误</p>', $content);
+        $this->assertContains('<p id="sub-title">服务器遇到错误，无法完成请求</p>', $content);
+        $this->assertSame(500, $resultResponse->getStatusCode());
+    }
+
+    public function testRendorWithHttpExceptionViewFor404()
+    {
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $option = new Option([
+            'app' => [
+                'debug' => true,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime2($project);
+
+        $e = new Exception7('hello world');
+
+        $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->rendorWithHttpExceptionView($e));
+
+        $content = $resultResponse->getContent();
+
+        $this->assertContains('<div id="status-code">404</div>', $content);
+        $this->assertContains('<p id="title">页面未找到</p>', $content);
+        $this->assertContains('<p id="sub-title">用户发出的请求针对的是不存在的页面</p>', $content);
+        $this->assertSame(404, $resultResponse->getStatusCode());
+    }
+
+    public function testRendorWithHttpExceptionViewButNotFoundView()
+    {
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $option = new Option([
+            'app' => [
+                'debug' => true,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime2($project);
+
+        $e = new Exception8('hello world');
+
+        $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->rendorWithHttpExceptionView($e));
+
+        $content = $resultResponse->getContent();
+
+        $this->assertContains('Tests\\Bootstrap\\Runtime\\Exception8: hello world', $content);
+        $this->assertSame(405, $resultResponse->getStatusCode());
+    }
+
+    public function testRenderWithDebugIsOff()
+    {
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $request = $this->createMock(IRequest::class);
+
+        $request->method('isAcceptJson')->willReturn(false);
+        $this->assertFalse($request->isAcceptJson());
+
+        $project->singleton('request', function () use ($request) {
+            return $request;
+        });
+
+        $option = new Option([
+            'app' => [
+                'debug' => false,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime2($project);
+
+        $e = new Exception1('hello world');
+
+        $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->render($request, $e));
+
+        $content = $resultResponse->getContent();
+
+        $this->assertContains('<div id="status-code">500</div>', $content);
+        $this->assertContains('<p id="title">服务器内部错误</p>', $content);
+        $this->assertContains('<p id="sub-title">服务器遇到错误，无法完成请求</p>', $content);
+        $this->assertSame(500, $resultResponse->getStatusCode());
+    }
+
+    public function testRendorWithHttpExceptionViewButNotFoundViewAndWithDefaultView()
+    {
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $option = new Option([
+            'app' => [
+                'debug' => false,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime3($project);
+
+        $e = new Exception8('hello world');
+
+        $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->rendorWithHttpExceptionView($e));
+
+        $content = $resultResponse->getContent();
+
+        $this->assertContains('<div id="status-code">405</div>', $content);
+        $this->assertContains('Tests\\Bootstrap\\Runtime\\Exception8<div class="file">#FILE', $content);
+        $this->assertContains('<p id="sub-title">hello world</p>', $content);
+        $this->assertSame(405, $resultResponse->getStatusCode());
+    }
+
+    public function testRendorWithHttpExceptionViewButNotFoundViewAndWithDefaultViewButNotStill()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            sprintf('Exception file %s is not extis.', __DIR__.'/assert/notFoundDefault.php')
+        );
+
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $option = new Option([
+            'app' => [
+                'debug' => false,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime4($project);
+
+        $e = new Exception8('hello world');
+
+        $runtime->rendorWithHttpExceptionView($e);
+    }
+
+    public function testRenderForEntityNotFoundException()
+    {
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $request = $this->createMock(IRequest::class);
+
+        $request->method('isAcceptJson')->willReturn(false);
+        $this->assertFalse($request->isAcceptJson());
+
+        $project->singleton('request', function () use ($request) {
+            return $request;
+        });
+
+        $option = new Option([
+            'app' => [
+                'debug' => true,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime2($project);
+
+        $e = new EntityNotFoundException('hello world');
+
+        $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->render($request, $e));
+
+        $content = $resultResponse->getContent();
+
+        $this->assertContains('<div id="status-code">404</div>', $content);
+        $this->assertContains('<p id="title">页面未找到</p>', $content);
+        $this->assertContains('<p id="sub-title">用户发出的请求针对的是不存在的页面</p>', $content);
+        $this->assertSame(404, $resultResponse->getStatusCode());
     }
 }
 
@@ -146,6 +494,40 @@ class Runtime1 extends Runtime
 {
 }
 
+class Runtime2 extends Runtime
+{
+    public function getHttpExceptionView(Exception $e): string
+    {
+        return __DIR__.'/assert/'.$e->getStatusCode().'.php';
+    }
+}
+
+class Runtime3 extends Runtime
+{
+    public function getHttpExceptionView(Exception $e): string
+    {
+        return __DIR__.'/assert/notFound.php';
+    }
+
+    public function getDefaultHttpExceptionView(): string
+    {
+        return __DIR__.'/assert/default.php';
+    }
+}
+
+class Runtime4 extends Runtime
+{
+    public function getHttpExceptionView(Exception $e): string
+    {
+        return __DIR__.'/assert/notFound.php';
+    }
+
+    public function getDefaultHttpExceptionView(): string
+    {
+        return __DIR__.'/assert/notFoundDefault.php';
+    }
+}
+
 class Exception1 extends Exception
 {
 }
@@ -156,4 +538,40 @@ class Exception2 extends Exception
     {
         $_SERVER['testExceptionItSelfWithReport'] = 1;
     }
+}
+
+class Exception3 extends Exception
+{
+    public function render(IRequest $request, Exception $e): string
+    {
+        return 'hello world';
+    }
+}
+
+class Exception4 extends Exception
+{
+    public function render(IRequest $request, Exception $e): Response
+    {
+        return new Response('foo bar', 500);
+    }
+}
+
+class Exception5 extends Exception
+{
+    public function render(IRequest $request, Exception $e): array
+    {
+        return ['foo' => 'bar'];
+    }
+}
+
+class Exception6 extends InternalServerErrorHttpException
+{
+}
+
+class Exception7 extends NotFoundHttpException
+{
+}
+
+class Exception8 extends MethodNotAllowedHttpException
+{
 }

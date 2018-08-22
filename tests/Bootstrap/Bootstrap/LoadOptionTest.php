@@ -53,7 +53,7 @@ class LoadOptionTest extends TestCase
         $this->assertFalse($project->isCachedOption());
         $this->assertSame($appPath.'/option', $project->optionPath());
 
-        $this->assertNull($bootstrap->handle($project));
+        $this->assertNull($bootstrap->handle($project, true));
 
         $option = $project->make('option');
 
@@ -83,7 +83,7 @@ class LoadOptionTest extends TestCase
 
         $this->assertTrue($project->isCachedOption());
 
-        $this->assertNull($bootstrap->handle($project));
+        $this->assertNull($bootstrap->handle($project, true));
 
         $option = $project->make('option');
 

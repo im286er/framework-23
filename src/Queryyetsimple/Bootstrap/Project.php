@@ -162,6 +162,7 @@ class Project extends Container implements IProject
      * @param string $path
      *
      * @return static
+     * @codeCoverageIgnore
      */
     public static function singletons(?string $path = null)
     {

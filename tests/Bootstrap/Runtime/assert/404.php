@@ -18,27 +18,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\Bootstrap\Runtime;
-
-use Whoops\Exception\Inspector as BaseInspector;
-
 /**
- * Inspector.
- *
- * @author Xiangmin Liu <635750556@qq.com>
- *
- * @since 2018.05.01
- *
- * @version 1.0
- * @codeCoverageIgnore
+ * 404 模板
  */
-class Inspector extends BaseInspector
-{
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTrace($e)
-    {
-        return $e->getTrace();
-    }
-}
+$title = '页面未找到';
+$message = '用户发出的请求针对的是不存在的页面';
+
+require __DIR__.'/layout.php';

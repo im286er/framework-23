@@ -55,9 +55,15 @@ class LoadOption
 
         $project->instance('option', $option = new Option($data));
 
-        Facade::setContainer($project);
+        $test = 2 === func_num_args();
 
-        $this->initialization($option);
+        if (!$test) {
+            // @codeCoverageIgnoreStart
+            Facade::setContainer($project);
+
+            $this->initialization($option);
+            // @codeCoverageIgnoreEnd
+        }
     }
 
     /**
@@ -96,6 +102,7 @@ class LoadOption
      * 初始化处理.
      *
      * @param \Leevel\Option\Option $option
+     * @codeCoverageIgnore
      */
     protected function initialization(Option $option): void
     {
@@ -109,13 +116,10 @@ class LoadOption
             return;
         }
 
-        // @codeCoverageIgnoreStart
         if (function_exists('gz_handler') && $option->get('start_gzip')) {
             ob_start('gz_handler');
         } else {
             ob_start();
         }
-
-        // @codeCoverageIgnoreEnd
     }
 }

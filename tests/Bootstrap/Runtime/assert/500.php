@@ -18,27 +18,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\Bootstrap\Runtime;
-
-use Whoops\Exception\Inspector as BaseInspector;
-
 /**
- * Inspector.
- *
- * @author Xiangmin Liu <635750556@qq.com>
- *
- * @since 2018.05.01
- *
- * @version 1.0
- * @codeCoverageIgnore
+ * 500 模板
  */
-class Inspector extends BaseInspector
-{
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTrace($e)
-    {
-        return $e->getTrace();
-    }
-}
+$title = '服务器内部错误';
+$message = '服务器遇到错误，无法完成请求';
+
+require __DIR__.'/layout.php';
