@@ -78,19 +78,15 @@ abstract class Runtime implements IRuntime
             return $e->report();
         }
 
+        // @codeCoverageIgnoreStart
         try {
-            /*
-             * 系统核心组件遇到异常，直接抛出异常
-             * @codeCoverageIgnoreStart
-             */
+            // 系统核心组件遇到异常，直接抛出异常
             if (!is_object($this->container->make('option'))) {
                 echo $this->renderExceptionWithWhoops($e);
                 exit();
             }
-            /** @codeCoverageIgnoreEnd */
-            $log = $this->container->make(ILog::class);
 
-            // @codeCoverageIgnoreStart
+            $log = $this->container->make(ILog::class);
         } catch (Exception $e) {
             throw $e;
         }
@@ -117,8 +113,7 @@ abstract class Runtime implements IRuntime
     {
         if (method_exists($e, 'render') && $response = $e->render($request, $e)) {
             if (!($response instanceof IResponse)) {
-                $response = new Response(
-                    $response,
+                $response = new Response($response,
                     $this->normalizeStatusCode($e),
                     $this->normalizeHeaders($e)
                 );
@@ -141,6 +136,7 @@ abstract class Runtime implements IRuntime
      *
      * @param \sSymfony\Component\Console\Output\OutputInterface $output
      * @param \Exception                                         $e
+     * @codeCoverageIgnore
      */
     public function renderForConsole(OutputInterface $output, Exception $e)
     {
@@ -162,9 +158,9 @@ abstract class Runtime implements IRuntime
      *
      * @param \Exception $e
      *
-     * @return \Leevel\Http\Response
+     * @return \Leevel\Http\IResponse
      */
-    public function rendorWithHttpExceptionView(Exception $e)
+    public function rendorWithHttpExceptionView(Exception $e): IResponse
     {
         $filepath = $this->getHttpExceptionView($e);
 
@@ -173,8 +169,7 @@ abstract class Runtime implements IRuntime
 
             $content = $this->renderWithFile($filepath, $vars);
 
-            return new Response(
-                $content,
+            return new Response($content,
                 $e->getStatusCode(),
                 $e->getHeaders()
             );
@@ -188,9 +183,9 @@ abstract class Runtime implements IRuntime
      *
      * @param \Exception $e
      *
-     * @return \Leevel\Http\Response
+     * @return \Leevel\Http\IResponse
      */
-    protected function makeHttpResponse(Exception $e)
+    protected function makeHttpResponse(Exception $e): IResponse
     {
         if (!$this->isHttpException($e) && $this->container->debug()) {
             return $this->convertExceptionToResponse($e);
@@ -208,9 +203,9 @@ abstract class Runtime implements IRuntime
      *
      * @param \Exception $e
      *
-     * @return \Leevel\Http\Response
+     * @return \Leevel\Http\IResponse
      */
-    protected function makeJsonResponse(Exception $e)
+    protected function makeJsonResponse(Exception $e): IResponse
     {
         $whoops = $this->makeWhoops();
         $whoops->pushHandler($this->makeJsonResponseHandler());
@@ -221,8 +216,7 @@ abstract class Runtime implements IRuntime
         $json['error']['file'] = $this->filterPhysicalPath($json['error']['file']);
         $json = json_encode($json);
 
-        return JsonResponse::fromJsonString(
-            $json,
+        return JsonResponse::fromJsonString($json,
             $this->normalizeStatusCode($e),
             $this->normalizeHeaders($e)
         );
@@ -233,9 +227,9 @@ abstract class Runtime implements IRuntime
      *
      * @param \Exception $e
      *
-     * @return \Leevel\Http\Response
+     * @return \Leevel\Http\IResponse
      */
-    protected function convertExceptionToResponse(Exception $e)
+    protected function convertExceptionToResponse(Exception $e): IResponse
     {
         return new Response(
             $this->renderExceptionContent($e),
@@ -251,7 +245,7 @@ abstract class Runtime implements IRuntime
      *
      * @return string
      */
-    protected function renderExceptionContent(Exception $e)
+    protected function renderExceptionContent(Exception $e): string
     {
         if ($this->container->debug()) {
             return $this->renderExceptionWithWhoops($e);
@@ -267,7 +261,7 @@ abstract class Runtime implements IRuntime
      *
      * @return string
      */
-    protected function renderExceptionWithDefault(Exception $e)
+    protected function renderExceptionWithDefault(Exception $e): string
     {
         $vars = $this->getExceptionVars($e);
 
@@ -281,7 +275,7 @@ abstract class Runtime implements IRuntime
      *
      * @return string
      */
-    protected function renderExceptionWithWhoops(Exception $e)
+    protected function renderExceptionWithWhoops(Exception $e): string
     {
         $whoops = $this->makeWhoops();
 
@@ -300,9 +294,9 @@ abstract class Runtime implements IRuntime
      *
      * @return array
      */
-    protected function getExceptionVars(Exception $e)
+    protected function getExceptionVars(Exception $e): array
     {
-        $vars = [
+        return [
             'e'       => $e,
             'code'    => $this->normalizeStatusCode($e),
             'message' => $e->getMessage(),
@@ -310,8 +304,6 @@ abstract class Runtime implements IRuntime
             'file'    => $this->filterPhysicalPath($e->getFile()),
             'line'    => $e->getLine(),
         ];
-
-        return $vars;
     }
 
     /**
@@ -321,7 +313,7 @@ abstract class Runtime implements IRuntime
      *
      * @return int
      */
-    protected function normalizeStatusCode(Exception $e)
+    protected function normalizeStatusCode(Exception $e): int
     {
         return $this->isHttpException($e) ? $e->getStatusCode() : 500;
     }
@@ -333,7 +325,7 @@ abstract class Runtime implements IRuntime
      *
      * @return array
      */
-    protected function normalizeHeaders(Exception $e)
+    protected function normalizeHeaders(Exception $e): array
     {
         return $this->isHttpException($e) ? $e->getHeaders() : [];
     }
@@ -358,7 +350,7 @@ abstract class Runtime implements IRuntime
      *
      * @return \Whoops\Handler\JsonResponseHandler
      */
-    protected function makeJsonResponseHandler()
+    protected function makeJsonResponseHandler(): JsonResponseHandler
     {
         return (new JsonResponseHandler())->addTraceToOutput($this->container->debug());
     }
@@ -368,12 +360,12 @@ abstract class Runtime implements IRuntime
      *
      * @param \Exception $e
      *
-     * @return \Throwable
+     * @return \Exception
      */
-    protected function prepareException(Exception $e)
+    protected function prepareException(Exception $e): Exception
     {
         if ($e instanceof EntityNotFoundException) {
-            $e = new NotFoundHttpException($e->getMessage(), $e);
+            $e = new NotFoundHttpException($e->getMessage(), $e->getCode());
         }
 
         return $e;
@@ -399,7 +391,7 @@ abstract class Runtime implements IRuntime
      *
      * @return string
      */
-    protected function renderWithFile(string $filepath, array $vars = [])
+    protected function renderWithFile(string $filepath, array $vars = []): string
     {
         if (!is_file($filepath)) {
             throw new Exception(sprintf('Exception file %s is not extis.', $filepath));
@@ -423,7 +415,7 @@ abstract class Runtime implements IRuntime
      *
      * @return string
      */
-    protected function filterPhysicalPath(string $path)
+    protected function filterPhysicalPath(string $path): string
     {
         return str_replace($this->container->path().'/', '', $path);
     }

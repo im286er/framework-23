@@ -30,6 +30,7 @@ use Whoops\Exception\Inspector as BaseInspector;
  * @since 2018.05.01
  *
  * @version 1.0
+ * @codeCoverageIgnore
  */
 class Inspector extends BaseInspector
 {
