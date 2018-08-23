@@ -22,10 +22,18 @@ namespace Tests\Bootstrap;
 
 use Leevel as Leevels;
 use Leevel\Bootstrap\Project as Projects;
+use Leevel\Cache\Cache;
+use Leevel\Cache\ICache;
+use Leevel\Cache\IConnect as IConnectCache;
 use Leevel\Di\Container;
 use Leevel\Di\IContainer;
+use Leevel\Encryption\IEncryption;
+use Leevel\I18n\II18n;
 use Leevel\Kernel\IProject;
 use Leevel\Log\ILog;
+use Leevel\Option\IOption;
+use Leevel\Router\IUrl;
+use Leevel\Session\ISession;
 use Tests\TestCase;
 
 /**
@@ -137,15 +145,181 @@ class FunctionTest extends TestCase
 
         $project = new Project3();
 
-        $project->singleton('log', function () use ($log) {
+        $project->singleton('logs', function () use ($log) {
             return $log;
         });
 
         Leevel2::setProject($project);
 
-        $this->assertInstanceof(ILog::class, Leevel2::log(null));
+        $this->assertInstanceof(ILog::class, Leevel2::log());
         $this->assertSame(['bar', '[]'], Leevel2::log('bar', [], ILog::INFO));
         $this->assertSame(['foo', '[]'], Leevel2::log('foo', [], ILog::INFO, true));
+    }
+
+    public function testOption()
+    {
+        $option = $this->createMock(IOption::class);
+
+        $option->method('set')->willReturn(null);
+        $this->assertNull($option->set(['foo' => 'bar']));
+
+        $option->method('get')->willReturn('bar');
+        $this->assertSame('bar', $option->get('foo'));
+
+        $project = new Project3();
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        Leevel2::setProject($project);
+
+        $this->assertInstanceof(IOption::class, Leevel2::option());
+        $this->assertNull(Leevel2::option(['foo' => 'bar']));
+        $this->assertSame('bar', Leevel2::option('foo'));
+    }
+
+    public function testCache()
+    {
+        $cache = $this->createMock(IConnectCache::class);
+
+        $cache->method('set')->willReturn(null);
+        $this->assertNull($cache->set('foo', 'bar'));
+
+        $cache->method('get')->willReturn('bar');
+        $this->assertSame('bar', $cache->get('foo'));
+
+        $cache = new Cache($cache);
+
+        $project = new Project3();
+
+        $project->singleton('caches', function () use ($cache) {
+            return $cache;
+        });
+
+        Leevel2::setProject($project);
+
+        $this->assertInstanceof(ICache::class, Leevel2::cache());
+        $this->assertNull(Leevel2::cache(['foo' => 'bar']));
+        $this->assertSame('bar', Leevel2::cache('foo'));
+    }
+
+    public function testEncryptAndEecrypt()
+    {
+        $encryption = $this->createMock(IEncryption::class);
+
+        $encryption->method('encrypt')->willReturn('foobar-helloworld');
+        $this->assertSame('foobar-helloworld', $encryption->encrypt('foo', 3600));
+
+        $encryption->method('decrypt')->willReturn('foo');
+        $this->assertSame('foo', $encryption->decrypt('foobar-helloworld'));
+
+        $project = new Project3();
+
+        $project->singleton('encryption', function () use ($encryption) {
+            return $encryption;
+        });
+
+        Leevel2::setProject($project);
+
+        $this->assertSame('foobar-helloworld', Leevel2::encrypt('foo', 3600));
+        $this->assertSame('foo', Leevel2::decrypt('foobar-helloworld'));
+    }
+
+    public function testSession()
+    {
+        $session = $this->createMock(ISession::class);
+
+        $session->method('put')->willReturn(null);
+        $this->assertNull($session->put(['foo' => 'bar']));
+
+        $session->method('get')->willReturn('bar');
+        $this->assertSame('bar', $session->get('foo'));
+
+        $project = new Project3();
+
+        $project->singleton('sessions', function () use ($session) {
+            return $session;
+        });
+
+        Leevel2::setProject($project);
+
+        $this->assertInstanceof(ISession::class, Leevel2::session());
+        $this->assertNull(Leevel2::session(['foo' => 'bar']));
+        $this->assertSame('bar', Leevel2::session('foo'));
+    }
+
+    public function testFlash()
+    {
+        $session = $this->createMock(ISession::class);
+
+        $session->method('flash')->willReturn(null);
+        $this->assertNull($session->flashs(['foo' => 'bar']));
+
+        $session->method('getFlash')->willReturn('bar');
+        $this->assertSame('bar', $session->getFlash('foo'));
+
+        $project = new Project3();
+
+        $project->singleton('sessions', function () use ($session) {
+            return $session;
+        });
+
+        Leevel2::setProject($project);
+
+        $this->assertInstanceof(ISession::class, Leevel2::flash());
+        $this->assertNull(Leevel2::flash(['foo' => 'bar']));
+        $this->assertSame('bar', Leevel2::flash('foo'));
+    }
+
+    public function testUrl()
+    {
+        $url = $this->createMock(IUrl::class);
+
+        $url->method('make')->willReturn('/goods?foo=bar');
+        $this->assertSame('/goods?foo=bar', $url->make('/goods', ['foo' => 'bar']));
+
+        $project = new Project3();
+
+        $project->singleton('url', function () use ($url) {
+            return $url;
+        });
+
+        Leevel2::setProject($project);
+
+        $this->assertSame('/goods?foo=bar', Leevel2::url('/goods', ['foo' => 'bar']));
+    }
+
+    public function testGettextWithI18n()
+    {
+        $i18n = $this->createMock(II18n::class);
+
+        $map = [
+            ['hello', 'hello'],
+            ['hello %s', 'foo', 'hello foo'],
+            ['hello %d', 5, 'hello 5'],
+        ];
+
+        $i18n->method('gettext')->will($this->returnValueMap($map));
+        $this->assertSame('hello', $i18n->gettext('hello'));
+        $this->assertSame('hello foo', $i18n->gettext('hello %s', 'foo'));
+        $this->assertSame('hello 5', $i18n->gettext('hello %d', 5));
+
+        $project = new Project3();
+
+        $project->singleton('i18n', function () use ($i18n) {
+            return $i18n;
+        });
+
+        Leevel2::setProject($project);
+
+        $this->assertSame('hello', Leevel2::gettext('hello'));
+        $this->assertSame('hello foo', Leevel2::gettext('hello %s', 'foo'));
+        $this->assertSame('hello 5', Leevel2::gettext('hello %d', 5));
+
+        $this->assertSame('hello', Leevel2::__('hello'));
+        $this->assertSame('hello foo', Leevel2::__('hello %s', 'foo'));
+        $this->assertSame('hello 5', Leevel2::__('hello %d', 5));
     }
 }
 

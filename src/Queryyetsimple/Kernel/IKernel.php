@@ -41,7 +41,7 @@ interface IKernel
      *
      * @return \Leevel\Http\IResponse
      */
-    public function handle(IRequest $request);
+    public function handle(IRequest $request): IResponse;
 
     /**
      * 执行结束
