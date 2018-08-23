@@ -65,6 +65,7 @@ class Register extends Provider
         return [
             'router' => [
                 'Leevel\\Router\\Router',
+                'Leevel\\Router\\IRouter',
             ],
             'url' => [
                 'Leevel\\Router\\Url',
