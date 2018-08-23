@@ -49,14 +49,14 @@ class CompilerBreakTest extends TestCase
 eot;
 
         $compiled = <<<'eot'
-<?php $index = 1;?>
-<?php if (is_array($list)): foreach ($list as $key => $value):?>
-   <?php if ($value == 'H'):?>
-       <?php break;?>
-   <?php endif;?>
-   <?php echo $value;?>
-<?php $index++;?>
-<?php endforeach; endif;?>
+<?php $index = 1; ?>
+<?php if (is_array($list)): foreach ($list as $key => $value): ?>
+   <?php if ($value == 'H'): ?>
+       <?php break; ?>
+   <?php endif; ?>
+   <?php echo $value; ?>
+<?php $index++; ?>
+<?php endforeach; endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -71,14 +71,14 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $index = 1;?>
-<?php if (is_array($list)): foreach ($list as $key => $value):?>
-   <?php if ($value == 'H'):?>
-       <?php continue;?>
-   <?php endif;?>
-   <?php echo $value;?>
-<?php $index++;?>
-<?php endforeach; endif;?>
+<?php $index = 1; ?>
+<?php if (is_array($list)): foreach ($list as $key => $value): ?>
+   <?php if ($value == 'H'): ?>
+       <?php continue; ?>
+   <?php endif; ?>
+   <?php echo $value; ?>
+<?php $index++; ?>
+<?php endforeach; endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));

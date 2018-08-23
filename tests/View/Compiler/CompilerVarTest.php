@@ -45,7 +45,7 @@ class CompilerVarTest extends TestCase
 eot;
 
         $compiled = <<<'eot'
-<?php echo $name;?>
+<?php echo $name; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -56,7 +56,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo $value;?>
+<?php echo $value; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -67,7 +67,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-我的梦想是写好”<?php echo $value['name'];?>“，我相信”<?php echo $value['description'];?>“。
+我的梦想是写好”<?php echo $value['name']; ?>“，我相信”<?php echo $value['description']; ?>“。
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -78,7 +78,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo $value['test'];?>
+<?php echo $value['test']; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -89,7 +89,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-我的梦想是写好”<?php echo $demo->name;?>“，我相信”<?php echo $demo->description;?>“。
+我的梦想是写好”<?php echo $demo->name; ?>“，我相信”<?php echo $demo->description; ?>“。
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -107,9 +107,9 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo $a->b;?>
-<?php echo $a . $b;?>
-<?php echo $a->b;?>
+<?php echo $a->b; ?>
+<?php echo $a . $b; ?>
+<?php echo $a->b; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -120,7 +120,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-我的梦想是写好”<?php echo $demo->name->child->child->child;?>“，我相信”<?php echo $demo->description;?>“。
+我的梦想是写好”<?php echo $demo->name->child->child->child; ?>“，我相信”<?php echo $demo->description; ?>“。
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -131,7 +131,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-我的梦想是写好”<?php echo $demo->name;?>“，我相信”<?php echo $demo->description;?>“。
+我的梦想是写好”<?php echo $demo->name; ?>“，我相信”<?php echo $demo->description; ?>“。
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -142,7 +142,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-我的梦想是写好”<?php echo $demo->name->one->two->three->four;?>“，我相信”<?php echo $demo->description->one->two->three->four;?>“。
+我的梦想是写好”<?php echo $demo->name->one->two->three->four; ?>“，我相信”<?php echo $demo->description->one->two->three->four; ?>“。
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -159,8 +159,8 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo $value+$value2;?>
-<?php echo $value-$value2;?>
+<?php echo $value+$value2; ?>
+<?php echo $value-$value2; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -175,11 +175,11 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo $value + 9 +10;?>
-<?php echo $value * $value2 * 10;?>
-<?php echo $value / $value2;?>
-<?php echo $value3+$list['key'];?>
-<?php echo $value3%$list['key'];?>
+<?php echo $value + 9 +10; ?>
+<?php echo $value * $value2 * 10; ?>
+<?php echo $value / $value2; ?>
+<?php echo $value3+$list['key']; ?>
+<?php echo $value3%$list['key']; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -190,7 +190,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo $value3.'start - '.$value.$value2.'- end';?>
+<?php echo $value3.'start - '.$value.$value2.'- end'; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -207,8 +207,8 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo $value+$value2;?>
-<?php echo $value-$value2;?>
+<?php echo $value+$value2; ?>
+<?php echo $value-$value2; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -223,11 +223,11 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo $value + 9 +10;?>
-<?php echo $value * $value2 * 10;?>
-<?php echo $value / $value2;?>
-<?php echo $value3+$list['key'];?>
-<?php echo $value3%$list['key'];?>
+<?php echo $value + 9 +10; ?>
+<?php echo $value * $value2 * 10; ?>
+<?php echo $value / $value2; ?>
+<?php echo $value3+$list['key']; ?>
+<?php echo $value3%$list['key']; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -238,7 +238,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo $value3.'start - '. $value. $value2.'end';?>
+<?php echo $value3.'start - '. $value. $value2.'end'; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -254,7 +254,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo function2(arg1,arg2,function1($varName));?>
+<?php echo function2(arg1,arg2,function1($varName)); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -265,7 +265,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo function2(function1($varName), arg1,arg2);?>
+<?php echo function2(function1($varName), arg1,arg2); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -276,7 +276,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo substr(strtoupper($content), 0,3);?>
+<?php echo substr(strtoupper($content), 0,3); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -287,7 +287,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo date("Y-m-d",$date);?>
+<?php echo date("Y-m-d",$date); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -298,7 +298,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo function1($var);?>
+<?php echo function1($var); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -310,8 +310,8 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $currentTime=time();?>
-<?php echo \Leevel\Support\Str::smartDate($currentTime);?>
+<?php $currentTime=time(); ?>
+<?php echo \Leevel\Support\Str::smartDate($currentTime); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -322,7 +322,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php function1($var);?>
+<?php function1($var); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -333,7 +333,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo('Hello world!');?>
+<?php echo('Hello world!'); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -344,7 +344,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo $demo->test();?>
+<?php echo $demo->test(); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -359,11 +359,11 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $name='';?>
-<?php echo $name ?: "Hello，我最爱的雪碧！";?>
+<?php $name=''; ?>
+<?php echo $name ?: "Hello，我最爱的雪碧！"; ?>
 
-<?php $name='肯德基更配！';?>
-<?php echo $name ?: "Hello，我最爱的雪碧！";?>
+<?php $name='肯德基更配！'; ?>
+<?php echo $name ?: "Hello，我最爱的雪碧！"; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -380,8 +380,8 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo escape($var);?>
-<?php echo e($var);?>
+<?php echo escape($var); ?>
+<?php echo e($var); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -392,7 +392,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo join($list, ',');?>
+<?php echo join($list, ','); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -403,7 +403,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo convert_encoding($data, 'iso-2022-jp', 'UTF-8'));?>
+<?php echo convert_encoding($data, 'iso-2022-jp', 'UTF-8')); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -414,7 +414,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo convert_encoding('iso-2022-jp', $data, 'UTF-8'));?>
+<?php echo convert_encoding('iso-2022-jp', $data, 'UTF-8')); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));

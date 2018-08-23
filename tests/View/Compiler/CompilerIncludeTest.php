@@ -44,7 +44,7 @@ class CompilerIncludeTest extends TestCase
 eot;
 
         $compiled = <<<'eot'
-<?php $this->display('application/app/ui/theme/default/header', [], '.html', true);?>
+<?php $this->display('application/app/ui/theme/default/header', [], '.html', true); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -55,8 +55,8 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $headTpl = Leevel::pathTheme() . '/' . '/header.html';?>
-<?php $this->display($headTpl, [], '', true);?>
+<?php $headTpl = Leevel::pathTheme() . '/' . '/header.html'; ?>
+<?php $this->display($headTpl, [], '', true); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -66,7 +66,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $this->display('test', [], '', true);?>
+<?php $this->display('test', [], '', true); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -76,7 +76,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $this->display('public+header', [], '', true);?>
+<?php $this->display('public+header', [], '', true); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -86,7 +86,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $this->display('blue@blog+view', [], '', true);?>
+<?php $this->display('blue@blog+view', [], '', true); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -100,10 +100,10 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $this->display(($path . '/' . $name), [], '', true);?>
-<?php $this->display(Template::tpl('header'), [], '', true);?>
-<?php $this->display(tpl('header'), [], '', true);?>
-<?php $this->display($hello->world('header'), [], '', true);?>
+<?php $this->display(($path . '/' . $name), [], '', true); ?>
+<?php $this->display(Template::tpl('header'), [], '', true); ?>
+<?php $this->display(tpl('header'), [], '', true); ?>
+<?php $this->display($hello->world('header'), [], '', true); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));

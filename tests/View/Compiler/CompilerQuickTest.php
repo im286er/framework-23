@@ -62,8 +62,8 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $value = 'Make QueryPHP greater !';?>
-<?php echo $value;?>
+<?php $value = 'Make QueryPHP greater !'; ?>
+<?php echo $value; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -73,7 +73,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php echo 'Hello QueryPHP!';?>
+<?php echo 'Hello QueryPHP!'; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));

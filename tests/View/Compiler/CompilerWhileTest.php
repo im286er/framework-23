@@ -48,11 +48,11 @@ class CompilerWhileTest extends TestCase
 eot;
 
         $compiled = <<<'eot'
-<?php $i = 10;?>
-<?php while ($i>0):?>
-    <?php echo $i;?>Hello QueryPHP !<br>
-    <?php $i--;?>
-<?php endwhile;?>
+<?php $i = 10; ?>
+<?php while ($i>0): ?>
+    <?php echo $i; ?>Hello QueryPHP !<br>
+    <?php $i--; ?>
+<?php endwhile; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -66,11 +66,11 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $i = 10;?>
-<?php while($i > 0):?>
-    <?php echo $i;?>Hello QueryPHP !<br>
-    <?php $i--;?>
-<?php endwhile;?>
+<?php $i = 10; ?>
+<?php while($i > 0): ?>
+    <?php echo $i; ?>Hello QueryPHP !<br>
+    <?php $i--; ?>
+<?php endwhile; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));

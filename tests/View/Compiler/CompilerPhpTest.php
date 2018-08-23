@@ -44,17 +44,17 @@ class CompilerPhpTest extends TestCase
 eot;
 
         $compiled = <<<'eot'
-<?php echo 'Hello,world!';?>
+<?php echo 'Hello,world!'; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
 
         $source = <<<'eot'
-<?php echo 'Hello,world!';?>
+<?php echo 'Hello,world!'; ?>
 eot;
 
         $compiled = <<<'eot'
-<?php echo 'Hello,world!';?>
+<?php echo 'Hello,world!'; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -70,10 +70,10 @@ eot;
 
         $compiled = <<<'eot'
 <?php 
-    <?php if ($hello == ''):?>
+    <?php if ($hello == ''): ?>
         Yet !
-    <?php endif;?>
-?>
+    <?php endif; ?>
+ ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));

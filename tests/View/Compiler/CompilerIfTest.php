@@ -50,13 +50,13 @@ class CompilerIfTest extends TestCase
 eot;
 
         $compiled = <<<'eot'
-<?php if ($id==1):?>
+<?php if ($id==1): ?>
     我的值为1，我为if下的内容。
-<?php elseif ($id==2):?>
+<?php elseif ($id==2): ?>
     我的值为2，我为elseif下的内容。
-<?php else:?>
-    我的值为<?php echo $id;?>，我不是谁的谁！
-<?php endif;?>
+<?php else: ?>
+    我的值为<?php echo $id; ?>，我不是谁的谁！
+<?php endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -72,13 +72,13 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php if ($a->name == 1):?>
+<?php if ($a->name == 1): ?>
     a
-<?php endif;?>
+<?php endif; ?>
 
-<?php if (hello::run() == 1):?>
+<?php if (hello::run() == 1): ?>
     b
-<?php endif;?>
+<?php endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -91,10 +91,10 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php if (($id == 1) OR ($id > 100)):?>one
-    <?php elseif ($id == 2):?>two?
-    <?php else:?>other?
-<?php endif;?>
+<?php if (($id == 1) OR ($id > 100)): ?>one
+    <?php elseif ($id == 2): ?>two?
+    <?php else: ?>other?
+<?php endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -110,13 +110,13 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php if ($a->name == 1):?>
+<?php if ($a->name == 1): ?>
     one
-<?php endif;?>
+<?php endif; ?>
 
-<?php if (hello::run() == 1):?>
+<?php if (hello::run() == 1): ?>
     two
-<?php endif;?>
+<?php endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -132,13 +132,13 @@ c
 eot;
 
         $compiled = <<<'eot'
-<?php if (length($users) > 0):?>
+<?php if (length($users) > 0): ?>
 a
-<?php elseif ($foo->bar > 0):?>
+<?php elseif ($foo->bar > 0): ?>
 b
-<?php else:?>
+<?php else: ?>
 c
-<?php endif;?>
+<?php endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));

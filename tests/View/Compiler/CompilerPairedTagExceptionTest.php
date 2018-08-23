@@ -117,10 +117,10 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php for ($i=1;$i<10;$i++):?>
-    <?php if ($foo):?>
-<?php endfor;?>
-    <?php endif;?>
+<?php for ($i=1;$i<10;$i++): ?>
+    <?php if ($foo): ?>
+<?php endfor; ?>
+    <?php endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));

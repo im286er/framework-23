@@ -54,13 +54,13 @@ eot;
     else:
         foreach ($tmp as $key => $vo):
             ++$index;
-            $mod = $index % 2;?>
-    <?php echo $vo->title;?>  <?php echo $vo->people;?>
+            $mod = $index % 2; ?>
+    <?php echo $vo->title; ?>  <?php echo $vo->people; ?>
         <?php endforeach;
     endif;
 else:
     echo "";
-endif;?>
+endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -80,22 +80,22 @@ eot;
     else:
         foreach ($tmp as $key => $vo):
             ++$index;
-            $mod = $index % 2;?>
-    <?php echo $vo->title;?> <?php echo $vo->people;?>
+            $mod = $index % 2; ?>
+    <?php echo $vo->title; ?> <?php echo $vo->people; ?>
         <?php endforeach;
     endif;
 else:
     echo "";
-endif;?>
+endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
 
         $source = <<<'eot'
 <lists name="list" id="vo" mod="2">
-    <?php if ($mod == 1):?>
+    <?php if ($mod == 1): ?>
         {$vo.title} {$vo.people}
-    <?php endif;?>
+    <?php endif; ?>
 </lists>
 eot;
 
@@ -108,24 +108,24 @@ eot;
     else:
         foreach ($tmp as $key => $vo):
             ++$index;
-            $mod = $index % 2;?>
-    <?php if ($mod == 1):?>
-        <?php echo $vo->title;?> <?php echo $vo->people;?>
-    <?php endif;?>
+            $mod = $index % 2; ?>
+    <?php if ($mod == 1): ?>
+        <?php echo $vo->title; ?> <?php echo $vo->people; ?>
+    <?php endif; ?>
         <?php endforeach;
     endif;
 else:
     echo "";
-endif;?>
+endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
 
         $source = <<<'eot'
 <lists name="list" id="vo" mod="2">
-    <?php if ($mod == 0):?>
+    <?php if ($mod == 0): ?>
         {$vo.title} {$vo.people}
-    <?php endif;?>
+    <?php endif; ?>
 </lists>
 eot;
 
@@ -138,15 +138,15 @@ eot;
     else:
         foreach ($tmp as $key => $vo):
             ++$index;
-            $mod = $index % 2;?>
-    <?php if ($mod == 0):?>
-        <?php echo $vo->title;?> <?php echo $vo->people;?>
-    <?php endif;?>
+            $mod = $index % 2; ?>
+    <?php if ($mod == 0): ?>
+        <?php echo $vo->title; ?> <?php echo $vo->people; ?>
+    <?php endif; ?>
         <?php endforeach;
     endif;
 else:
     echo "";
-endif;?>
+endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -154,9 +154,9 @@ eot;
         $source = <<<'eot'
 <lists name="list" id="vo" mod="2">
     {$vo.title} {$vo.people}
-    <?php if ($mod == 0):?>
+    <?php if ($mod == 0): ?>
         <br>
-    <?php endif;?>
+    <?php endif; ?>
 </lists>
 eot;
 
@@ -169,16 +169,16 @@ eot;
     else:
         foreach ($tmp as $key => $vo):
             ++$index;
-            $mod = $index % 2;?>
-    <?php echo $vo->title;?> <?php echo $vo->people;?>
-    <?php if ($mod == 0):?>
+            $mod = $index % 2; ?>
+    <?php echo $vo->title; ?> <?php echo $vo->people; ?>
+    <?php if ($mod == 0): ?>
         <br>
-    <?php endif;?>
+    <?php endif; ?>
         <?php endforeach;
     endif;
 else:
     echo "";
-endif;?>
+endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -186,9 +186,9 @@ eot;
         $source = <<<'eot'
 <lists name="list" id="vo" mod="2">
     {$vo.title} {$vo.people}
-    <?php if ($mod == 0):?>
+    <?php if ($mod == 0): ?>
         <br>
-    <?php endif;?>
+    <?php endif; ?>
 </lists>
 eot;
 
@@ -201,16 +201,16 @@ eot;
     else:
         foreach ($tmp as $key => $vo):
             ++$index;
-            $mod = $index % 2;?>
-    <?php echo $vo->title;?> <?php echo $vo->people;?>
-    <?php if ($mod == 0):?>
+            $mod = $index % 2; ?>
+    <?php echo $vo->title; ?> <?php echo $vo->people; ?>
+    <?php if ($mod == 0): ?>
         <br>
-    <?php endif;?>
+    <?php endif; ?>
         <?php endforeach;
     endif;
 else:
     echo "";
-endif;?>
+endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -230,13 +230,13 @@ eot;
     else:
         foreach ($tmp as $key => $vo):
             ++$k;
-            $mod = $k % 2;?>
-    <?php echo $k;?> <?php echo $vo->people;?>
+            $mod = $k % 2; ?>
+    <?php echo $k; ?> <?php echo $vo->people; ?>
         <?php endforeach;
     endif;
 else:
     echo "";
-endif;?>
+endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -256,13 +256,13 @@ eot;
     else:
         foreach ($tmp as $key => $vo):
             ++$index;
-            $mod = $index % 2;?>
-    key: <?php echo $key;?>
+            $mod = $index % 2; ?>
+    key: <?php echo $key; ?>
         <?php endforeach;
     endif;
 else:
     echo "";
-endif;?>
+endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -281,7 +281,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $mod = 4;?>
+<?php $mod = 4; ?>
 
 <?php if (is_array($list)):
     $index = 0;
@@ -291,13 +291,13 @@ eot;
     else:
         foreach ($tmp as $key => $vo):
             ++$index;
-            $mod = $index % $mod;?>
-    <?php echo $vo->title;?>  <?php echo $vo->people;?>
+            $mod = $index % $mod; ?>
+    <?php echo $vo->title; ?>  <?php echo $vo->people; ?>
         <?php endforeach;
     endif;
 else:
     echo "";
-endif;?>
+endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -322,13 +322,13 @@ eot;
     else:
         foreach ($tmp as $key => $vo):
             ++$index;
-            $mod = $index % 2;?>
-    <?php echo $vo->title;?>  <?php echo $vo->people;?>
+            $mod = $index % 2; ?>
+    <?php echo $vo->title; ?>  <?php echo $vo->people; ?>
         <?php endforeach;
     endif;
 else:
     echo "";
-endif;?>
+endif; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
