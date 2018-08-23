@@ -61,7 +61,9 @@ class Leevel
 
         if (null === $i18n) {
             if (!is_object($i18n = static::project('i18n'))) {
+                /** @codeCoverageIgnoreStart */
                 $i18n = 'sprintf';
+            // @codeCoverageIgnoreEnd
             } else {
                 $i18n = [$i18n, 'gettext'];
             }
@@ -168,27 +170,27 @@ class Leevel
     /**
      * 日志.
      *
-     * @param string $message = null
-     * @param array  $context
-     * @param string $level
-     * @param bool   $write
+     * @param null|string $message = null
+     * @param array       $context
+     * @param string      $level
+     * @param bool        $write
      *
      * @return mixed
      */
     public static function log(?string $message = null, array $context = [], string $level = ILog::INFO, bool $write = false)
     {
         if (null === $message) {
-            return static::project('log');
+            return static::project('logs');
         }
 
-        return static::project('log')->{$write ? 'write' : 'log'}($level, $message, $context);
+        return static::project('logs')->{$write ? 'write' : 'log'}($level, $message, $context);
     }
 
     /**
      * 设置或者获取 option 值
      *
-     * @param array|string $key
-     * @param mixed        $defaults
+     * @param null|array|string $key
+     * @param mixed             $defaults
      *
      * @return mixed
      */
@@ -208,34 +210,35 @@ class Leevel
     /**
      * 设置或者获取 cache 值
      *
-     * @param array|string $key
-     * @param mixed        $defaults
+     * @param null|array|string $key
+     * @param mixed             $defaults
      *
      * @return mixed
      */
     public static function cache($key = null, $defaults = null)
     {
         if (null === $key) {
-            return static::project('cache');
+            return static::project('caches');
         }
 
         if (is_array($key)) {
-            return static::project('cache')->put($key);
+            return static::project('caches')->put($key);
         }
 
-        return static::project('cache')->get($key, $defaults);
+        return static::project('caches')->get($key, $defaults);
     }
 
     /**
      * 加密字符串.
      *
      * @param string $value
+     * @param int    $expiry
      *
      * @return string
      */
-    public static function encrypt(string $value)
+    public static function encrypt(string $value, ?int $expiry = null)
     {
-        return static::project('encryption')->encrypt($value);
+        return static::project('encryption')->encrypt($value, $expiry);
     }
 
     /**
@@ -253,43 +256,43 @@ class Leevel
     /**
      * 设置或者获取 session 值
      *
-     * @param array|string $key
-     * @param mixed        $defaults
+     * @param null|array|string $key
+     * @param mixed             $defaults
      *
      * @return mixed
      */
     public static function session($key = null, $defaults = null)
     {
         if (null === $key) {
-            return static::project('session');
+            return static::project('sessions');
         }
 
         if (is_array($key)) {
-            return static::project('session')->put($key);
+            return static::project('sessions')->put($key);
         }
 
-        return static::project('session')->get($key, $defaults);
+        return static::project('sessions')->get($key, $defaults);
     }
 
     /**
      * 设置或者获取 flash 值.
      *
-     * @param string $key
-     * @param mixed  $defaults
+     * @param null|string $key
+     * @param mixed       $defaults
      *
      * @return mixed
      */
     public static function flash($key = null, $defaults = null)
     {
         if (null === $key) {
-            return static::project('session');
+            return static::project('sessions');
         }
 
         if (is_array($key)) {
-            return static::project('session')->flashs($key);
+            return static::project('sessions')->flashs($key);
         }
 
-        return static::project('session')->getFlash($key, $defaults);
+        return static::project('sessions')->getFlash($key, $defaults);
     }
 
     /**

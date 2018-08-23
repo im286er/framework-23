@@ -88,7 +88,7 @@ abstract class KernelConsole implements IKernelConsole
      *
      * @return int
      */
-    public function handle(InputInterface $input = null, OutputInterface $output = null)
+    public function handle(InputInterface $input = null, OutputInterface $output = null): int
     {
         $this->registerBaseService();
 
@@ -126,7 +126,7 @@ abstract class KernelConsole implements IKernelConsole
      *
      * @return \Leevel\Console\Application
      */
-    protected function getConsoleApplication()
+    protected function getConsoleApplication(): Application
     {
         if ($this->consoleApplication) {
             return $this->consoleApplication;
@@ -138,15 +138,17 @@ abstract class KernelConsole implements IKernelConsole
     /**
      * 注册基础服务
      */
-    protected function registerBaseService()
+    protected function registerBaseService(): void
     {
         $this->project->instance('request', Request::createFromGlobals());
     }
 
     /**
      * 初始化.
+     *
+     * @codeCoverageIgnore
      */
-    protected function bootstrap()
+    protected function bootstrap(): void
     {
         $this->project->bootstrap($this->bootstraps);
     }
@@ -154,7 +156,7 @@ abstract class KernelConsole implements IKernelConsole
     /**
      * 载入.
      */
-    protected function loadCommands()
+    protected function loadCommands(): void
     {
         $commands = $this->normalizeCommands($this->getCommands());
 
@@ -164,7 +166,7 @@ abstract class KernelConsole implements IKernelConsole
     /**
      * 设置全局替换.
      */
-    protected function setGlobalReplace()
+    protected function setGlobalReplace(): void
     {
         Make::setGlobalReplace(
             $this->project['option']->get('console\template') ?: []

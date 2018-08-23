@@ -35,7 +35,7 @@ use Leevel\Kernel\IKernel;
 use Leevel\Kernel\IProject;
 use Leevel\Kernel\Runtime\IRuntime;
 use Leevel\Log\ILog;
-use Leevel\Router\Router;
+use Leevel\Router\IRouter;
 use Leevel\Support\Debug\Console;
 use Throwable;
 
@@ -60,7 +60,7 @@ abstract class Kernel implements IKernel
     /**
      * 路由.
      *
-     * @var \Leevel\Router\Router
+     * @var \Leevel\Router\IRouter
      */
     protected $router;
 
@@ -80,9 +80,9 @@ abstract class Kernel implements IKernel
      * 构造函数.
      *
      * @param \Leevel\Kernel\IProject $project
-     * @param \Leevel\Router\Router   $router
+     * @param \Leevel\Router\IRouter  $router
      */
-    public function __construct(IProject $project, Router $router)
+    public function __construct(IProject $project, IRouter $router)
     {
         $this->project = $project;
         $this->router = $router;
@@ -95,7 +95,7 @@ abstract class Kernel implements IKernel
      *
      * @return \Leevel\Http\IResponse
      */
-    public function handle(IRequest $request)
+    public function handle(IRequest $request): IResponse
     {
         try {
             $this->registerBaseService($request);
@@ -134,6 +134,7 @@ abstract class Kernel implements IKernel
      *
      * @param \Leevel\Http\IRequest  $request
      * @param \Leevel\Http\IResponse $response
+     * @codeCoverageIgnore
      */
     public function terminate(IRequest $request, IResponse $response)
     {
@@ -154,7 +155,7 @@ abstract class Kernel implements IKernel
      *
      * @return \Leevel\Bootstrap\Runtime\IRuntime
      */
-    protected function getRuntime()
+    protected function getRuntime(): IRuntime
     {
         return $this->project->make(IRuntime::class);
     }
@@ -176,7 +177,7 @@ abstract class Kernel implements IKernel
      *
      * @return \Leevel\Http\IResponse
      */
-    protected function getResponseWithRequest(IRequest $request)
+    protected function getResponseWithRequest(IRequest $request): IResponse
     {
         return $this->dispatchRouter($request);
     }
@@ -188,15 +189,17 @@ abstract class Kernel implements IKernel
      *
      * @return \Leevel\Http\IResponse
      */
-    protected function dispatchRouter(IRequest $request)
+    protected function dispatchRouter(IRequest $request): IResponse
     {
         return $this->router->dispatch($request);
     }
 
     /**
      * 初始化.
+     *
+     * @codeCoverageIgnore
      */
-    protected function bootstrap()
+    protected function bootstrap(): void
     {
         $this->project->bootstrap($this->bootstraps);
     }
@@ -219,7 +222,7 @@ abstract class Kernel implements IKernel
      *
      * @return \Leevel\Http\IResponse
      */
-    protected function renderException(IRequest $request, Exception $e)
+    protected function renderException(IRequest $request, Exception $e): IResponse
     {
         return $this->getRuntime()->render($request, $e);
     }
@@ -231,7 +234,7 @@ abstract class Kernel implements IKernel
      *
      * @return \Leevel\Http\IResponse
      */
-    protected function prepareTrace(IResponse $response)
+    protected function prepareTrace(IResponse $response): IResponse
     {
         if (!$this->project->debug()) {
             return $response;
