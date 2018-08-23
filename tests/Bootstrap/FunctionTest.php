@@ -99,8 +99,6 @@ class FunctionTest extends TestCase
         putenv($name.'='.$value);
 
         $this->assertSame($envValue, Leevel::env($name));
-
-        unset($_ENV[$name]);
     }
 
     public function envProvider()
