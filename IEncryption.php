@@ -39,7 +39,7 @@ interface IEncryption
      *
      * @return string
      */
-    public function encrypt($value, $expiry = null);
+    public function encrypt($value, ?int $expiry = null);
 
     /**
      * 解密.

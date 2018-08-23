@@ -51,7 +51,7 @@ class Encryption extends Connect implements IEncryption
      *
      * @return string
      */
-    public function encrypt($value, $expiry = null)
+    public function encrypt($value, ?int $expiry = null)
     {
         return $this->authcode($value,
             false,
