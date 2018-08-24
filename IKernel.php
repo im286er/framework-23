@@ -49,7 +49,7 @@ interface IKernel
      * @param \Leevel\Http\IRequest  $request
      * @param \Leevel\Http\IResponse $response
      */
-    public function terminate(IRequest $request, IResponse $response);
+    public function terminate(IRequest $request, IResponse $response): void;
 
     /**
      * 返回项目.
