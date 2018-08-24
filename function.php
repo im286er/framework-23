@@ -173,17 +173,16 @@ class Leevel
      * @param null|string $message = null
      * @param array       $context
      * @param string      $level
-     * @param bool        $write
      *
      * @return mixed
      */
-    public static function log(?string $message = null, array $context = [], string $level = ILog::INFO, bool $write = false)
+    public static function log(?string $message = null, array $context = [], string $level = ILog::INFO)
     {
         if (null === $message) {
             return static::project('logs');
         }
 
-        return static::project('logs')->{$write ? 'write' : 'log'}($level, $message, $context);
+        return static::project('logs')->log($level, $message, $context);
     }
 
     /**

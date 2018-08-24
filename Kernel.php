@@ -136,7 +136,7 @@ abstract class Kernel implements IKernel
      * @param \Leevel\Http\IResponse $response
      * @codeCoverageIgnore
      */
-    public function terminate(IRequest $request, IResponse $response)
+    public function terminate(IRequest $request, IResponse $response): void
     {
     }
 
@@ -240,7 +240,7 @@ abstract class Kernel implements IKernel
             return $response;
         }
 
-        $logs = $this->project[ILog::class]->get();
+        $logs = $this->project[ILog::class]->all();
 
         if ((
                 $response instanceof ApiResponse ||

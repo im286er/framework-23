@@ -106,8 +106,9 @@ abstract class KernelConsole implements IKernelConsole
      *
      * @param int                                             $status
      * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @codeCoverageIgnore
      */
-    public function terminate(int $status, InputInterface $input = null)
+    public function terminate(int $status, InputInterface $input = null): void
     {
     }
 
@@ -125,6 +126,7 @@ abstract class KernelConsole implements IKernelConsole
      * 取得命令行应用.
      *
      * @return \Leevel\Console\Application
+     * @codeCoverageIgnore
      */
     protected function getConsoleApplication(): Application
     {
@@ -169,7 +171,7 @@ abstract class KernelConsole implements IKernelConsole
     protected function setGlobalReplace(): void
     {
         Make::setGlobalReplace(
-            $this->project['option']->get('console\template') ?: []
+            $this->project['option']->get('console\\template') ?: []
         );
     }
 
