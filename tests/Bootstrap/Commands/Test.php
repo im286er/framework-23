@@ -18,33 +18,43 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\Log;
+namespace Tests\Bootstrap\Commands;
+
+use Leevel\Console\Command;
 
 /**
- * IConnect 接口.
+ * test command.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2017.04.23
+ * @since 2018.08.24
  *
  * @version 1.0
  */
-interface IConnect
+class Test extends Command
 {
-    /**
-     * 设置配置.
-     *
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return $this
-     */
-    public function setOption(string $name, $value);
+    protected $name = 'test';
 
-    /**
-     * 日志写入接口.
-     *
-     * @param array $data
-     */
-    public function flush(array $datas);
+    protected $description = 'This is a test command';
+
+    protected $help = <<<'EOF'
+The <info>%command.name%</info> command to show how to make a command:
+
+  <info>php %command.full_name%</info>
+EOF;
+
+    public function handle()
+    {
+        $this->info('Hello my test command.');
+    }
+
+    protected function getArguments()
+    {
+        return [];
+    }
+
+    protected function getOptions()
+    {
+        return [];
+    }
 }

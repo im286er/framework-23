@@ -18,75 +18,56 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Tests\Session\Middleware;
+namespace Tests\Log\Middleware;
 
 use Leevel\Di\Container;
 use Leevel\Di\IContainer;
+use Leevel\Filesystem\Fso;
 use Leevel\Http\IRequest;
 use Leevel\Http\IResponse;
+use Leevel\Log\Manager;
+use Leevel\Log\Middleware\Log as MiddlewareLog;
 use Leevel\Option\Option;
-use Leevel\Session\Manager;
-use Leevel\Session\Middleware\Session as MiddlewareSession;
 use Tests\TestCase;
 
 /**
- * session test.
+ * log test.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2018.08.18
+ * @since 2018.08.24
  *
  * @version 1.0
  */
-class SessionTest extends TestCase
+class LogTest extends TestCase
 {
     public function testBaseUse()
     {
-        $session = $this->createSession();
+        $log = $this->createLog();
 
-        $middleware = new MiddlewareSession($session);
+        $middleware = new MiddlewareLog($log);
 
-        $request = $this->createRequest('http://127.0.0.1');
-
-        $this->assertNull($middleware->handle(function ($request) {
-            $this->assertInstanceof(IRequest::class, $request);
-            $this->assertSame('http://127.0.0.1', $request->getUri());
-        }, $request));
-    }
-
-    public function testTerminate()
-    {
-        $session = $this->createSession();
-
-        $middleware = new MiddlewareSession($session);
-
-        $request = $this->createRequest('http://127.0.0.1');
-
+        $request = $this->createRequest();
         $response = $this->createResponse();
 
-        $this->assertNull($middleware->handle(function ($request) {
-            $this->assertInstanceof(IRequest::class, $request);
-            $this->assertSame('http://127.0.0.1', $request->getUri());
-        }, $request));
+        $log->info('foo', ['bar']);
+        $filePath = __DIR__.'/cache/info/'.date('Y-m-d').'.log';
+        $this->assertFileNotExists($filePath);
 
         $this->assertNull($middleware->terminate(function ($request, $response) {
             $this->assertInstanceof(IRequest::class, $request);
-            $this->assertSame('http://127.0.0.1', $request->getUri());
             $this->assertInstanceof(IResponse::class, $response);
             $this->assertSame('content', $response->getContent());
         }, $request, $response));
+
+        $this->assertFileExists($filePath);
+
+        Fso::deleteDirectory(__DIR__.'/cache', true);
     }
 
-    protected function createRequest(string $url): IRequest
+    protected function createRequest(): IRequest
     {
-        $request = $this->createMock(IRequest::class);
-
-        $request->cookies = new CookieTest();
-
-        $request->method('getUri')->willReturn($url);
-        $this->assertEquals($url, $request->getUri());
-
-        return $request;
+        return $this->createMock(IRequest::class);
     }
 
     protected function createResponse(): IResponse
@@ -99,7 +80,7 @@ class SessionTest extends TestCase
         return $response;
     }
 
-    protected function createSession(): Manager
+    protected function createLog(): Manager
     {
         $container = new Container();
 
@@ -109,14 +90,25 @@ class SessionTest extends TestCase
         $this->assertInstanceof(Container::class, $manager->container());
 
         $option = new Option([
-            'session' => [
-                'default'       => 'nulls',
-                'id'            => null,
-                'name'          => 'UID',
-                'expire'        => 86400,
-                'connect'       => [
-                    'nulls' => [
-                        'driver' => 'nulls',
+            'log' => [
+                'default' => 'file',
+                'level'   => [
+                    'debug',
+                    'info',
+                    'notice',
+                    'warning',
+                    'error',
+                    'critical',
+                    'alert',
+                    'emergency',
+                ],
+                'time_format' => '[Y-m-d H:i:s]',
+                'connect'     => [
+                    'file' => [
+                        'driver' => 'file',
+                        'name'   => 'Y-m-d',
+                        'size'   => 2097152,
+                        'path'   => __DIR__.'/cache',
                     ],
                 ],
             ],
@@ -125,12 +117,5 @@ class SessionTest extends TestCase
         $container->singleton('option', $option);
 
         return $manager;
-    }
-}
-
-class CookieTest
-{
-    public function get(string $name, $default = null)
-    {
     }
 }

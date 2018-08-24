@@ -88,13 +88,6 @@ interface ILog
     const EMERGENCY = 'emergency';
 
     /**
-     * sql.
-     *
-     * @var string
-     */
-    const SQL = 'sql';
-
-    /**
      * 设置配置.
      *
      * @param string $name
@@ -105,117 +98,120 @@ interface ILog
     public function setOption(string $name, $value);
 
     /**
-     * 记录 emergency 日志.
+     * 系统无法使用.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function emergency($message, array $context = [], bool $write = false);
+    public function emergency(string $message, array $context = []): void;
 
     /**
-     * 记录 alert 日志.
+     * 必须立即采取行动.
+     *
+     * 比如: 整个网站宕机，数据库不可用等等.
+     * 这种错误应该通过短信通知你.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function alert($message, array $context = [], bool $write = false);
+    public function alert(string $message, array $context = []): void;
 
     /**
-     * 记录 critical 日志.
+     * 临界条件.
+     *
+     * 比如: 应用程序组件不可用，意外异常.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function critical($message, array $context = [], bool $write = false);
+    public function critical(string $message, array $context = []): void;
 
     /**
-     * 记录 error 日志.
+     * 运行时错误，不需要立即处理.
+     * 但是需要被记录和监控.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function error($message, array $context = [], bool $write = false);
+    public function error(string $message, array $context = []): void;
 
     /**
-     * 记录 warning 日志.
+     * 非错误的异常事件.
+     *
+     * 比如: 弃用的 API 接口, API 使用不足, 不良事物.
+     * 它们不一定是错误的.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function warning($message, array $context = [], bool $write = false);
+    public function warning(string $message, array $context = []): void;
 
     /**
-     * 记录 notice 日志.
+     * 正常重要事件.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function notice($message, array $context = [], bool $write = false);
+    public function notice(string $message, array $context = []): void;
 
     /**
-     * 记录 info 日志.
+     * 想记录的日志.
+     *
+     * 比如: 用户日志, SQL 日志.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function info($message, array $context = [], bool $write = false);
+    public function info(string $message, array $context = []): void;
 
     /**
-     * 记录 debug 日志.
+     * 调试信息.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function debug($message, array $context = [], bool $write = false);
+    public function debug(string $message, array $context = []): void;
 
     /**
-     * 记录日志.
+     * 记录特定级别的日志信息.
      *
-     * @param string $level
-     * @param mixed  $message
-     * @param array  $context
-     *
-     * @return array
-     */
-    public function log($level, $message, array $context = []);
-
-    /**
-     * 记录错误消息并写入.
-     *
-     * @param string $level   日志类型
-     * @param string $message 应该被记录的错误信息
+     * @param mixed  $level
+     * @param string $message
      * @param array  $context
      */
-    public function write($level, $message, array $context = []);
+    public function log(string $level, string $message, array $context = []): void;
 
     /**
      * 保存日志信息.
      */
-    public function save();
+    public function flush();
+
+    /**
+     * 清理日志记录.
+     *
+     * @param string $level
+     *
+     * @return int
+     */
+    public function clear(?string $level = null): int;
+
+    /**
+     * 获取日志记录.
+     *
+     * @param string $level
+     *
+     * @return array
+     */
+    public function all(?string $level = null): array;
+
+    /**
+     * 获取日志记录数量.
+     *
+     * @param string $level
+     *
+     * @return int
+     */
+    public function count(?string $level = null);
 
     /**
      * 注册日志过滤器.
@@ -230,31 +226,4 @@ interface ILog
      * @param callable $processor
      */
     public function registerProcessor(callable $processor);
-
-    /**
-     * 清理日志记录.
-     *
-     * @param string $level
-     *
-     * @return int
-     */
-    public function clear($level = null);
-
-    /**
-     * 获取日志记录.
-     *
-     * @param string $level
-     *
-     * @return array
-     */
-    public function get($level = null);
-
-    /**
-     * 获取日志记录数量.
-     *
-     * @param string $level
-     *
-     * @return int
-     */
-    public function count($level = null);
 }

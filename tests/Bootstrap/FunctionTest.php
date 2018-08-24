@@ -135,11 +135,8 @@ class FunctionTest extends TestCase
     {
         $log = $this->createMock(ILog::class);
 
-        $log->method('write')->willReturn(['foo', '[]']);
-        $this->assertSame(['foo', '[]'], $log->write(ILog::INFO, 'foo', []));
-
-        $log->method('log')->willReturn(['bar', '[]']);
-        $this->assertSame(['bar', '[]'], $log->log('bar', []));
+        $log->method('log')->willReturn(null);
+        $this->assertNull($log->log(ILog::INFO, 'bar', []));
 
         $project = new Project3();
 
@@ -150,8 +147,7 @@ class FunctionTest extends TestCase
         Leevel2::setProject($project);
 
         $this->assertInstanceof(ILog::class, Leevel2::log());
-        $this->assertSame(['bar', '[]'], Leevel2::log('bar', [], ILog::INFO));
-        $this->assertSame(['foo', '[]'], Leevel2::log('foo', [], ILog::INFO, true));
+        $this->assertNull(Leevel2::log('bar', [], ILog::INFO));
     }
 
     public function testOption()

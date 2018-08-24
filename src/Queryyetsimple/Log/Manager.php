@@ -52,8 +52,7 @@ class Manager extends Managers
      */
     protected function createConnect($connect)
     {
-        return new Log(
-            $connect,
+        return new Log($connect,
             $this->getCommonOption()
         );
     }

@@ -24,12 +24,11 @@ use Leevel\Cache\Cache;
 use Leevel\Cache\File;
 use Leevel\Http\IRequest;
 use Leevel\Throttler\Middleware\Throttler as MiddlewareThrottler;
-use Leevel\Throttler\Provider\Register;
 use Leevel\Throttler\Throttler;
 use Tests\TestCase;
 
 /**
- * register test.
+ * throttler test.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
