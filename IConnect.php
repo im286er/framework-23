@@ -46,5 +46,5 @@ interface IConnect
      *
      * @param array $data
      */
-    public function save(array $datas);
+    public function flush(array $datas);
 }

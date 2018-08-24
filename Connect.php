@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Log;
 
-use RuntimeException;
+use InvalidArgumentException;
 
 /**
  * aconnect 驱动抽象类.
@@ -63,11 +63,10 @@ abstract class Connect
      *
      * @param string $filePath
      */
-    protected function checkSize($filePath)
+    protected function checkSize(string $filePath): void
     {
         $dirname = dirname($filePath);
 
-        // 如果不是文件，则创建
         if (!is_file($filePath)) {
             if (!is_dir($dirname)) {
                 if (is_dir(dirname($dirname)) && !is_writable(dirname($dirname))) {
@@ -81,19 +80,19 @@ abstract class Connect
 
             if (!is_writable($dirname)) {
                 throw new InvalidArgumentException(
-                    sprintf('Unable to create log file：%s.', $filePath)
+                    sprintf('Dir %s is not writeable.', $dirname)
                 );
             }
         }
 
-        // 检测日志文件大小，超过配置大小则备份日志文件重新生成
+        // 清理文件状态缓存 http://php.net/manual/zh/function.clearstatcache.php
+        clearstatcache();
+
         if (is_file($filePath) &&
             floor($this->option['size']) <= filesize($filePath)) {
-            rename(
-                $filePath, $dirname.'/'.
-                date('Y-m-d H.i.s').'_'.
-                basename($filePath)
-            );
+            rename($filePath,
+                $dirname.'/'.basename($filePath, '.log').'_'.
+                (time() - filemtime($filePath)).'.log');
         }
     }
 
@@ -101,25 +100,20 @@ abstract class Connect
      * 获取日志路径.
      *
      * @param string $level
-     * @param string $filePath
      *
      * @return string
      */
-    protected function getPath($level = '')
+    protected function getPath(string $level = ''): string
     {
-        // 不存在路径，则直接使用项目默认路径
-        if (empty($filePath)) {
-            if (!$this->option['path']) {
-                throw new RuntimeException(
-                    'Default path for log has not specified.'
-                );
-            }
-
-            $filePath = $this->option['path'].'/'.
-                ($level ? $level.'/' : '').
-                date($this->option['name']).
-                '.log';
+        if (!$this->option['path']) {
+            throw new InvalidArgumentException(
+                'Path for log has not set.'
+            );
         }
+
+        $filePath = $this->option['path'].'/'.
+            ($level ? $level.'/' : '').
+            date($this->option['name']).'.log';
 
         return $filePath;
     }

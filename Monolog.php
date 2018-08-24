@@ -98,7 +98,7 @@ class Monolog extends Connect implements IConnect
      *
      * @param array $data
      */
-    public function save(array $data)
+    public function flush(array $data)
     {
         $level = array_keys($this->supportLevel);
 
@@ -109,101 +109,6 @@ class Monolog extends Connect implements IConnect
 
             $this->monolog->{$item[0]}($item[1], $item[2]);
         }
-    }
-
-    /**
-     * 注册文件 handler.
-     *
-     * @param string $path
-     * @param string $level
-     */
-    public function file($path, $level = ILog::DEBUG)
-    {
-        $handler = new StreamHandler(
-            $path, $this->parseMonologLevel($level)
-        );
-
-        $this->monolog->pushHandler($handler);
-
-        $handler->setFormatter($this->getDefaultFormatter());
-    }
-
-    /**
-     * 注册每日文件 handler.
-     *
-     * @param string $path
-     * @param int    $days
-     * @param string $level
-     */
-    public function dailyFile($path, $days = 0, $level = ILog::DEBUG)
-    {
-        $handler = new RotatingFileHandler(
-            $path, $days, $this->parseMonologLevel($level)
-        );
-
-        $this->monolog->pushHandler($handler);
-
-        $handler->setFormatter($this->getDefaultFormatter());
-    }
-
-    /**
-     * 注册系统 handler.
-     *
-     * @param string $name
-     * @param string $level
-     *
-     * @return \Psr\Log\LoggerInterface
-     */
-    public function syslog($name = 'queryphp', $level = ILog::DEBUG)
-    {
-        $handler = new SyslogHandler($name, LOG_USER, $level);
-
-        return $this->monolog->pushHandler($handler);
-    }
-
-    /**
-     * 注册 error_log handler.
-     *
-     * @param string $level
-     * @param int    $messageType
-     */
-    public function errorLog($level = ILog::DEBUG, $messageType = ErrorLogHandler::OPERATING_SYSTEM)
-    {
-        $handler = new ErrorLogHandler(
-            $messageType, $this->parseMonologLevel($level)
-        );
-
-        $this->monolog->pushHandler($handler);
-
-        $handler->setFormatter($this->getDefaultFormatter());
-    }
-
-    /**
-     * monolog 回调.
-     *
-     * @param null|callable $callback
-     *
-     * @return $this
-     */
-    public function monolog($callback = null)
-    {
-        if (is_callable($callback)) {
-            call_user_func_array($callback, [
-                $this,
-            ]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * 取得 Monolog.
-     *
-     * @return \Monolog\Logger
-     */
-    public function getMonolog()
-    {
-        return $this->monolog;
     }
 
     /**
@@ -242,6 +147,73 @@ class Monolog extends Connect implements IConnect
     protected function makeErrorLogHandler()
     {
         $this->errorLog();
+    }
+
+    /**
+     * 注册文件 handler.
+     *
+     * @param string $path
+     * @param string $level
+     */
+    protected function file($path, $level = ILog::DEBUG)
+    {
+        $handler = new StreamHandler(
+            $path, $this->parseMonologLevel($level)
+        );
+
+        $this->monolog->pushHandler($handler);
+
+        $handler->setFormatter($this->getDefaultFormatter());
+    }
+
+    /**
+     * 注册每日文件 handler.
+     *
+     * @param string $path
+     * @param int    $days
+     * @param string $level
+     */
+    protected function dailyFile($path, $days = 0, $level = ILog::DEBUG)
+    {
+        $handler = new RotatingFileHandler(
+            $path, $days, $this->parseMonologLevel($level)
+        );
+
+        $this->monolog->pushHandler($handler);
+
+        $handler->setFormatter($this->getDefaultFormatter());
+    }
+
+    /**
+     * 注册系统 handler.
+     *
+     * @param string $name
+     * @param string $level
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function syslog($name = 'queryphp', $level = ILog::DEBUG)
+    {
+        $handler = new SyslogHandler($name, LOG_USER, $level);
+
+        return $this->monolog->pushHandler($handler);
+    }
+
+    /**
+     * 注册 error_log handler.
+     *
+     * @param string $level
+     * @param int    $messageType
+     */
+    protected function errorLog($level = ILog::DEBUG, $messageType = ErrorLogHandler::OPERATING_SYSTEM)
+    {
+        $handler = new ErrorLogHandler(
+            $messageType, $this->parseMonologLevel($level)
+        );
+
+        $this->monolog->pushHandler($handler);
+
+        $handler->setFormatter($this->getDefaultFormatter());
     }
 
     /**

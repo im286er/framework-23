@@ -47,12 +47,10 @@ class File extends Connect implements IConnect
      *
      * @param array $datas
      */
-    public function save(array $datas)
+    public function flush(array $datas)
     {
-        // 保存日志
         $this->checkSize($filepath = $this->getPath($datas[0][0]));
 
-        // 记录到系统
         foreach ($datas as $item) {
             error_log(
                 $this->formatMessage($item[1], $item[2]).PHP_EOL,

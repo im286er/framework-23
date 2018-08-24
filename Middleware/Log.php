@@ -21,8 +21,8 @@ declare(strict_types=1);
 namespace Leevel\Log\Middleware;
 
 use Closure;
-use Leevel\Http\Request;
-use Leevel\Http\Response;
+use Leevel\Http\IRequest;
+use Leevel\Http\IResponse;
 use Leevel\Log\Manager;
 
 /**
@@ -56,11 +56,11 @@ class Log
     /**
      * 响应.
      *
-     * @param \Closure              $next
-     * @param \Leevel\Http\Request  $request
-     * @param \Leevel\Http\Response $response
+     * @param \Closure               $next
+     * @param \Leevel\Http\IRequest  $request
+     * @param \Leevel\Http\IResponse $response
      */
-    public function terminate(Closure $next, Request $request, Response $response)
+    public function terminate(Closure $next, IRequest $request, IResponse $response)
     {
         $this->saveLog();
 
@@ -72,8 +72,6 @@ class Log
      */
     protected function saveLog()
     {
-        if ($this->manager->container()['option']['log\enabled']) {
-            $this->manager->save();
-        }
+        $this->manager->flush();
     }
 }

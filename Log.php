@@ -20,10 +20,6 @@ declare(strict_types=1);
 
 namespace Leevel\Log;
 
-use Leevel\Support\IArray;
-use Leevel\Support\IJson;
-use RuntimeException;
-
 /**
  * 日志仓储.
  *
@@ -69,7 +65,6 @@ class Log implements ILog
      * @var array
      */
     protected $option = [
-        'enabled' => true,
         'level'   => [
             self::DEBUG,
             self::INFO,
@@ -79,7 +74,6 @@ class Log implements ILog
             self::CRITICAL,
             self::ALERT,
             self::EMERGENCY,
-            self::SQL,
         ],
         'time_format' => '[Y-m-d H:i]',
     ];
@@ -126,140 +120,119 @@ class Log implements ILog
     }
 
     /**
-     * 记录 emergency 日志.
+     * 系统无法使用.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function emergency($message, array $context = [], bool $write = false)
+    public function emergency(string $message, array $context = []): void
     {
-        return $this->{$write ? 'write' : 'log'}(static::EMERGENCY, $message, $context);
+        $this->log(static::EMERGENCY, $message, $context);
     }
 
     /**
-     * 记录 alert 日志.
+     * 必须立即采取行动.
+     *
+     * 比如: 整个网站宕机，数据库不可用等等.
+     * 这种错误应该通过短信通知你.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function alert($message, array $context = [], bool $write = false)
+    public function alert(string $message, array $context = []): void
     {
-        return $this->{$write ? 'write' : 'log'}(static::ALERT, $message, $context);
+        $this->log(static::ALERT, $message, $context);
     }
 
     /**
-     * 记录 critical 日志.
+     * 临界条件.
+     *
+     * 比如: 应用程序组件不可用，意外异常.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function critical($message, array $context = [], bool $write = false)
+    public function critical(string $message, array $context = []): void
     {
-        return $this->{$write ? 'write' : 'log'}(static::CRITICAL, $message, $context);
+        $this->log(static::CRITICAL, $message, $context);
     }
 
     /**
-     * 记录 error 日志.
+     * 运行时错误，不需要立即处理.
+     * 但是需要被记录和监控.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function error($message, array $context = [], bool $write = false)
+    public function error(string $message, array $context = []): void
     {
-        return $this->{$write ? 'write' : 'log'}(static::ERROR, $message, $context);
+        $this->log(static::ERROR, $message, $context);
     }
 
     /**
-     * 记录 warning 日志.
+     * 非错误的异常事件.
+     *
+     * 比如: 弃用的 API 接口, API 使用不足, 不良事物.
+     * 它们不一定是错误的.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function warning($message, array $context = [], bool $write = false)
+    public function warning(string $message, array $context = []): void
     {
-        return $this->{$write ? 'write' : 'log'}(static::WARNING, $message, $context);
+        $this->log(static::WARNING, $message, $context);
     }
 
     /**
-     * 记录 notice 日志.
+     * 正常重要事件.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function notice($message, array $context = [], bool $write = false)
+    public function notice(string $message, array $context = []): void
     {
-        return $this->{$write ? 'write' : 'log'}(static::NOTICE, $message, $context);
+        $this->log(static::NOTICE, $message, $context);
     }
 
     /**
-     * 记录 info 日志.
+     * 想记录的日志.
+     *
+     * 比如: 用户日志, SQL 日志.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function info($message, array $context = [], bool $write = false)
+    public function info(string $message, array $context = []): void
     {
-        return $this->{$write ? 'write' : 'log'}(static::INFO, $message, $context);
+        $this->log(static::INFO, $message, $context);
     }
 
     /**
-     * 记录 debug 日志.
+     * 调试信息.
      *
      * @param string $message
      * @param array  $context
-     * @param bool   $write
-     *
-     * @return array
      */
-    public function debug($message, array $context = [], bool $write = false)
+    public function debug(string $message, array $context = []): void
     {
-        return $this->{$write ? 'write' : 'log'}(static::DEBUG, $message, $context);
+        $this->log(static::DEBUG, $message, $context);
     }
 
     /**
-     * 记录日志.
+     * 记录特定级别的日志信息.
      *
-     * @param string $level
-     * @param mixed  $message
+     * @param mixed  $level
+     * @param string $message
      * @param array  $context
-     *
-     * @return array
      */
-    public function log($level, $message, array $context = [])
+    public function log(string $level, string $message, array $context = []): void
     {
-        // 是否开启日志
-        if (!$this->option['enabled']) {
-            return;
-        }
-
         // 只记录系统允许的日志级别
         if (!in_array($level, $this->option['level'], true)) {
             return;
         }
 
-        $message = date($this->option['time_format']).
-            $this->formatMessage($message);
+        $message = date($this->option['time_format']).$message;
 
         $data = [
             $level,
@@ -276,29 +249,14 @@ class Log implements ILog
         if (!isset($this->logs[$level])) {
             $this->logs[$level] = [];
         }
+
         $this->logs[$level][] = $data;
-
-        return $data;
-    }
-
-    /**
-     * 记录错误消息并写入.
-     *
-     * @param string $level   日志类型
-     * @param string $message 应该被记录的错误信息
-     * @param array  $context
-     */
-    public function write($level, $message, array $context = [])
-    {
-        $this->saveStore([
-            $this->log($level, $message, $context),
-        ]);
     }
 
     /**
      * 保存日志信息.
      */
-    public function save()
+    public function flush()
     {
         if (!$this->logs) {
             return;
@@ -309,6 +267,58 @@ class Log implements ILog
         }
 
         $this->clear();
+    }
+
+    /**
+     * 清理日志记录.
+     *
+     * @param string $level
+     *
+     * @return int
+     */
+    public function clear(?string $level = null): int
+    {
+        if ($level && isset($this->logs[$level])) {
+            $count = count($this->logs[$level]);
+            $this->logs[$level] = [];
+        } else {
+            $count = count($this->logs);
+            $this->logs = [];
+        }
+
+        return $count;
+    }
+
+    /**
+     * 获取日志记录.
+     *
+     * @param string $level
+     *
+     * @return array
+     */
+    public function all(?string $level = null): array
+    {
+        if ($level && isset($this->logs[$level])) {
+            return $this->logs[$level];
+        }
+
+        return $this->logs;
+    }
+
+    /**
+     * 获取日志记录数量.
+     *
+     * @param string $level
+     *
+     * @return int
+     */
+    public function count(?string $level = null): int
+    {
+        if ($level && isset($this->logs[$level])) {
+            return count($this->logs[$level]);
+        }
+
+        return count($this->logs);
     }
 
     /**
@@ -332,93 +342,17 @@ class Log implements ILog
     }
 
     /**
-     * 清理日志记录.
-     *
-     * @param string $level
-     *
-     * @return int
-     */
-    public function clear($level = null)
-    {
-        if ($level && isset($this->logs[$level])) {
-            $count = count($this->logs[$level]);
-            $this->logs[$level] = [];
-        } else {
-            $count = count($this->logs);
-            $this->logs = [];
-        }
-
-        return $count;
-    }
-
-    /**
-     * 获取日志记录.
-     *
-     * @param string $level
-     *
-     * @return array
-     */
-    public function get($level = null)
-    {
-        if ($level && isset($this->logs[$level])) {
-            return $this->logs[$level];
-        }
-
-        return $this->logs;
-    }
-
-    /**
-     * 获取日志记录数量.
-     *
-     * @param string $level
-     *
-     * @return int
-     */
-    public function count($level = null)
-    {
-        if ($level && isset($this->logs[$level])) {
-            return count($this->logs[$level]);
-        }
-
-        return count($this->logs);
-    }
-
-    /**
      * 存储日志.
      *
      * @param array $data
      */
-    protected function saveStore($data)
+    protected function saveStore(array $data)
     {
         // 执行处理器
         if (null !== $this->processor) {
             call_user_func_array($this->processor, $data);
         }
-        $this->connect->save($data);
-    }
 
-    /**
-     * 格式化日志消息.
-     *
-     * @param mixed $message
-     *
-     * @return mixed
-     */
-    protected function formatMessage($message)
-    {
-        if (is_array($message)) {
-            return var_export($message, true);
-        }
-        if ($message instanceof IJson) {
-            return $message->toJson();
-        }
-        if ($message instanceof IArray) {
-            return var_export($message->toArray(), true);
-        }
-        if (is_scalar($message)) {
-            return $message;
-        }
-
-        throw new RuntimeException('Message is invalid.');
+        $this->connect->flush($data);
     }
 }
