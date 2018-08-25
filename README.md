@@ -80,10 +80,6 @@ composer require leevel/cache
 ... and more
 ```
 
-## Official Documentation
-
-Documentation for the framework can be found on the [QueryPHP website](http://www.queryphp.com).
-
 ## Run Tests
 
 ```
@@ -109,6 +105,10 @@ $php-cs-fixer fix --config=.php_cs.dist
 ## Travis CI Supported
 
 Let code poem.
+
+## Official Documentation
+
+Documentation for the framework can be found on the [QueryPHP website](http://www.queryphp.com).
 
 ## License
 
