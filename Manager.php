@@ -64,7 +64,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Log\File
      */
-    protected function makeConnectFile($options = []): File
+    protected function makeConnectFile(array $options = []): File
     {
         return new File(
             $this->normalizeConnectOption('file', $options)
@@ -72,13 +72,13 @@ class Manager extends Managers
     }
 
     /**
-     * 创建 monolog 日志驱动.
+     * 创建 syslog 日志驱动.
      *
      * @param array $options
      *
-     * @return \Leevel\Log\Monolog
+     * @return \Leevel\Log\Syslog
      */
-    protected function makeConnectMonolog($options = []): Monolog
+    protected function makeConnectSyslog(array $options = []): Syslog
     {
         return new Syslog(
             $this->normalizeConnectOption('syslog', $options)

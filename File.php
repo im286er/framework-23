@@ -75,7 +75,7 @@ class File implements IConnect
      *
      * @param array $datas
      */
-    public function flush(array $datas)
+    public function flush(array $datas): void
     {
         $level = $datas[0][0];
 
@@ -154,9 +154,9 @@ class File implements IConnect
      */
     protected function formatMessage(string $level, string $message, array $contexts = []): string
     {
-        return sprintf('[%s] %s %s: %s'.PHP_EOL, date('Y-m-d H:i:s'),
-            $message,
-            $level,
+        return sprintf(
+            '[%s] %s %s: %s'.PHP_EOL,
+            date('Y-m-d H:i:s'), $message, $level,
             json_encode($contexts, JSON_UNESCAPED_UNICODE)
         );
     }

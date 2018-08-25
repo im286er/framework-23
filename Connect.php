@@ -20,8 +20,8 @@ declare(strict_types=1);
 
 namespace Leevel\Log;
 
-use HandlerInterface;
 use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 
 /**
@@ -33,7 +33,7 @@ use Monolog\Logger;
  *
  * @version 1.0
  */
-abstract class Connect extends Connect implements IConnect
+abstract class Connect implements IConnect
 {
     /**
      * Monolog.
@@ -99,7 +99,7 @@ abstract class Connect extends Connect implements IConnect
      *
      * @param array $data
      */
-    public function flush(array $data)
+    public function flush(array $data): void
     {
         foreach ($data as $value) {
             $method = $this->normalizeLevel(array_shift($value));
@@ -109,15 +109,25 @@ abstract class Connect extends Connect implements IConnect
     }
 
     /**
+     * 取得 Monolog.
+     *
+     * @return \Monolog\Logger
+     */
+    public function getMonolog(): Logger
+    {
+        return $this->monolog;
+    }
+
+    /**
      * 设置默认格式化.
      *
      * @param \Monolog\Handler\HandlerInterface $handler
      *
      * @return \Monolog\Handler\HandlerInterface
      */
-    protected function prepareHandler(HandlerInterface $handler)
+    protected function normalizeHandler(HandlerInterface $handler): HandlerInterface
     {
-        return $handler->setFormatter($this->getDefaultFormatter());
+        return $handler->setFormatter($this->lineFormatter());
     }
 
     /**
@@ -125,7 +135,7 @@ abstract class Connect extends Connect implements IConnect
      *
      * @return \Monolog\Formatter\LineFormatter
      */
-    protected function getDefaultFormatter()
+    protected function lineFormatter(): LineFormatter
     {
         return new LineFormatter(null, null, true, true);
     }
