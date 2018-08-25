@@ -20,19 +20,52 @@ declare(strict_types=1);
 
 namespace Leevel\Log;
 
-use InvalidArgumentException;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Logger;
 
 /**
- * aconnect 驱动抽象类.
+ * connect 驱动抽象类.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2017.08.26
+ * @since 2017.09.01
  *
  * @version 1.0
  */
-abstract class Connect
+abstract class Connect extends Connect implements IConnect
 {
+    /**
+     * Monolog.
+     *
+     * @var \Monolog\Logger
+     */
+    protected $monolog;
+
+    /**
+     * 配置.
+     *
+     * @var array
+     */
+    protected $option = [
+        'channel' => 'query',
+    ];
+
+    /**
+     * Monolog 支持日志级别.
+     *
+     * @var array
+     */
+    protected $supportLevel = [
+        ILog::DEBUG     => Logger::DEBUG,
+        ILog::INFO      => Logger::INFO,
+        ILog::NOTICE    => Logger::NOTICE,
+        ILog::WARNING   => Logger::WARNING,
+        ILog::ERROR     => Logger::ERROR,
+        ILog::CRITICAL  => Logger::CRITICAL,
+        ILog::ALERT     => Logger::ALERT,
+        ILog::EMERGENCY => Logger::EMERGENCY,
+    ];
+
     /**
      * 构造函数.
      *
@@ -41,6 +74,8 @@ abstract class Connect
     public function __construct(array $option = [])
     {
         $this->option = array_merge($this->option, $option);
+
+        $this->monolog = new Logger($this->option['channel']);
     }
 
     /**
@@ -59,62 +94,47 @@ abstract class Connect
     }
 
     /**
-     * 验证日志文件大小.
+     * 日志写入接口.
      *
-     * @param string $filePath
+     * @param array $data
      */
-    protected function checkSize(string $filePath): void
+    public function flush(array $data)
     {
-        $dirname = dirname($filePath);
+        $level = array_keys($this->supportLevel);
 
-        if (!is_file($filePath)) {
-            if (!is_dir($dirname)) {
-                if (is_dir(dirname($dirname)) && !is_writable(dirname($dirname))) {
-                    throw new InvalidArgumentException(
-                        sprintf('Unable to create the %s directory.', $dirname)
-                    );
-                }
-
-                mkdir($dirname, 0777, true);
+        foreach ($data as $item) {
+            if (!in_array($item[0], $level, true)) {
+                $item[0] = ILog::DEBUG;
             }
 
-            if (!is_writable($dirname)) {
-                throw new InvalidArgumentException(
-                    sprintf('Dir %s is not writeable.', $dirname)
-                );
-            }
-        }
-
-        // 清理文件状态缓存 http://php.net/manual/zh/function.clearstatcache.php
-        clearstatcache();
-
-        if (is_file($filePath) &&
-            floor($this->option['size']) <= filesize($filePath)) {
-            rename($filePath,
-                $dirname.'/'.basename($filePath, '.log').'_'.
-                (time() - filemtime($filePath)).'.log');
+            $this->monolog->{$item[0]}($item[1], $item[2]);
         }
     }
 
     /**
-     * 获取日志路径.
+     * 默认格式化.
+     *
+     * @return \Monolog\Formatter\LineFormatter
+     */
+    protected function getDefaultFormatter()
+    {
+        return new LineFormatter(null, null, true, true);
+    }
+
+    /**
+     * 获取 Monolog 级别
+     * 不支持级别归并到 DEBUG.
      *
      * @param string $level
      *
-     * @return string
+     * @return int
      */
-    protected function getPath(string $level = ''): string
+    protected function parseMonologLevel($level)
     {
-        if (!$this->option['path']) {
-            throw new InvalidArgumentException(
-                'Path for log has not set.'
-            );
+        if (isset($this->supportLevel[$level])) {
+            return $this->supportLevel[$level];
         }
 
-        $filePath = $this->option['path'].'/'.
-            ($level ? $level.'/' : '').
-            date($this->option['name']).'.log';
-
-        return $filePath;
+        return $this->supportLevel[ILog::DEBUG];
     }
 }

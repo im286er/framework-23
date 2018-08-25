@@ -80,8 +80,8 @@ class Manager extends Managers
      */
     protected function makeConnectMonolog($options = []): Monolog
     {
-        return new Monolog(
-            $this->normalizeConnectOption('monolog', $options)
+        return new Syslog(
+            $this->normalizeConnectOption('syslog', $options)
         );
     }
 }
