@@ -39,9 +39,10 @@ class File implements IConnect
      * @var array
      */
     protected $option = [
-        'name' => 'Y-m-d H',
-        'size' => 2097152,
-        'path' => '',
+        'channel' => 'development',
+        'name'    => 'Y-m-d H',
+        'size'    => 2097152,
+        'path'    => '',
     ];
 
     /**
@@ -76,14 +77,12 @@ class File implements IConnect
      */
     public function flush(array $datas)
     {
-        $this->checkSize($filepath = $this->getPath($datas[0][0]));
+        $level = $datas[0][0];
 
-        foreach ($datas as $item) {
-            error_log(
-                $this->formatMessage($item[1], $item[2]).PHP_EOL,
-                3,
-                $filepath
-            );
+        $this->checkSize($filepath = $this->normalizePath($level));
+
+        foreach ($datas as $value) {
+            error_log($this->formatMessage(...$value), 3, $filepath);
         }
     }
 
@@ -126,13 +125,13 @@ class File implements IConnect
     }
 
     /**
-     * 获取日志路径.
+     * 格式化日志路径.
      *
      * @param string $level
      *
      * @return string
      */
-    protected function getPath(string $level = ''): string
+    protected function normalizePath(string $level): string
     {
         if (!$this->option['path']) {
             throw new InvalidArgumentException(
@@ -140,24 +139,25 @@ class File implements IConnect
             );
         }
 
-        $filePath = $this->option['path'].'/'.
-            ($level ? $level.'/' : '').
-            date($this->option['name']).'.log';
-
-        return $filePath;
+        return $this->option['path'].'/'.$this->option['channel'].'.'.
+            ($level ? $level.'/' : '').date($this->option['name']).'.log';
     }
 
     /**
      * 格式化日志信息.
      *
-     * @param string $message  应该被记录的错误信息
+     * @param string $level
+     * @param string $message
      * @param array  $contexts
      *
      * @return string
      */
-    protected function formatMessage($message, array $contexts = [])
+    protected function formatMessage(string $level, string $message, array $contexts = []): string
     {
-        return '['.date('Y-m-d H:i:s').'] '.$message.' '.
-            json_encode($contexts, JSON_UNESCAPED_UNICODE);
+        return sprintf('[%s] %s %s: %s'.PHP_EOL, date('Y-m-d H:i:s'),
+            $message,
+            $level,
+            json_encode($contexts, JSON_UNESCAPED_UNICODE)
+        );
     }
 }

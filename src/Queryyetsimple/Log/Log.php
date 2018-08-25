@@ -226,7 +226,6 @@ class Log implements ILog
      */
     public function log(string $level, string $message, array $context = []): void
     {
-        // 只记录系统允许的日志级别
         if (!in_array($level, $this->option['level'], true)) {
             return;
         }
@@ -237,12 +236,11 @@ class Log implements ILog
             $context,
         ];
 
-        // 执行过滤器
-        if (null !== $this->filter && false === call_user_func_array($this->filter, $data)) {
+        if (null !== $this->filter && false === call_user_func_array(
+            $this->filter, $data)) {
             return;
         }
 
-        // 记录到内存方便后期调用
         if (!isset($this->logs[$level])) {
             $this->logs[$level] = [];
         }
@@ -345,7 +343,6 @@ class Log implements ILog
      */
     protected function saveStore(array $data)
     {
-        // 执行处理器
         if (null !== $this->processor) {
             call_user_func_array($this->processor, $data);
         }

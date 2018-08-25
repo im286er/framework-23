@@ -711,7 +711,7 @@ class Compiler implements ICompiler
 
         // 编译
         $theme['content'] = $this->withPhpTag(
-            $attr['name'].'='.$attr['value'].';'
+            $attr['name'].' = '.$attr['value'].';'
         );
     }
 

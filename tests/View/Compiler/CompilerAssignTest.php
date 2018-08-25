@@ -45,8 +45,8 @@ class CompilerAssignTest extends TestCase
 eot;
 
         $compiled = <<<'eot'
-<?php $helloWorld='say hello to the world'; ?>
-<?php $test->hello='hello'; ?>
+<?php $helloWorld = 'say hello to the world'; ?>
+<?php $test->hello = 'hello'; ?>
 eot;
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
     }
@@ -60,7 +60,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $test->hello=null; ?>
+<?php $test->hello = null; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -75,7 +75,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $test->hello=$hello; ?>
+<?php $test->hello = $hello; ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -90,7 +90,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $test->hello=md5($hello); ?>
+<?php $test->hello = md5($hello); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
@@ -105,7 +105,7 @@ eot;
 eot;
 
         $compiled = <<<'eot'
-<?php $test->hello=foo(test($hello, 0,1)); ?>
+<?php $test->hello = foo(test($hello, 0,1)); ?>
 eot;
 
         $this->assertSame($compiled, $parser->doCompile($source, null, true));

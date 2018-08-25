@@ -51,7 +51,7 @@ class LogTest extends TestCase
         $response = $this->createResponse();
 
         $log->info('foo', ['bar']);
-        $filePath = __DIR__.'/cache/info/'.date('Y-m-d').'.log';
+        $filePath = __DIR__.'/cache/development.info/'.date('Y-m-d').'.log';
         $this->assertFileNotExists($filePath);
 
         $this->assertNull($middleware->terminate(function ($request, $response) {
@@ -102,12 +102,14 @@ class LogTest extends TestCase
                     'alert',
                     'emergency',
                 ],
+                'channel'     => 'development',
                 'connect'     => [
                     'file' => [
-                        'driver' => 'file',
-                        'name'   => 'Y-m-d',
-                        'size'   => 2097152,
-                        'path'   => __DIR__.'/cache',
+                        'driver'  => 'file',
+                        'channel' => null,
+                        'name'    => 'Y-m-d',
+                        'size'    => 2097152,
+                        'path'    => __DIR__.'/cache',
                     ],
                 ],
             ],

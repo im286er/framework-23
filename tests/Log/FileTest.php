@@ -68,7 +68,7 @@ class FileTest extends TestCase
         $data = $this->getLogData();
         $file->flush($data);
 
-        $filePath = __DIR__.'/info/'.date('Y-m-d H').'.log';
+        $filePath = __DIR__.'/development.info/'.date('Y-m-d H').'.log';
         $this->assertTrue(is_file($filePath));
 
         Fso::deleteDirectory(dirname($filePath), true);
@@ -83,7 +83,7 @@ class FileTest extends TestCase
         $data = $this->getLogData();
         $file->flush($data);
 
-        $filePath = __DIR__.'/info/'.date('Y-m-d H').'.log';
+        $filePath = __DIR__.'/development.info/'.date('Y-m-d H').'.log';
         $this->assertTrue(is_file($filePath));
 
         Fso::deleteDirectory(dirname($filePath), true);
@@ -94,7 +94,7 @@ class FileTest extends TestCase
         $path = __DIR__.'/write';
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('Dir %s is not writeable.', $path.'/info'));
+        $this->expectExceptionMessage(sprintf('Dir %s is not writeable.', $path.'/development.info'));
 
         $file = new File([
             'path' => $path,
@@ -103,7 +103,7 @@ class FileTest extends TestCase
         // 设置目录只读
         // 7 = 4+2+1 分别代表可读可写可执行
         mkdir($path, 0777);
-        mkdir($path.'/info', 0444);
+        mkdir($path.'/development.info', 0444);
 
         $data = $this->getLogData();
         $file->flush($data);
@@ -114,7 +114,7 @@ class FileTest extends TestCase
         $path = __DIR__.'/parentWrite';
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('Unable to create the %s directory.', $path.'/info'));
+        $this->expectExceptionMessage(sprintf('Unable to create the %s directory.', $path.'/development.info'));
 
         $file = new File([
             'path' => $path,
@@ -135,27 +135,27 @@ class FileTest extends TestCase
         $file = new File([
             'name' => 'Y-m-d',
             'path' => $path,
-            'size' => 50,
+            'size' => 60,
         ]);
 
         $data = $this->getLogData();
 
         // save
         $file->flush($data);
-        $filePath = $path.'/info/'.date('Y-m-d').'.log';
+        $filePath = $path.'/development.info/'.date('Y-m-d').'.log';
         $this->assertFileExists($filePath);
         clearstatcache();
-        $this->assertSame(46, filesize($filePath));
+        $this->assertSame(52, filesize($filePath));
         $file->flush($data); // next > 50
         clearstatcache();
-        $this->assertSame(92, filesize($filePath));
+        $this->assertSame(104, filesize($filePath));
 
         sleep(2);
         $file->flush($data);
-        $renameFilePath = $path.'/info/'.date('Y-m-d').'_2.log';
+        $renameFilePath = $path.'/development.info/'.date('Y-m-d').'_2.log';
         $this->assertFileExists($renameFilePath);
         clearstatcache();
-        $this->assertSame(92, filesize($renameFilePath));
+        $this->assertSame(104, filesize($renameFilePath));
     }
 
     public function testFileNotSetException()
