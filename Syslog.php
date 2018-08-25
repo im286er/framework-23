@@ -36,10 +36,14 @@ class Syslog extends Monolog
     /**
      * 配置.
      *
+     * @see \Monolog\Handler\AbstractSyslogHandler
+     *
      * @var array
      */
     protected $option = [
-        'channel' => 'query',
+        'channel'  => 'development',
+        'facility' => LOG_USER,
+        'level'    => ILog::DEBUG,
     ];
 
     /**
@@ -56,24 +60,16 @@ class Syslog extends Monolog
 
     /**
      * 初始化系统 handler.
-     */
-    protected function makeSyslogHandler()
-    {
-        $this->syslog();
-    }
-
-    /**
-     * 注册系统 handler.
-     *
-     * @param string $name
-     * @param string $level
      *
      * @return \Psr\Log\LoggerInterface
      */
-    protected function syslog($name = 'log', $level = ILog::DEBUG)
+    protected function makeSyslogHandler()
     {
-        $handler = new SyslogHandler($name, LOG_USER, $level);
+        $handler = new SyslogHandler($name,
+            $this->option['facility'],
+            $this->normalizeMonologLevel($this->option['level'])
+        );
 
-        return $this->monolog->pushHandler($handler);
+        return $this->monolog->pushHandler($this->prepareHandler($handler));
     }
 }

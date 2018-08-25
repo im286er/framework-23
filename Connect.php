@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Log;
 
+use HandlerInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Logger;
 
@@ -47,7 +48,7 @@ abstract class Connect extends Connect implements IConnect
      * @var array
      */
     protected $option = [
-        'channel' => 'query',
+        'channel' => 'development',
     ];
 
     /**
@@ -100,25 +101,50 @@ abstract class Connect extends Connect implements IConnect
      */
     public function flush(array $data)
     {
-        $level = array_keys($this->supportLevel);
+        foreach ($data as $value) {
+            $method = $this->normalizeLevel(array_shift($value));
 
-        foreach ($data as $item) {
-            if (!in_array($item[0], $level, true)) {
-                $item[0] = ILog::DEBUG;
-            }
-
-            $this->monolog->{$item[0]}($item[1], $item[2]);
+            $this->monolog->{$method}(...$value);
         }
     }
 
     /**
-     * 默认格式化.
+     * 设置默认格式化.
+     *
+     * @param \Monolog\Handler\HandlerInterface $handler
+     *
+     * @return \Monolog\Handler\HandlerInterface
+     */
+    protected function prepareHandler(HandlerInterface $handler)
+    {
+        return $handler->setFormatter($this->getDefaultFormatter());
+    }
+
+    /**
+     * 默认行格式化.
      *
      * @return \Monolog\Formatter\LineFormatter
      */
     protected function getDefaultFormatter()
     {
         return new LineFormatter(null, null, true, true);
+    }
+
+    /**
+     * 格式化级别
+     * 不支持级别归并到 DEBUG.
+     *
+     * @param string $level
+     *
+     * @return string
+     */
+    protected function normalizeLevel(string $level): string
+    {
+        if (!in_array($level, array_keys($this->supportLevel), true)) {
+            return ILog::DEBUG;
+        }
+
+        return $level;
     }
 
     /**
@@ -129,7 +155,7 @@ abstract class Connect extends Connect implements IConnect
      *
      * @return int
      */
-    protected function parseMonologLevel($level)
+    protected function normalizeMonologLevel(string $level): int
     {
         if (isset($this->supportLevel[$level])) {
             return $this->supportLevel[$level];
