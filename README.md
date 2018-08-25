@@ -32,7 +32,7 @@ DoYouHaoBaby 框架成立于 2010 年，全名 The DoYouHaoBaby PHP Framework，
 
 DoYouHaoBaby 是作者小牛仔于 2010 年 10 月发布的一个作品，那个时候刚刚 20 岁正青春。八年磨一剑，只珍朝夕。
 
-![](doyouhaobaby-googlecode.jpg)
+<a href="https://raw.githubusercontent.com/hunzhiwange/framework/master/doyouhaobaby-googlecode.jpg" target="_blank">DoYouHaoBaby In Googlecode</a>
 
 ## Optional C Extension
 
