@@ -85,7 +85,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Database\Mysql
      */
-    protected function makeConnectMysql($option = []): Mysql
+    protected function makeConnectMysql(array $option = []): Mysql
     {
         return new Mysql(
             $this->container['log'],
