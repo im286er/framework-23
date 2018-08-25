@@ -96,9 +96,7 @@ abstract class Manager
             return $this->connects[$unique];
         }
 
-        $driver = !empty($options['driver']) ?
-            $options['driver'] :
-            $this->getDefaultDriver();
+        $driver = $options['driver'] ?? $this->getDefaultDriver();
 
         return $this->connects[$unique] = $this->makeConnect(
             $driver, $options
