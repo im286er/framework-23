@@ -102,7 +102,6 @@ class LogTest extends TestCase
                     'alert',
                     'emergency',
                 ],
-                'time_format' => '[Y-m-d H:i:s]',
                 'connect'     => [
                     'file' => [
                         'driver' => 'file',

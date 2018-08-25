@@ -75,7 +75,6 @@ class Log implements ILog
             self::ALERT,
             self::EMERGENCY,
         ],
-        'time_format' => '[Y-m-d H:i]',
     ];
 
     /**
@@ -231,8 +230,6 @@ class Log implements ILog
         if (!in_array($level, $this->option['level'], true)) {
             return;
         }
-
-        $message = date($this->option['time_format']).$message;
 
         $data = [
             $level,

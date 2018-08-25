@@ -20,6 +20,8 @@ declare(strict_types=1);
 
 namespace Leevel\Log;
 
+use InvalidArgumentException;
+
 /**
  * log.file.
  *
@@ -29,7 +31,7 @@ namespace Leevel\Log;
  *
  * @version 1.0
  */
-class File extends Connect implements IConnect
+class File implements IConnect
 {
     /**
      * 配置.
@@ -41,6 +43,31 @@ class File extends Connect implements IConnect
         'size' => 2097152,
         'path' => '',
     ];
+
+    /**
+     * 构造函数.
+     *
+     * @param array $option
+     */
+    public function __construct(array $option = [])
+    {
+        $this->option = array_merge($this->option, $option);
+    }
+
+    /**
+     * 设置配置.
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return $this
+     */
+    public function setOption(string $name, $value)
+    {
+        $this->option[$name] = $value;
+
+        return $this;
+    }
 
     /**
      * 日志写入接口.
@@ -61,6 +88,66 @@ class File extends Connect implements IConnect
     }
 
     /**
+     * 验证日志文件大小.
+     *
+     * @param string $filePath
+     */
+    protected function checkSize(string $filePath): void
+    {
+        $dirname = dirname($filePath);
+
+        if (!is_file($filePath)) {
+            if (!is_dir($dirname)) {
+                if (is_dir(dirname($dirname)) && !is_writable(dirname($dirname))) {
+                    throw new InvalidArgumentException(
+                        sprintf('Unable to create the %s directory.', $dirname)
+                    );
+                }
+
+                mkdir($dirname, 0777, true);
+            }
+
+            if (!is_writable($dirname)) {
+                throw new InvalidArgumentException(
+                    sprintf('Dir %s is not writeable.', $dirname)
+                );
+            }
+        }
+
+        // 清理文件状态缓存 http://php.net/manual/zh/function.clearstatcache.php
+        clearstatcache();
+
+        if (is_file($filePath) &&
+            floor($this->option['size']) <= filesize($filePath)) {
+            rename($filePath,
+                $dirname.'/'.basename($filePath, '.log').'_'.
+                (time() - filemtime($filePath)).'.log');
+        }
+    }
+
+    /**
+     * 获取日志路径.
+     *
+     * @param string $level
+     *
+     * @return string
+     */
+    protected function getPath(string $level = ''): string
+    {
+        if (!$this->option['path']) {
+            throw new InvalidArgumentException(
+                'Path for log has not set.'
+            );
+        }
+
+        $filePath = $this->option['path'].'/'.
+            ($level ? $level.'/' : '').
+            date($this->option['name']).'.log';
+
+        return $filePath;
+    }
+
+    /**
      * 格式化日志信息.
      *
      * @param string $message  应该被记录的错误信息
@@ -70,7 +157,7 @@ class File extends Connect implements IConnect
      */
     protected function formatMessage($message, array $contexts = [])
     {
-        return $message.' '.
+        return '['.date('Y-m-d H:i:s').'] '.$message.' '.
             json_encode($contexts, JSON_UNESCAPED_UNICODE);
     }
 }

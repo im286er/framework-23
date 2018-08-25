@@ -145,17 +145,17 @@ class FileTest extends TestCase
         $filePath = $path.'/info/'.date('Y-m-d').'.log';
         $this->assertFileExists($filePath);
         clearstatcache();
-        $this->assertSame(42, filesize($filePath));
+        $this->assertSame(46, filesize($filePath));
         $file->flush($data); // next > 50
         clearstatcache();
-        $this->assertSame(84, filesize($filePath));
+        $this->assertSame(92, filesize($filePath));
 
         sleep(2);
         $file->flush($data);
         $renameFilePath = $path.'/info/'.date('Y-m-d').'_2.log';
         $this->assertFileExists($renameFilePath);
         clearstatcache();
-        $this->assertSame(84, filesize($renameFilePath));
+        $this->assertSame(92, filesize($renameFilePath));
     }
 
     public function testFileNotSetException()
@@ -172,12 +172,12 @@ class FileTest extends TestCase
     protected function getLogData(): array
     {
         return [
-            0 => [
-                0 => 'info',
-                1 => '[2018-06-10 12:03]hello',
-                2 => [
-                    0 => 'hello',
-                    1 => 'world',
+            [
+                'info',
+                'hello',
+                [
+                    'hello',
+                    'world',
                 ],
             ],
         ];
