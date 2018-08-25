@@ -126,7 +126,7 @@ interface IProject extends IContainer
      *
      * @return string
      */
-    public function pathTheme(?string $app = null);
+    public function themePath(?string $app = null);
 
     /**
      * 设置公共路径.

@@ -20,6 +20,8 @@ declare(strict_types=1);
 
 namespace Leevel\Log;
 
+use Closure;
+
 /**
  * ILog 接口.
  *
@@ -190,10 +192,8 @@ interface ILog
      * 清理日志记录.
      *
      * @param string $level
-     *
-     * @return int
      */
-    public function clear(?string $level = null): int;
+    public function clear(?string $level = null): void;
 
     /**
      * 获取日志记录.
@@ -216,14 +216,35 @@ interface ILog
     /**
      * 注册日志过滤器.
      *
-     * @param callable $filter
+     * @param \Closure $filter
      */
-    public function registerFilter(callable $filter);
+    public function filter(Closure $filter);
 
     /**
      * 注册日志处理器.
      *
-     * @param callable $processor
+     * @param \Closure $processor
      */
-    public function registerProcessor(callable $processor);
+    public function processor(Closure $processor);
+
+    /**
+     * 是否为 Monolog.
+     *
+     * @return bool
+     */
+    public function isMonolog(): bool;
+
+    /**
+     * 取得 Monolog.
+     *
+     * @return null|\Monolog\Logger
+     */
+    public function getMonolog();
+
+    /**
+     * 返回连接.
+     *
+     * @return \Leevel\Log\IConnect
+     */
+    public function getConnect(): IConnect;
 }

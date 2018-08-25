@@ -62,7 +62,7 @@ class Manager extends Managers
      *
      * @return \Leevel\View\Html
      */
-    protected function makeConnectHtml($options = []): Html
+    protected function makeConnectHtml(array $options = []): Html
     {
         $options = $this->normalizeConnectOption('html', $options);
         $options = array_merge(
@@ -87,7 +87,7 @@ class Manager extends Managers
      *
      * @return \Leevel\View\Twig
      */
-    protected function makeConnectTwig($options = []): Twig
+    protected function makeConnectTwig(array $options = []): Twig
     {
         $options = $this->normalizeConnectOption('twig', $options);
         $options = array_merge(
@@ -112,7 +112,7 @@ class Manager extends Managers
      *
      * @return \Leevel\View\Phpui
      */
-    protected function makeConnectPhpui($options = []): Phpui
+    protected function makeConnectPhpui(array $options = []): Phpui
     {
         $options = $this->normalizeConnectOption('phpui', $options);
         $options = array_merge(
@@ -129,7 +129,7 @@ class Manager extends Managers
      *
      * @return \Leevel\View\V8
      */
-    protected function makeConnectV8($options = []): V8
+    protected function makeConnectV8(array $options = []): V8
     {
         $options = $this->normalizeConnectOption('v8', $options);
         $options = array_merge(
@@ -152,7 +152,7 @@ class Manager extends Managers
             'debug'            => $this->container->development(),
             'controller_name'  => $request->controller(),
             'action_name'      => $request->action(),
-            'theme_path'       => $this->container->pathTheme(),
+            'theme_path'       => $this->container->themePath(),
             'theme_cache_path' => $this->container->runtimePath('theme').'/'.strtolower($request->app()),
         ];
 

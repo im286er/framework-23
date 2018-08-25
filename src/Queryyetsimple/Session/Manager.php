@@ -72,7 +72,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Session\Nulls
      */
-    protected function makeConnectNulls($options = []): Nulls
+    protected function makeConnectNulls(array $options = []): Nulls
     {
         return new Nulls(
             $this->normalizeConnectOption('nulls', $options)
@@ -86,7 +86,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Session\File
      */
-    protected function makeConnectFile($options = []): File
+    protected function makeConnectFile(array $options = []): File
     {
         return new File(
             $this->normalizeConnectOption('file', $options)
@@ -100,7 +100,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Session\Redis
      */
-    protected function makeConnectRedis($options = []): Redis
+    protected function makeConnectRedis(array $options = []): Redis
     {
         return new Redis(
             $this->normalizeConnectOption('redis', $options)

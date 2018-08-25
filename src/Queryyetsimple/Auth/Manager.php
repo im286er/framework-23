@@ -86,7 +86,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Auth\Session
      */
-    protected function makeConnectSession($options = []): Session
+    protected function makeConnectSession(array $options = []): Session
     {
         $options = array_merge(
             $this->normalizeConnectOption('session', $options)
@@ -108,7 +108,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Auth\Token
      */
-    protected function makeConnectToken($options = []): Token
+    protected function makeConnectToken(array $options = []): Token
     {
         $options = array_merge(
             $this->normalizeConnectOption('token', $options)

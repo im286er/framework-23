@@ -20,6 +20,8 @@ declare(strict_types=1);
 
 namespace Leevel\Log;
 
+use Closure;
+
 /**
  * 日志仓储.
  *
@@ -65,7 +67,7 @@ class Log implements ILog
      * @var array
      */
     protected $option = [
-        'level'   => [
+        'levels'   => [
             self::DEBUG,
             self::INFO,
             self::NOTICE,
@@ -88,19 +90,6 @@ class Log implements ILog
         $this->connect = $connect;
 
         $this->option = array_merge($this->option, $option);
-    }
-
-    /**
-     * call.
-     *
-     * @param string $method
-     * @param array  $args
-     *
-     * @return mixed
-     */
-    public function __call(string $method, array $args)
-    {
-        return $this->connect->{$method}(...$args);
     }
 
     /**
@@ -226,7 +215,7 @@ class Log implements ILog
      */
     public function log(string $level, string $message, array $context = []): void
     {
-        if (!in_array($level, $this->option['level'], true)) {
+        if (!in_array($level, $this->option['levels'], true)) {
             return;
         }
 
@@ -236,13 +225,9 @@ class Log implements ILog
             $context,
         ];
 
-        if (null !== $this->filter && false === call_user_func_array(
-            $this->filter, $data)) {
+        if (null !== ($filter = $this->filter) &&
+            false === $filter(...$data)) {
             return;
-        }
-
-        if (!isset($this->logs[$level])) {
-            $this->logs[$level] = [];
         }
 
         $this->logs[$level][] = $data;
@@ -253,10 +238,6 @@ class Log implements ILog
      */
     public function flush()
     {
-        if (!$this->logs) {
-            return;
-        }
-
         foreach ($this->logs as $data) {
             $this->saveStore($data);
         }
@@ -268,20 +249,16 @@ class Log implements ILog
      * 清理日志记录.
      *
      * @param string $level
-     *
-     * @return int
      */
-    public function clear(?string $level = null): int
+    public function clear(?string $level = null): void
     {
-        if ($level && isset($this->logs[$level])) {
-            $count = count($this->logs[$level]);
-            $this->logs[$level] = [];
-        } else {
-            $count = count($this->logs);
+        if (null === $level) {
             $this->logs = [];
         }
 
-        return $count;
+        if (isset($this->logs[$level])) {
+            $this->logs[$level] = [];
+        }
     }
 
     /**
@@ -309,19 +286,15 @@ class Log implements ILog
      */
     public function count(?string $level = null): int
     {
-        if ($level && isset($this->logs[$level])) {
-            return count($this->logs[$level]);
-        }
-
-        return count($this->logs);
+        return count($this->all($level));
     }
 
     /**
      * 注册日志过滤器.
      *
-     * @param callable $filter
+     * @param \Closure $filter
      */
-    public function registerFilter(callable $filter)
+    public function filter(Closure $filter)
     {
         $this->filter = $filter;
     }
@@ -329,11 +302,45 @@ class Log implements ILog
     /**
      * 注册日志处理器.
      *
-     * @param callable $processor
+     * @param \Closure $processor
      */
-    public function registerProcessor(callable $processor)
+    public function processor(Closure $processor)
     {
         $this->processor = $processor;
+    }
+
+    /**
+     * 是否为 Monolog.
+     *
+     * @return bool
+     */
+    public function isMonolog(): bool
+    {
+        return method_exists($this->connect, 'getMonolog');
+    }
+
+    /**
+     * 取得 Monolog.
+     *
+     * @return null|\Monolog\Logger
+     */
+    public function getMonolog()
+    {
+        if (!$this->isMonolog()) {
+            return;
+        }
+
+        return $this->connect->getMonolog();
+    }
+
+    /**
+     * 返回连接.
+     *
+     * @return \Leevel\Log\IConnect
+     */
+    public function getConnect(): IConnect
+    {
+        return $this->connect;
     }
 
     /**
@@ -343,8 +350,10 @@ class Log implements ILog
      */
     protected function saveStore(array $data)
     {
-        if (null !== $this->processor) {
-            call_user_func_array($this->processor, $data);
+        if (null !== ($processor = $this->processor)) {
+            foreach ($data as $value) {
+                $processor(...$value);
+            }
         }
 
         $this->connect->flush($data);

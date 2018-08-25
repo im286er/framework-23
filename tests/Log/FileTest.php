@@ -22,6 +22,7 @@ namespace Tests\Log;
 
 use Leevel\Filesystem\Fso;
 use Leevel\Log\File;
+use Leevel\Log\ILog;
 use Tests\TestCase;
 
 /**
@@ -173,7 +174,7 @@ class FileTest extends TestCase
     {
         return [
             [
-                'info',
+                ILog::INFO,
                 'hello',
                 [
                     'hello',

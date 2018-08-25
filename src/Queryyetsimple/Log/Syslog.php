@@ -31,7 +31,7 @@ use Monolog\Handler\SyslogHandler;
  *
  * @version 1.0
  */
-class Syslog extends Monolog
+class Syslog extends Connect
 {
     /**
      * 配置.
@@ -65,11 +65,11 @@ class Syslog extends Monolog
      */
     protected function makeSyslogHandler()
     {
-        $handler = new SyslogHandler($name,
+        $handler = new SyslogHandler($this->option['channel'],
             $this->option['facility'],
             $this->normalizeMonologLevel($this->option['level'])
         );
 
-        return $this->monolog->pushHandler($this->prepareHandler($handler));
+        return $this->monolog->pushHandler($this->normalizeHandler($handler));
     }
 }

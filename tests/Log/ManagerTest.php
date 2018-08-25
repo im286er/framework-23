@@ -23,8 +23,10 @@ namespace Tests\Log;
 use Leevel\Di\Container;
 use Leevel\Di\IContainer;
 use Leevel\Filesystem\Fso;
+use Leevel\Log\ILog;
 use Leevel\Log\Manager;
 use Leevel\Option\Option;
+use Monolog\Logger;
 use Tests\TestCase;
 
 /**
@@ -52,6 +54,30 @@ class ManagerTest extends TestCase
         Fso::deleteDirectory(__DIR__.'/cache', true);
     }
 
+    public function testSyslog()
+    {
+        $manager = $this->createManager();
+
+        $syslog = $manager->connect('syslog');
+
+        $syslog->info('foo', ['bar']);
+
+        $this->assertNull($syslog->flush());
+    }
+
+    public function testMonolog()
+    {
+        $manager = $this->createManager();
+
+        $manager->setDefaultDriver('syslog');
+
+        $this->assertInstanceof(Container::class, $container = $manager->container());
+        $this->assertInstanceof(IContainer::class, $container);
+
+        $this->assertTrue($manager->isMonolog());
+        $this->assertInstanceof(Logger::class, $manager->getMonolog());
+    }
+
     protected function createManager()
     {
         $container = new Container();
@@ -63,8 +89,8 @@ class ManagerTest extends TestCase
 
         $option = new Option([
             'log' => [
-                'default' => 'file',
-                'level'   => [
+                'default'  => 'file',
+                'levels'   => [
                     'debug',
                     'info',
                     'notice',
@@ -82,6 +108,12 @@ class ManagerTest extends TestCase
                         'name'    => 'Y-m-d',
                         'size'    => 2097152,
                         'path'    => __DIR__.'/cache',
+                    ],
+                    'syslog' => [
+                        'driver'   => 'syslog',
+                        'channel'  => null,
+                        'facility' => LOG_USER,
+                        'level'    => ILog::DEBUG,
                     ],
                 ],
             ],

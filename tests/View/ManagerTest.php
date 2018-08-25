@@ -74,7 +74,7 @@ class ManagerTest extends TestCase
         $this->assertInstanceof(IContainer::class, $manager->container());
         $this->assertInstanceof(Container::class, $manager->container());
 
-        $this->assertSame(__DIR__.'/assert/default', $container->pathTheme());
+        $this->assertSame(__DIR__.'/assert/default', $container->themePath());
         $this->assertSame(__DIR__.'/cache_theme', $container->runtimePath('theme'));
 
         $option = new Option([
@@ -85,8 +85,7 @@ class ManagerTest extends TestCase
                 'action_fail'           => 'public+fail',
                 'action_success'        => 'public+success',
                 'controlleraction_depr' => '/',
-
-                'connect' => [
+                'connect'               => [
                     'html' => [
                         'driver'         => 'html',
                         'suffix'         => '.html',
@@ -129,7 +128,7 @@ class ExtendContainer extends Container
         return true;
     }
 
-    public function pathTheme()
+    public function themePath()
     {
         return __DIR__.'/assert/default';
     }

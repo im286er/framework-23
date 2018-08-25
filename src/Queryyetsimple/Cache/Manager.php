@@ -63,7 +63,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Cache\File
      */
-    protected function makeConnectFile($options = []): File
+    protected function makeConnectFile(array $options = []): File
     {
         return new File(
             $this->normalizeConnectOption('file', $options)
@@ -77,7 +77,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Cache\Redis
      */
-    protected function makeConnectRedis($options = []): Redis
+    protected function makeConnectRedis(array $options = []): Redis
     {
         $options = $this->normalizeConnectOption('redis', $options);
 

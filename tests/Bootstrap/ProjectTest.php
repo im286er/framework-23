@@ -204,8 +204,8 @@ class ProjectTest extends TestCase
             return $option;
         });
 
-        $this->assertSame($appPath.'/application/ui/theme/foo', $project->pathTheme());
-        $this->assertSame($appPath.'/application/blog/ui/theme/foo', $project->pathTheme('blog'));
+        $this->assertSame($appPath.'/application/ui/theme/foo', $project->themePath());
+        $this->assertSame($appPath.'/application/blog/ui/theme/foo', $project->themePath('blog'));
     }
 
     public function testCommonPath()

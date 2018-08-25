@@ -91,8 +91,8 @@ class LogTest extends TestCase
 
         $option = new Option([
             'log' => [
-                'default' => 'file',
-                'level'   => [
+                'default'  => 'file',
+                'levels'   => [
                     'debug',
                     'info',
                     'notice',

@@ -279,7 +279,7 @@ class Project extends Container implements IProject
      *
      * @return string
      */
-    public function pathTheme(?string $app = null)
+    public function themePath(?string $app = null)
     {
         return $this->appPath($app).'/ui/theme/'.
             $this->make('option')->get('view\\theme_name');
