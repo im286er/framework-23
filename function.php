@@ -157,14 +157,12 @@ class Leevel
      * 返回默认值
      *
      * @param mixed $value
-     * @param array $arr
      *
      * @return mixed
      */
-    public static function value($value, ...$arr)
+    public static function value($value)
     {
-        return !is_string($value) && is_callable($value) ?
-            call_user_func_array($value, $arr) : $value;
+        return $value instanceof Closure ? $value() : $value;
     }
 
     /**
