@@ -66,7 +66,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Mail\Nulls
      */
-    protected function makeConnectNulls($options = []): Nulls
+    protected function makeConnectNulls(array $options = []): Nulls
     {
         return new Nulls(
             $this->normalizeConnectOption('nulls', $options)
@@ -80,7 +80,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Mail\Smtp
      */
-    protected function makeConnectSmtp($options = []): Smtp
+    protected function makeConnectSmtp(array $options = []): Smtp
     {
         return new Smtp(
             $this->normalizeConnectOption('smtp', $options)
@@ -94,7 +94,7 @@ class Manager extends Managers
      *
      * @return \Leevel\Mail\Sendmail
      */
-    protected function makeConnectSendmail($options = []): Sendmail
+    protected function makeConnectSendmail(array $options = []): Sendmail
     {
         return new Sendmail(
             $this->normalizeConnectOption('sendmail', $options)
