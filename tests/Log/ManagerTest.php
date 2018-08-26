@@ -101,6 +101,8 @@ class ManagerTest extends TestCase
                     'emergency',
                 ],
                 'channel'     => 'development',
+                'buffer'      => true,
+                'buffer_size' => 100,
                 'connect'     => [
                     'file' => [
                         'driver'  => 'file',

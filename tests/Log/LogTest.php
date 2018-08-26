@@ -150,6 +150,23 @@ class LogTest extends TestCase
         Fso::deleteDirectory(__DIR__.'/cacheLog', true);
     }
 
+    public function testWithOutBuffer()
+    {
+        $log = new Log($this->createFileConnect(), ['buffer' => false]);
+
+        $this->assertInstanceof(ILog::class, $log);
+
+        $dir = __DIR__.'/cacheLog';
+
+        $this->assertDirectoryNotExists($dir);
+
+        $this->assertNull($log->info('foo', ['hello', 'world']));
+
+        $this->assertDirectoryExists($dir);
+
+        Fso::deleteDirectory(__DIR__.'/cacheLog', true);
+    }
+
     protected function createFileConnect(): File
     {
         return new File([
