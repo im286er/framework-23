@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Leevel\Router\Provider;
 
 use Leevel\Cookie\Cookie;
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\Http\Request;
 use Leevel\Http\Response;
@@ -93,7 +94,7 @@ class Register extends Provider
      */
     protected function router()
     {
-        $this->container->singleton('router', function ($project) {
+        $this->container->singleton('router', function (IContainer $container) {
             return new Router($project);
         });
     }
@@ -103,7 +104,7 @@ class Register extends Provider
      */
     protected function url()
     {
-        $this->container->singleton('url', function ($project) {
+        $this->container->singleton('url', function (IContainer $container) {
             $option = $project['option'];
             $router = $project['router'];
 
@@ -126,7 +127,7 @@ class Register extends Provider
      */
     protected function redirect()
     {
-        $this->container['redirect'] = $this->container->share(function ($project) {
+        $this->container['redirect'] = $this->container->share(function (IContainer $container) {
             $redirect = new Redirect($project['url']);
 
             if (isset($project['session'])) {
@@ -142,7 +143,7 @@ class Register extends Provider
      */
     protected function response()
     {
-        $this->container->singleton('response', function ($project) {
+        $this->container->singleton('response', function (IContainer $container) {
             $option = $project['option'];
 
             return (new ResponseFactory($project['view'], $project['redirect']))->
@@ -157,7 +158,7 @@ class Register extends Provider
      */
     protected function cookie()
     {
-        $this->container->singleton('cookie', function ($project) {
+        $this->container->singleton('cookie', function (IContainer $container) {
             return new Cookie($project['option']->get('cookie\\'));
         });
     }
@@ -167,7 +168,7 @@ class Register extends Provider
      */
     protected function view()
     {
-        $this->container->singleton('view', function ($project) {
+        $this->container->singleton('view', function (IContainer $container) {
             return new view($project['view.view']);
         });
     }
