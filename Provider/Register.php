@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Throttler\Provider;
 
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\Throttler\Throttler;
 
@@ -71,7 +72,7 @@ class Register extends Provider
      */
     protected function throttler()
     {
-        $this->container->singleton('throttler', function ($project) {
+        $this->container->singleton('throttler', function (IContainer $container) {
             return (new Throttler($project['caches']->
             connect($project['option']['throttler\\driver'])))->
 
