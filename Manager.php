@@ -152,7 +152,7 @@ class Manager extends Managers
             'debug'            => $this->container->development(),
             'controller_name'  => $request->controller(),
             'action_name'      => $request->action(),
-            'theme_path'       => $this->container->themePath(),
+            'theme_path'       => $this->container->themePath(true),
             'theme_cache_path' => $this->container->runtimePath('theme').'/'.strtolower($request->app()),
         ];
 
