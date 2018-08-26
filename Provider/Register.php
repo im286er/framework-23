@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Page\Provider;
 
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\Page\PageFactory;
 
@@ -69,7 +70,7 @@ class Register extends Provider
      */
     protected function page()
     {
-        $this->container->singleton('page', function ($project) {
+        $this->container->singleton('page', function (IContainer $container) {
             return new PageFactory($project['url']);
         });
     }
