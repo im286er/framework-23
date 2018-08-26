@@ -75,7 +75,7 @@ class Register extends Provider
     protected function filesystems()
     {
         $this->container->singleton('filesystems', function (IContainer $container) {
-            return new Manager($project);
+            return new Manager($container);
         });
     }
 
@@ -85,7 +85,7 @@ class Register extends Provider
     protected function filesystem()
     {
         $this->container->singleton('filesystem', function (IContainer $container) {
-            return $project['filesystems']->connect();
+            return $container['filesystems']->connect();
         });
     }
 }
