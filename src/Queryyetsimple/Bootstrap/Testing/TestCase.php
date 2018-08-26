@@ -20,10 +20,10 @@ declare(strict_types=1);
 
 namespace Leevel\Bootstrap\Testing;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestCase as TestCases;
 
 /**
- * phpunit 测试用例.
+ * phpunit 基础测试类.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
@@ -31,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @version 1.0
  */
-abstract class TestCase extends TestCase
+abstract class TestCase extends TestCases
 {
+    use Helper;
 }

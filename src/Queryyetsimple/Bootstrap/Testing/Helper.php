@@ -18,23 +18,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Tests;
-
-use PHPUnit\Framework\TestCase as TestCases;
-use ReflectionClass;
-use ReflectionMethod;
-use ReflectionProperty;
+namespace Leevel\Bootstrap\Testing;
 
 /**
- * phpunit 基础测试类.
+ * 助手方法.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2017.05.09
+ * @since 2018.08.26
  *
  * @version 1.0
  */
-abstract class TestCase extends TestCases
+trait Helper
 {
     protected function invokeTestMethod($classObj, string $method, array $args = [])
     {
@@ -86,15 +81,5 @@ abstract class TestCase extends TestCases
         $method->setAccessible(true);
 
         return $method;
-    }
-
-    protected function varExport(array $data)
-    {
-        file_put_contents(
-            dirname(__DIR__).'/logs/trace.log',
-            var_export($data, true)
-        );
-
-        return var_export($data, true);
     }
 }
