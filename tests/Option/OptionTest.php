@@ -37,8 +37,8 @@ class OptionTest extends TestCase
     public function testAll()
     {
         $data = [
-            'hello'      => 'world',
-            'test\child' => ['foo' => 'bar'],
+            'hello'       => 'world',
+            'test\\child' => ['foo' => 'bar'],
         ];
 
         $option = new Option($data);
@@ -64,12 +64,12 @@ class OptionTest extends TestCase
 
         $option = new Option($data);
 
-        $this->assertSame('testing', $option->get('app\environment'));
-        $this->assertSame('testing', $option->get('environment'), 'Default namespace is app, so it equal app\testing.');
-        $this->assertNull($option->get('hello'), 'The default namespace is app, so it equal app\hello');
-        $this->assertNull($option->get('app\hello'), 'The default namespace is app, so it equal app\hello');
+        $this->assertSame('testing', $option->get('app\\environment'));
+        $this->assertSame('testing', $option->get('environment'), 'Default namespace is app, so it equal app\\testing.');
+        $this->assertNull($option->get('hello'), 'The default namespace is app, so it equal app\\hello');
+        $this->assertNull($option->get('app\\hello'), 'The default namespace is app, so it equal app\\hello');
         $this->assertSame($option->get('hello\\'), 'world');
-        $this->assertSame($option->get('hello\*'), 'world');
+        $this->assertSame($option->get('hello\\*'), 'world');
 
         $this->assertSame([
             'environment' => 'testing',
@@ -79,16 +79,16 @@ class OptionTest extends TestCase
         $this->assertSame([
             'environment' => 'testing',
             'debug'       => true,
-        ], $option->get('app\*'));
+        ], $option->get('app\\*'));
 
         $this->assertFalse([
             'environment' => 'testing',
             'debug'       => true,
-        ] === $option->get('app'), 'The default namespace is app, so it equal app\app');
+        ] === $option->get('app'), 'The default namespace is app, so it equal app\\app');
 
         // namespace\sub.sub1.sub2
-        $this->assertSame($option->get('cache\time_preset.foo'), 'bar');
-        $this->assertNull($option->get('cache\time_preset.foo2'));
+        $this->assertSame($option->get('cache\\time_preset.foo'), 'bar');
+        $this->assertNull($option->get('cache\\time_preset.foo2'));
     }
 
     public function testHas()
@@ -109,22 +109,22 @@ class OptionTest extends TestCase
 
         $option = new Option($data);
 
-        $this->assertTrue($option->has('app\environment'));
-        $this->assertTrue($option->has('environment'), 'Default namespace is app, so it equal app\testing.');
-        $this->assertFalse($option->has('hello'), 'The default namespace is app, so it equal app\hello');
-        $this->assertFalse($option->has('app\hello'), 'The default namespace is app, so it equal app\hello');
+        $this->assertTrue($option->has('app\\environment'));
+        $this->assertTrue($option->has('environment'), 'Default namespace is app, so it equal app\\testing.');
+        $this->assertFalse($option->has('hello'), 'The default namespace is app, so it equal app\\hello');
+        $this->assertFalse($option->has('app\\hello'), 'The default namespace is app, so it equal app\\hello');
         $this->assertTrue($option->has('hello\\'));
-        $this->assertTrue($option->has('hello\*'));
+        $this->assertTrue($option->has('hello\\*'));
 
         $this->assertTrue($option->has('app\\'));
 
-        $this->assertTrue($option->has('app\*'));
+        $this->assertTrue($option->has('app\\*'));
 
-        $this->assertFalse($option->has('app'), 'The default namespace is app, so it equal app\app');
+        $this->assertFalse($option->has('app'), 'The default namespace is app, so it equal app\\app');
 
         // namespace\sub.sub1.sub2
-        $this->assertTrue($option->has('cache\time_preset.foo'));
-        $this->assertFalse($option->has('cache\time_preset.foo2'));
+        $this->assertTrue($option->has('cache\\time_preset.foo'));
+        $this->assertFalse($option->has('cache\\time_preset.foo2'));
     }
 
     public function testSet()
@@ -135,12 +135,12 @@ class OptionTest extends TestCase
 
         // set app\environment value
         $option->set('environment', 'testing');
-        $this->assertSame('testing', $option->get('app\environment'));
-        $this->assertSame('testing', $option->get('environment'), 'Default namespace is app, so it equal app\testing.');
+        $this->assertSame('testing', $option->get('app\\environment'));
+        $this->assertSame('testing', $option->get('environment'), 'Default namespace is app, so it equal app\\testing.');
 
-        $this->assertNull($option->get('hello'), 'The default namespace is app, so it equal app\hello');
+        $this->assertNull($option->get('hello'), 'The default namespace is app, so it equal app\\hello');
         $option->set('hello', 'i am hello');
-        $this->assertSame($option->get('hello'), 'i am hello', 'The default namespace is app, so it equal app\hello');
+        $this->assertSame($option->get('hello'), 'i am hello', 'The default namespace is app, so it equal app\\hello');
 
         $this->assertSame($option->all(), [
             'app' => [
@@ -152,16 +152,16 @@ class OptionTest extends TestCase
         // 当我们获取一个不存在的配置命名空间时，返回一个初始化的空数组
         // hello namespace not app\hello
         $this->assertSame($option->get('hello\\'), []);
-        $this->assertSame($option->get('hello\*'), []);
+        $this->assertSame($option->get('hello\\*'), []);
 
         $option->set('hello\\', ['foo' => ['sub' => 'bar']]);
 
-        $this->assertSame($option->get('hello\foo.sub'), 'bar');
+        $this->assertSame($option->get('hello\\foo.sub'), 'bar');
 
         // namespace\sub.sub1.sub2
-        $option->set('cache\time_preset.foo', 'bar');
-        $this->assertSame($option->get('cache\time_preset.foo'), 'bar');
-        $this->assertNull($option->get('cache\time_preset.foo2'));
+        $option->set('cache\\time_preset.foo', 'bar');
+        $this->assertSame($option->get('cache\\time_preset.foo'), 'bar');
+        $this->assertNull($option->get('cache\\time_preset.foo2'));
     }
 
     public function testSet2()
@@ -210,7 +210,7 @@ class OptionTest extends TestCase
             'hello' => 'world',
         ]);
 
-        $option->delete('cache\time_preset.foo');
+        $option->delete('cache\\time_preset.foo');
 
         $this->assertSame($option->all(), [
             'app' => [
@@ -332,15 +332,15 @@ class OptionTest extends TestCase
         $option = new Option($data);
 
         // get
-        $this->assertSame($option['cache\time_preset.foo'], 'bar');
+        $this->assertSame($option['cache\\time_preset.foo'], 'bar');
 
         // remove
-        unset($option['cache\time_preset.foo']);
-        $this->assertNull($option['cache\time_preset.foo']);
+        unset($option['cache\\time_preset.foo']);
+        $this->assertNull($option['cache\\time_preset.foo']);
 
         // set
-        $option['cache\foo'] = 'bar';
-        $this->assertSame($option['cache\foo'], 'bar');
+        $option['cache\\foo'] = 'bar';
+        $this->assertSame($option['cache\\foo'], 'bar');
 
         // has
         $this->assertTrue(isset($option['hello\\']));

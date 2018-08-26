@@ -42,24 +42,11 @@ class ComposerOptionTest extends TestCase
 array (
   'providers' => 
   array (
-    0 => 'Leevel\\Auth\\Provider\\Register',
-    1 => 'Leevel\\Cache\\Provider\\Register',
-    2 => 'Leevel\\Cookie\\Provider\\Register',
-    3 => 'Leevel\\Database\\Provider\\Register',
-    4 => 'Leevel\\Encryption\\Provider\\Register',
-    5 => 'Leevel\\Filesystem\\Provider\\Register',
-    6 => 'Leevel\\Mail\\Provider\\Register',
-    7 => 'Leevel\\Mvc\\Provider\\Register',
-    8 => 'Leevel\\Page\\Provider\\Register',
-    9 => 'Leevel\\Queue\\Provider\\Register',
-    10 => 'Leevel\\Session\\Provider\\Register',
-    11 => 'Leevel\\Protocol\\Provider\\Register',
-    12 => 'Leevel\\Throttler\\Provider\\Register',
-    13 => 'Leevel\\Validate\\Provider\\Register',
-    14 => 'Leevel\\View\\Provider\\Register',
-    15 => 'Demo\\Provider\\Register',
-    16 => 'Common\\Infra\\Provider\\Event',
-    17 => 'Common\\Infra\\Provider\\Router',
+    0 => 'Tests\\Option\\Providers\\Foo',
+    1 => 'Tests\\Option\\Providers\\Bar',
+    2 => 'Demo\\Provider\\Register',
+    3 => 'Common\\Infra\\Provider\\Event',
+    4 => 'Common\\Infra\\Provider\\Router',
   ),
   'ignores' => 
   array (
@@ -67,15 +54,10 @@ array (
   ),
   'commands' => 
   array (
-    0 => 'Leevel\\Database\\Console',
-    1 => 'Leevel\\I18n\\Console',
-    2 => 'Leevel\\Mvc\\Console',
-    3 => 'Leevel\\Queue\\Console',
-    4 => 'Leevel\\Router\\Console',
-    5 => 'Leevel\\Protocol\\Console',
-    6 => 'Leevel\\Option\\Console',
-    7 => 'Demo\\Demo\\Console',
-    8 => 'Common\\App\\Console',
+    0 => 'Tests\\Option\\Commands\\Test',
+    1 => 'Tests\\Option\\Commands\\Console',
+    2 => 'Demo\\Demo\\Console',
+    3 => 'Common\\App\\Console',
   ),
   'options' => 
   array (
@@ -115,36 +97,18 @@ eot;
 array (
   'providers' => 
   array (
-    0 => 'Leevel\\Auth\\Provider\\Register',
-    1 => 'Leevel\\Cache\\Provider\\Register',
-    2 => 'Leevel\\Cookie\\Provider\\Register',
-    3 => 'Leevel\\Database\\Provider\\Register',
-    4 => 'Leevel\\Encryption\\Provider\\Register',
-    5 => 'Leevel\\Filesystem\\Provider\\Register',
-    6 => 'Leevel\\Mail\\Provider\\Register',
-    7 => 'Leevel\\Mvc\\Provider\\Register',
-    8 => 'Leevel\\Page\\Provider\\Register',
-    9 => 'Leevel\\Queue\\Provider\\Register',
-    10 => 'Leevel\\Session\\Provider\\Register',
-    11 => 'Leevel\\Protocol\\Provider\\Register',
-    12 => 'Leevel\\Throttler\\Provider\\Register',
-    13 => 'Leevel\\Validate\\Provider\\Register',
-    14 => 'Leevel\\View\\Provider\\Register',
-    15 => 'Demo\\Provider\\Register',
+    0 => 'Tests\\Option\\Providers\\Foo',
+    1 => 'Tests\\Option\\Providers\\Bar',
+    2 => 'Demo\\Provider\\Register',
   ),
   'ignores' => 
   array (
   ),
   'commands' => 
   array (
-    0 => 'Leevel\\Database\\Console',
-    1 => 'Leevel\\I18n\\Console',
-    2 => 'Leevel\\Mvc\\Console',
-    3 => 'Leevel\\Queue\\Console',
-    4 => 'Leevel\\Router\\Console',
-    5 => 'Leevel\\Protocol\\Console',
-    6 => 'Leevel\\Option\\Console',
-    7 => 'Demo\\Demo\\Console',
+    0 => 'Tests\\Option\\Commands\\Test',
+    1 => 'Tests\\Option\\Commands\\Console',
+    2 => 'Demo\\Demo\\Console',
   ),
   'options' => 
   array (
