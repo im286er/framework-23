@@ -62,6 +62,13 @@ class Log implements ILog
     protected $processor;
 
     /**
+     * 日志数量.
+     *
+     * @var int
+     */
+    protected $count = 0;
+
+    /**
      * 配置.
      *
      * @var array
@@ -77,6 +84,8 @@ class Log implements ILog
             self::ALERT,
             self::EMERGENCY,
         ],
+        'buffer'      => true,
+        'buffer_size' => 100,
     ];
 
     /**
@@ -230,7 +239,13 @@ class Log implements ILog
             return;
         }
 
+        $this->count++;
         $this->logs[$level][] = $data;
+
+        if (false === $this->option['buffer'] ||
+            ($this->option['buffer_size'] && $this->count >= $this->option['buffer_size'])) {
+            $this->flush();
+        }
     }
 
     /**
@@ -253,10 +268,12 @@ class Log implements ILog
     public function clear(?string $level = null): void
     {
         if (null === $level) {
+            $this->count = 0;
             $this->logs = [];
         }
 
         if (isset($this->logs[$level])) {
+            $this->count -= count($this->logs[$level]);
             $this->logs[$level] = [];
         }
     }
@@ -270,11 +287,15 @@ class Log implements ILog
      */
     public function all(?string $level = null): array
     {
-        if ($level && isset($this->logs[$level])) {
+        if (null === $level) {
+            return $this->logs;
+        }
+
+        if (isset($this->logs[$level])) {
             return $this->logs[$level];
         }
 
-        return $this->logs;
+        return [];
     }
 
     /**
@@ -286,6 +307,10 @@ class Log implements ILog
      */
     public function count(?string $level = null): int
     {
+        if (null === $level) {
+            return $this->count;
+        }
+
         return count($this->all($level));
     }
 
