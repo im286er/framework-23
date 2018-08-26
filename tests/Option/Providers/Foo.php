@@ -40,7 +40,7 @@ class Foo extends Provider
         });
     }
 
-    public static function providers()
+    public static function providers(): array
     {
         return [
             'foo' => [

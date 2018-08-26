@@ -70,7 +70,7 @@ class Register extends Provider
      *
      * @return array
      */
-    public static function providers()
+    public static function providers(): array
     {
         return [
             'databases' => [

@@ -100,7 +100,7 @@ abstract class Provider
      *
      * @return array
      */
-    public static function providers()
+    public static function providers(): array
     {
         return [];
     }
@@ -110,7 +110,7 @@ abstract class Provider
      *
      * @return bool
      */
-    public static function isDeferred()
+    public static function isDeferred(): bool
     {
         return static::$defer;
     }
@@ -120,7 +120,7 @@ abstract class Provider
      *
      * @return \Leevel\Di\IContainer
      */
-    public function container()
+    public function container(): IContainer
     {
         return $this->container;
     }

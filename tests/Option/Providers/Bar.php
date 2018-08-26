@@ -42,7 +42,7 @@ class Bar extends Provider
         });
     }
 
-    public static function providers()
+    public static function providers(): array
     {
         return [
             'bar' => [

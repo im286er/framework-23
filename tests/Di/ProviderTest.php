@@ -121,7 +121,7 @@ class PrividerTest extends Provider
      *
      * @return array
      */
-    public static function providers()
+    public static function providers(): array
     {
         return [
             'foo' => [
@@ -156,7 +156,7 @@ class PrividerTest2 extends Provider
      *
      * @return array
      */
-    public static function providers()
+    public static function providers(): array
     {
         return [
             'world' => 'hello',
