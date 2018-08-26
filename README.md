@@ -8,7 +8,7 @@
   <a href="https://github.com/hunzhiwange/framework/releases">
     <img alt="Latest Version" src="https://poser.pugx.org/hunzhiwange/framework/version" /></a>
   <a href="http://opensource.org/licenses/MIT">
-    <img alt="QueryPHP License" src="https://poser.pugx.org/hunzhiwange/queryphp/license.svg" /></a>
+    <img alt="QueryPHP License" src="https://poser.pugx.org/hunzhiwange/framework/license.svg" /></a>
 </p>
 
 # The QueryPHP Framework
