@@ -1,5 +1,7 @@
-<?php declare(strict_types=1);
-{{header_comment}}
+<?php
+
+declare(strict_types=1);
+
 namespace {{namespace}}\Domain\Entity;
 
 {{file_comment}}
