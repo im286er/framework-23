@@ -18,14 +18,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Tests\Mail\Provider;
+namespace Tests\Encryption\Provider;
 
 use Leevel\Di\Container;
-use Leevel\Event\IDispatch;
-use Leevel\Mail\Provider\Register;
-use Leevel\Mvc\IView;
+use Leevel\Encryption\IEncryption;
+use Leevel\Encryption\Provider\Register;
 use Leevel\Option\Option;
-use Swift_Message;
 use Tests\TestCase;
 
 /**
@@ -33,7 +31,7 @@ use Tests\TestCase;
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2018.07.28
+ * @since 2018.08.26
  *
  * @version 1.0
  */
@@ -45,19 +43,35 @@ class RegisterTest extends TestCase
 
         $test->register();
 
-        $manager = $container->make('mails');
+        $encryption = $container->make('encryption');
 
-        $manager->plain('Here is the message itself');
+        $this->assertInstanceof(IEncryption::class, $encryption);
 
-        $result = $manager->send(function (Swift_Message $message) {
-            $message->setFrom(['foo@qq.com' => 'John Doe'])->
+        $sourceMessage = '123456';
 
-            setTo(['bar@qq.com' => 'A name'])->
+        $encodeMessage = $encryption->encrypt($sourceMessage);
 
-            setBody('Here is the message itself');
-        });
+        $this->assertFalse($sourceMessage === $encodeMessage);
 
-        $this->assertSame(1, $result);
+        $this->assertSame(
+            $encryption->decrypt($encodeMessage),
+            $sourceMessage
+        );
+
+        $this->assertSame(
+            $encryption->decrypt($encodeMessage.'foo'),
+            ''
+        );
+
+        $this->assertSame(
+            '7becb888f518b20224a988906df51e05',
+            $this->getTestProperty($encryption, 'key')
+        );
+
+        $this->assertSame(
+            0,
+            $this->getTestProperty($encryption, 'expiry')
+        );
     }
 
     protected function createContainer(): Container
@@ -65,33 +79,13 @@ class RegisterTest extends TestCase
         $container = new Container();
 
         $option = new Option([
-            'mail' => [
-                'default'     => 'nulls',
-                'global_from' => [
-                    'address' => null,
-                    'name'    => null,
-                ],
-                'global_to' => [
-                    'address' => null,
-                    'name'    => null,
-                ],
-                'connect' => [
-                    'nulls' => [
-                        'driver' => 'nulls',
-                    ],
-                ],
+            'app' => [
+                'auth_key'    => '7becb888f518b20224a988906df51e05',
+                'auth_expiry' => 0,
             ],
         ]);
 
         $container->singleton('option', $option);
-
-        $view = $this->createMock(IView::class);
-
-        $container->singleton('view', $view);
-
-        $event = $this->createMock(IDispatch::class);
-
-        $container->singleton('event', $event);
 
         return $container;
     }

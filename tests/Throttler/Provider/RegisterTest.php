@@ -80,7 +80,7 @@ class RegisterTest extends TestCase
         unlink($path.'/'.$key.'.php');
     }
 
-    protected function createContainer()
+    protected function createContainer(): Container
     {
         $container = new Container();
 

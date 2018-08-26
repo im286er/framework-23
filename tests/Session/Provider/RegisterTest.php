@@ -68,7 +68,7 @@ class RegisterTest extends TestCase
         $this->assertInstanceof(SessionHandlerInterface::class, $manager->getConnect());
     }
 
-    protected function createContainer()
+    protected function createContainer(): Container
     {
         $container = new Container();
 

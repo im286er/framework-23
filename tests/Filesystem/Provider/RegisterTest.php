@@ -18,14 +18,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Tests\Mail\Provider;
+namespace Tests\Filesystem\Provider;
 
+use League\Flysystem\Filesystem as LeagueFilesystem;
 use Leevel\Di\Container;
-use Leevel\Event\IDispatch;
-use Leevel\Mail\Provider\Register;
-use Leevel\Mvc\IView;
+use Leevel\Filesystem\Provider\Register;
 use Leevel\Option\Option;
-use Swift_Message;
 use Tests\TestCase;
 
 /**
@@ -33,7 +31,7 @@ use Tests\TestCase;
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2018.07.28
+ * @since 2018.08.26
  *
  * @version 1.0
  */
@@ -45,19 +43,21 @@ class RegisterTest extends TestCase
 
         $test->register();
 
-        $manager = $container->make('mails');
+        $manager = $container->make('filesystems');
 
-        $manager->plain('Here is the message itself');
+        $path = __DIR__.'/forRegister';
 
-        $result = $manager->send(function (Swift_Message $message) {
-            $message->setFrom(['foo@qq.com' => 'John Doe'])->
+        $this->assertInstanceof(LeagueFilesystem::class, $manager->getFilesystem());
 
-            setTo(['bar@qq.com' => 'A name'])->
+        $manager->put('helloregister.txt', 'register');
 
-            setBody('Here is the message itself');
-        });
+        $file = $path.'/helloregister.txt';
 
-        $this->assertSame(1, $result);
+        $this->assertTrue(is_file($file));
+        $this->assertSame('register', file_get_contents($file));
+
+        unlink($file);
+        rmdir($path);
     }
 
     protected function createContainer(): Container
@@ -65,33 +65,18 @@ class RegisterTest extends TestCase
         $container = new Container();
 
         $option = new Option([
-            'mail' => [
-                'default'     => 'nulls',
-                'global_from' => [
-                    'address' => null,
-                    'name'    => null,
-                ],
-                'global_to' => [
-                    'address' => null,
-                    'name'    => null,
-                ],
+            'filesystem' => [
+                'default' => 'local',
                 'connect' => [
-                    'nulls' => [
-                        'driver' => 'nulls',
+                    'local' => [
+                        'driver'  => 'local',
+                        'path'    => __DIR__.'/forRegister',
                     ],
                 ],
             ],
         ]);
 
         $container->singleton('option', $option);
-
-        $view = $this->createMock(IView::class);
-
-        $container->singleton('view', $view);
-
-        $event = $this->createMock(IDispatch::class);
-
-        $container->singleton('event', $event);
 
         return $container;
     }

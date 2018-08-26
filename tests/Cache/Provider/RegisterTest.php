@@ -18,14 +18,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Tests\Mail\Provider;
+namespace Tests\Cache\Provider;
 
+use Leevel\Cache\Provider\Register;
 use Leevel\Di\Container;
-use Leevel\Event\IDispatch;
-use Leevel\Mail\Provider\Register;
-use Leevel\Mvc\IView;
+use Leevel\Filesystem\Fso;
 use Leevel\Option\Option;
-use Swift_Message;
 use Tests\TestCase;
 
 /**
@@ -33,7 +31,7 @@ use Tests\TestCase;
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2018.07.28
+ * @since 2018.08.26
  *
  * @version 1.0
  */
@@ -45,19 +43,25 @@ class RegisterTest extends TestCase
 
         $test->register();
 
-        $manager = $container->make('mails');
+        $manager = $container->make('caches');
 
-        $manager->plain('Here is the message itself');
+        $filePath = __DIR__.'/cache/hello.php';
 
-        $result = $manager->send(function (Swift_Message $message) {
-            $message->setFrom(['foo@qq.com' => 'John Doe'])->
+        $this->assertFileNotExists($filePath);
 
-            setTo(['bar@qq.com' => 'A name'])->
+        $manager->set('hello', 'world');
 
-            setBody('Here is the message itself');
-        });
+        $this->assertFileExists($filePath);
 
-        $this->assertSame(1, $result);
+        $this->assertSame('world', $manager->get('hello'));
+
+        $manager->delete('hello');
+
+        $this->assertFileNotExists($filePath);
+
+        $this->assertFalse($manager->get('hello'));
+
+        Fso::deleteDirectory(__DIR__.'/cache', true);
     }
 
     protected function createContainer(): Container
@@ -65,33 +69,22 @@ class RegisterTest extends TestCase
         $container = new Container();
 
         $option = new Option([
-            'mail' => [
-                'default'     => 'nulls',
-                'global_from' => [
-                    'address' => null,
-                    'name'    => null,
-                ],
-                'global_to' => [
-                    'address' => null,
-                    'name'    => null,
-                ],
-                'connect' => [
-                    'nulls' => [
-                        'driver' => 'nulls',
+            'cache' => [
+                'default'     => 'file',
+                'expire'      => 86400,
+                'time_preset' => [],
+                'connect'     => [
+                    'file' => [
+                        'driver'    => 'file',
+                        'path'      => __DIR__.'/cache',
+                        'serialize' => true,
+                        'expire'    => null,
                     ],
                 ],
             ],
         ]);
 
         $container->singleton('option', $option);
-
-        $view = $this->createMock(IView::class);
-
-        $container->singleton('view', $view);
-
-        $event = $this->createMock(IDispatch::class);
-
-        $container->singleton('event', $event);
 
         return $container;
     }

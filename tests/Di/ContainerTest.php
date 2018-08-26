@@ -402,6 +402,29 @@ class ContainerTest extends TestCase
 
         $container->call([new Test10(), 'hello']);
     }
+
+    public function testInstanceWithArray()
+    {
+        $container = new Container();
+
+        $instance = new stdClass();
+
+        $container->instance(['foo' => 'bar'], $instance);
+
+        $this->assertSame($instance, $container->make('foo'));
+        $this->assertSame($instance, $container->make('bar'));
+    }
+
+    public function testInstanceItSelf()
+    {
+        $container = new Container();
+
+        $container->instance('foo');
+        $this->assertSame('foo', $container->make('foo'));
+
+        $container->instance('Leevel\\Foo\\Middleware\\Bar');
+        $this->assertSame('Leevel\\Foo\\Middleware\\Bar', $container->make('Leevel\\Foo\\Middleware\\Bar'));
+    }
 }
 
 class Test1

@@ -117,16 +117,16 @@ interface IProject extends IContainer
      *
      * @return string
      */
-    public function appPath($app = true, string $path = '');
+    public function appPath($app = false, string $path = '');
 
     /**
      * 取得应用主题目录.
      *
-     * @param string $app
+     * @param bool|string $app
      *
      * @return string
      */
-    public function themePath(?string $app = null);
+    public function themePath($app = false);
 
     /**
      * 设置公共路径.

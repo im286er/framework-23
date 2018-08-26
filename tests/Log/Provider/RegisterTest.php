@@ -54,7 +54,7 @@ class RegisterTest extends TestCase
         Fso::deleteDirectory(__DIR__.'/cache', true);
     }
 
-    protected function createContainer()
+    protected function createContainer(): Container
     {
         $container = new Container();
 

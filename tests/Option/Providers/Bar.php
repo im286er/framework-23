@@ -48,6 +48,7 @@ class Bar extends Provider
             'bar' => [
                 'Tests\\Option\\Providers\\World',
             ],
+            'helloworld',
         ];
     }
 }
