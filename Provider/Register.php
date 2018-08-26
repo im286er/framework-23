@@ -75,7 +75,7 @@ class Register extends Provider
     protected function mails()
     {
         $this->container->singleton('mails', function (IContainer $container) {
-            return new Manager($project);
+            return new Manager($container);
         });
     }
 
@@ -85,7 +85,7 @@ class Register extends Provider
     protected function mail()
     {
         $this->container->singleton('mail', function (IContainer $container) {
-            return $project['mails']->connect();
+            return $container['mails']->connect();
         });
     }
 }
