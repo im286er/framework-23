@@ -96,9 +96,10 @@ abstract class Runtime implements IRuntime
             $e->getMessage(),
             [
                 'exception' => $e,
-            ],
-            true
+            ]
         );
+
+        $log->flush();
     }
 
     /**
