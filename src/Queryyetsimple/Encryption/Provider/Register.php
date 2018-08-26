@@ -49,8 +49,8 @@ class Register extends Provider
     {
         $this->container->singleton('encryption', function (IContainer $container) {
             return new Encryption(
-                $project['option']['auth_key'],
-                $project['option']['auth_expiry']
+                $container['option']['auth_key'],
+                $container['option']['auth_expiry']
             );
         });
     }

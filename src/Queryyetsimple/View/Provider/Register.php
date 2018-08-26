@@ -84,7 +84,7 @@ class Register extends Provider
     protected function viewViews()
     {
         $this->container->singleton('view.views', function (IContainer $container) {
-            return new Manager($project);
+            return new Manager($container);
         });
     }
 
@@ -94,7 +94,7 @@ class Register extends Provider
     protected function viewView()
     {
         $this->container->singleton('view.view', function (IContainer $container) {
-            return $project['view.views']->connect();
+            return $container['view.views']->connect();
         });
     }
 
@@ -114,7 +114,7 @@ class Register extends Provider
     protected function viewParser()
     {
         $this->container->singleton('view.parser', function (IContainer $container) {
-            return (new Parser($project['view.compiler']))->
+            return (new Parser($container['view.compiler']))->
             registerCompilers()->
 
             registerParsers();
@@ -129,8 +129,8 @@ class Register extends Provider
         $this->container->singleton('view.twig.parser', function (IContainer $container) {
             return new Twig_Environment(new Twig_Loader_Filesystem(), [
                 'auto_reload' => true,
-                'debug'       => $project->development(),
-                'cache'       => $project->runtimePath('theme').'/'.$project['request']->app(),
+                'debug'       => $container->development(),
+                'cache'       => $container->runtimePath('theme').'/'.$container['request']->app(),
             ]);
         });
     }

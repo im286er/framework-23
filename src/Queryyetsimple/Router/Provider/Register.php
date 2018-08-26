@@ -95,7 +95,7 @@ class Register extends Provider
     protected function router()
     {
         $this->container->singleton('router', function (IContainer $container) {
-            return new Router($project);
+            return new Router($container);
         });
     }
 
@@ -105,10 +105,11 @@ class Register extends Provider
     protected function url()
     {
         $this->container->singleton('url', function (IContainer $container) {
-            $option = $project['option'];
-            $router = $project['router'];
+            $option = $container['option'];
+            $router = $container['router'];
 
             $options = [];
+
             foreach ([
                 'with_suffix',
                 'html_suffix',
@@ -118,7 +119,7 @@ class Register extends Provider
                 $options[$item] = $option->get($item);
             }
 
-            return new Url($project['request'], $options);
+            return new Url($container['request'], $options);
         });
     }
 
@@ -128,10 +129,10 @@ class Register extends Provider
     protected function redirect()
     {
         $this->container['redirect'] = $this->container->share(function (IContainer $container) {
-            $redirect = new Redirect($project['url']);
+            $redirect = new Redirect($container['url']);
 
-            if (isset($project['session'])) {
-                $redirect->setSession($project['session']);
+            if (isset($container['session'])) {
+                $redirect->setSession($container['session']);
             }
 
             return $redirect;
@@ -144,9 +145,9 @@ class Register extends Provider
     protected function response()
     {
         $this->container->singleton('response', function (IContainer $container) {
-            $option = $project['option'];
+            $option = $container['option'];
 
-            return (new ResponseFactory($project['view'], $project['redirect']))->
+            return (new ResponseFactory($container['view'], $container['redirect']))->
             setViewSuccessTemplate($option->get('view\\action_success'))->
 
             setViewFailTemplate($option->get('view\\action_fail'));
@@ -159,7 +160,7 @@ class Register extends Provider
     protected function cookie()
     {
         $this->container->singleton('cookie', function (IContainer $container) {
-            return new Cookie($project['option']->get('cookie\\'));
+            return new Cookie($container['option']->get('cookie\\'));
         });
     }
 
@@ -169,7 +170,7 @@ class Register extends Provider
     protected function view()
     {
         $this->container->singleton('view', function (IContainer $container) {
-            return new view($project['view.view']);
+            return new view($container['view.view']);
         });
     }
 

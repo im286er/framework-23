@@ -90,7 +90,7 @@ class Register extends Provider
     protected function databases()
     {
         $this->container->singleton('databases', function (IContainer $container) {
-            return new Manager($project);
+            return new Manager($container);
         });
     }
 
@@ -100,7 +100,7 @@ class Register extends Provider
     protected function database()
     {
         $this->container->singleton('database', function (IContainer $container) {
-            return $project['databases']->connect();
+            return $container['databases']->connect();
         });
     }
 

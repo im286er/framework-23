@@ -71,7 +71,7 @@ class Register extends Provider
     protected function page()
     {
         $this->container->singleton('page', function (IContainer $container) {
-            return new PageFactory($project['url']);
+            return new PageFactory($container['url']);
         });
     }
 }

@@ -70,7 +70,7 @@ class Register extends Provider
     protected function sessions()
     {
         $this->container->singleton('sessions', function (IContainer $container) {
-            return new Manager($project);
+            return new Manager($container);
         });
     }
 
@@ -80,7 +80,7 @@ class Register extends Provider
     protected function session()
     {
         $this->container->singleton('session', function (IContainer $container) {
-            return $project['sessions']->connect();
+            return $container['sessions']->connect();
         });
     }
 

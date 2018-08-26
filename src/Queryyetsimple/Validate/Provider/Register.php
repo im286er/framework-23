@@ -41,7 +41,7 @@ class Register extends Provider
     public function register()
     {
         $this->container->singleton('validate', function (IContainer $container) {
-            return (new Validate())->setContainer($project);
+            return (new Validate())->setContainer($container);
         });
     }
 
