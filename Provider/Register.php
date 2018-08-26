@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\View\Provider;
 
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\View\Compiler;
 use Leevel\View\Manager;
@@ -82,7 +83,7 @@ class Register extends Provider
      */
     protected function viewViews()
     {
-        $this->container->singleton('view.views', function ($project) {
+        $this->container->singleton('view.views', function (IContainer $container) {
             return new Manager($project);
         });
     }
@@ -92,7 +93,7 @@ class Register extends Provider
      */
     protected function viewView()
     {
-        $this->container->singleton('view.view', function ($project) {
+        $this->container->singleton('view.view', function (IContainer $container) {
             return $project['view.views']->connect();
         });
     }
@@ -102,7 +103,7 @@ class Register extends Provider
      */
     protected function viewCompiler()
     {
-        $this->container->singleton('view.compiler', function ($project) {
+        $this->container->singleton('view.compiler', function (IContainer $container) {
             return new Compiler();
         });
     }
@@ -112,7 +113,7 @@ class Register extends Provider
      */
     protected function viewParser()
     {
-        $this->container->singleton('view.parser', function ($project) {
+        $this->container->singleton('view.parser', function (IContainer $container) {
             return (new Parser($project['view.compiler']))->
             registerCompilers()->
 
@@ -125,7 +126,7 @@ class Register extends Provider
      */
     protected function viewTwigParser()
     {
-        $this->container->singleton('view.twig.parser', function ($project) {
+        $this->container->singleton('view.twig.parser', function (IContainer $container) {
             return new Twig_Environment(new Twig_Loader_Filesystem(), [
                 'auto_reload' => true,
                 'debug'       => $project->development(),
