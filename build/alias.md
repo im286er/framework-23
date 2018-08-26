@@ -42,10 +42,6 @@ The code below need to be add.
     url = git@github.com:queryyetsimple/cache.git
     fetch = +refs/heads/*:refs/remotes/Cache/*
 
-[remote "Client"]
-    url = git@github.com:queryyetsimple/client.git
-    fetch = +refs/heads/*:refs/remotes/Client/*
-
 [remote "Collection"]
     url = git@github.com:queryyetsimple/collection.git
     fetch = +refs/heads/*:refs/remotes/Collection/*
@@ -122,10 +118,6 @@ The code below need to be add.
     url = git@github.com:queryyetsimple/pipeline.git
     fetch = +refs/heads/*:refs/remotes/Pipeline/*
 
-[remote "Protocol"]
-    url = git@github.com:queryyetsimple/protocol.git
-    fetch = +refs/heads/*:refs/remotes/Protocol/*
-
 [remote "Router"]
     url = git@github.com:queryyetsimple/router.git
     fetch = +refs/heads/*:refs/remotes/Router/*
@@ -145,10 +137,6 @@ The code below need to be add.
 [remote "Support"]
     url = git@github.com:queryyetsimple/support.git
     fetch = +refs/heads/*:refs/remotes/Support/*
-
-[remote "Task"]
-    url = git@github.com:queryyetsimple/task.git
-    fetch = +refs/heads/*:refs/remotes/Task/*
 
 [remote "Throttler"]
     url = git@github.com:queryyetsimple/throttler.git

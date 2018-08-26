@@ -7,8 +7,6 @@ git subtree add --prefix=src/Queryyetsimple/Auth git@github.com:queryyetsimple/a
 
 git subtree add --prefix=src/Queryyetsimple/Cache git@github.com:queryyetsimple/cache.git master
 
-git subtree add --prefix=src/Queryyetsimple/Client git@github.com:queryyetsimple/client.git master
-
 git subtree add --prefix=src/Queryyetsimple/Collection git@github.com:queryyetsimple/collection.git master
 
 git subtree add --prefix=src/Queryyetsimple/Console git@github.com:queryyetsimple/console.git master
@@ -47,8 +45,6 @@ git subtree add --prefix=src/Queryyetsimple/Page git@github.com:queryyetsimple/p
 
 git subtree add --prefix=src/Queryyetsimple/Pipeline git@github.com:queryyetsimple/pipeline.git master
 
-git subtree add --prefix=src/Queryyetsimple/Protocol git@github.com:queryyetsimple/protocol.git master
-
 git subtree add --prefix=src/Queryyetsimple/Router git@github.com:queryyetsimple/router.git master
 
 git subtree add --prefix=src/Queryyetsimple/Seccode git@github.com:queryyetsimple/seccode.git master
@@ -58,8 +54,6 @@ git subtree add --prefix=src/Queryyetsimple/Session git@github.com:queryyetsimpl
 git subtree add --prefix=src/Queryyetsimple/Stack git@github.com:queryyetsimple/stack.git master
 
 git subtree add --prefix=src/Queryyetsimple/Support git@github.com:queryyetsimple/support.git master
-
-git subtree add --prefix=src/Queryyetsimple/Task git@github.com:queryyetsimple/task.git master
 
 git subtree add --prefix=src/Queryyetsimple/Throttler git@github.com:queryyetsimple/throttler.git master
 
