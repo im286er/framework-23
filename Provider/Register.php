@@ -70,7 +70,7 @@ class Register extends Provider
     protected function logs()
     {
         $this->container->singleton('logs', function (IContainer $container) {
-            return new Manager($project);
+            return new Manager($container);
         });
     }
 
@@ -80,7 +80,7 @@ class Register extends Provider
     protected function log()
     {
         $this->container->singleton('log', function (IContainer $container) {
-            return $project['logs']->connect();
+            return $container['logs']->connect();
         });
     }
 
