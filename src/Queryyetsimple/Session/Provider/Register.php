@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Session\Provider;
 
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\Session\Manager;
 
@@ -68,7 +69,7 @@ class Register extends Provider
      */
     protected function sessions()
     {
-        $this->container->singleton('sessions', function ($project) {
+        $this->container->singleton('sessions', function (IContainer $container) {
             return new Manager($project);
         });
     }
@@ -78,7 +79,7 @@ class Register extends Provider
      */
     protected function session()
     {
-        $this->container->singleton('session', function ($project) {
+        $this->container->singleton('session', function (IContainer $container) {
             return $project['sessions']->connect();
         });
     }

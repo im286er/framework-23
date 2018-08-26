@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Leevel\Auth\Provider;
 
 use Leevel\Auth\Manager;
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 
 /**
@@ -66,7 +67,7 @@ class Register extends Provider
      */
     protected function auths()
     {
-        $this->container->singleton('auths', function ($project) {
+        $this->container->singleton('auths', function (IContainer $container) {
             return new Manager($project);
         });
     }
@@ -76,7 +77,7 @@ class Register extends Provider
      */
     protected function auth()
     {
-        $this->container->singleton('auth', function ($project) {
+        $this->container->singleton('auth', function (IContainer $container) {
             return $project['auths']->connect();
         });
     }

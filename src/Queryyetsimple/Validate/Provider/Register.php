@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Validate\Provider;
 
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\Validate\Validate;
 
@@ -39,7 +40,7 @@ class Register extends Provider
      */
     public function register()
     {
-        $this->container->singleton('validate', function ($project) {
+        $this->container->singleton('validate', function (IContainer $container) {
             return (new Validate())->setContainer($project);
         });
     }

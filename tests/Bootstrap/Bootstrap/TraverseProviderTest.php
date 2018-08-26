@@ -114,7 +114,7 @@ class ProviderDeferTest1 extends Provider
     {
         $_SERVER['providerDeferTest1'] = 1;
 
-        $this->container->singleton('foo', function ($project) {
+        $this->container->singleton('foo', function (IContainer $container) {
             return 'bar';
         });
     }

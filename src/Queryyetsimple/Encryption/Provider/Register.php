@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Encryption\Provider;
 
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\Encryption\Encryption;
 
@@ -46,7 +47,7 @@ class Register extends Provider
      */
     public function register()
     {
-        $this->container->singleton('encryption', function ($project) {
+        $this->container->singleton('encryption', function (IContainer $container) {
             return new Encryption(
                 $project['option']['auth_key'],
                 $project['option']['auth_expiry']

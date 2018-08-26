@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Log\Provider;
 
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\Log\Manager;
 
@@ -68,7 +69,7 @@ class Register extends Provider
      */
     protected function logs()
     {
-        $this->container->singleton('logs', function ($project) {
+        $this->container->singleton('logs', function (IContainer $container) {
             return new Manager($project);
         });
     }
@@ -78,7 +79,7 @@ class Register extends Provider
      */
     protected function log()
     {
-        $this->container->singleton('log', function ($project) {
+        $this->container->singleton('log', function (IContainer $container) {
             return $project['logs']->connect();
         });
     }

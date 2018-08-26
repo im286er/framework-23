@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Event\Provider;
 
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\Event\Dispatch;
 
@@ -39,7 +40,7 @@ class Register extends Provider
      */
     public function register()
     {
-        $this->container->singleton('event', function ($project) {
+        $this->container->singleton('event', function (IContainer $container) {
             return new Dispatch($project);
         });
     }

@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Mail\Provider;
 
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\Mail\Manager;
 
@@ -73,7 +74,7 @@ class Register extends Provider
      */
     protected function mails()
     {
-        $this->container->singleton('mails', function ($project) {
+        $this->container->singleton('mails', function (IContainer $container) {
             return new Manager($project);
         });
     }
@@ -83,7 +84,7 @@ class Register extends Provider
      */
     protected function mail()
     {
-        $this->container->singleton('mail', function ($project) {
+        $this->container->singleton('mail', function (IContainer $container) {
             return $project['mails']->connect();
         });
     }

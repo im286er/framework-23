@@ -23,6 +23,7 @@ namespace Leevel\Database\Provider;
 use Leevel\Database\Ddd\Entity;
 use Leevel\Database\Ddd\Meta;
 use Leevel\Database\Manager;
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\Event\IDispatch;
 
@@ -88,7 +89,7 @@ class Register extends Provider
      */
     protected function databases()
     {
-        $this->container->singleton('databases', function ($project) {
+        $this->container->singleton('databases', function (IContainer $container) {
             return new Manager($project);
         });
     }
@@ -98,7 +99,7 @@ class Register extends Provider
      */
     protected function database()
     {
-        $this->container->singleton('database', function ($project) {
+        $this->container->singleton('database', function (IContainer $container) {
             return $project['databases']->connect();
         });
     }

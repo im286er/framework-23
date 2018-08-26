@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Tests\Option\Providers;
 
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 
 /**
@@ -37,7 +38,7 @@ class Bar extends Provider
 
     public function register()
     {
-        $this->container->singleton('bar', function ($project) {
+        $this->container->singleton('bar', function (IContainer $container) {
             return 'foo';
         });
     }
