@@ -37,7 +37,7 @@ class Encryption extends Connect implements IEncryption
      * @param string $key
      * @param int    $expiry
      */
-    public function __construct($key, int $expiry = 0)
+    public function __construct($key, ?int $expiry = 0)
     {
         $this->key = (string) $key;
         $this->expiry = (int) $expiry;
