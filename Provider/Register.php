@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Leevel\Filesystem\Provider;
 
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 use Leevel\Filesystem\Manager;
 
@@ -73,7 +74,7 @@ class Register extends Provider
      */
     protected function filesystems()
     {
-        $this->container->singleton('filesystems', function ($project) {
+        $this->container->singleton('filesystems', function (IContainer $container) {
             return new Manager($project);
         });
     }
@@ -83,7 +84,7 @@ class Register extends Provider
      */
     protected function filesystem()
     {
-        $this->container->singleton('filesystem', function ($project) {
+        $this->container->singleton('filesystem', function (IContainer $container) {
             return $project['filesystems']->connect();
         });
     }
