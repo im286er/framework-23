@@ -22,6 +22,7 @@ namespace Leevel\Cache\Provider;
 
 use Leevel\Cache\Load;
 use Leevel\Cache\Manager;
+use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
 
 /**
@@ -78,7 +79,7 @@ class Register extends Provider
      */
     protected function caches()
     {
-        $this->container->singleton('caches', function ($project) {
+        $this->container->singleton('caches', function (IContainer $container) {
             return new Manager($project);
         });
     }
@@ -88,7 +89,7 @@ class Register extends Provider
      */
     protected function cache()
     {
-        $this->container->singleton('cache', function ($project) {
+        $this->container->singleton('cache', function (IContainer $container) {
             return $project['caches']->connect();
         });
     }
@@ -98,7 +99,7 @@ class Register extends Provider
      */
     protected function cacheLoad()
     {
-        $this->container->singleton('cache.load', function ($project) {
+        $this->container->singleton('cache.load', function (IContainer $container) {
             return new Load($project, $project['cache']);
         });
     }
