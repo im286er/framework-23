@@ -21,7 +21,6 @@ declare(strict_types=1);
 namespace Leevel\Router;
 
 use InvalidArgumentException;
-use Leevel;
 use Swagger\Annotations\Swagger;
 use Swagger\Context;
 
@@ -502,7 +501,9 @@ class SwaggerRouter
      */
     protected function makeSwagger()
     {
-        require_once Leevel::path().'/vendor/zircote/swagger-php/src/functions.php';
+        if (!function_exists('\\Swagger\\scan')) {
+            require_once __DIR__.'/../../../../../zircote/swagger-php/src/functions.php';
+        }
 
         return \Swagger\scan($this->swaggerScan);
     }
