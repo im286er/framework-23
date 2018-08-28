@@ -148,7 +148,7 @@ class UploadedFileTest extends TestCase
     {
         switch ($file->getError()) {
             case UPLOAD_ERR_INI_SIZE:
-                $exceptionMessage = 'The file foo.txt exceeds your upload_max_filesize ini directive (limit is 2048 KiB).';
+                $exceptionMessage = sprintf('The file foo.txt exceeds your upload_max_filesize ini directive (limit is %d KiB).', UploadedFile::getMaxFilesize());
 
                 break;
             case UPLOAD_ERR_FORM_SIZE:
@@ -188,10 +188,15 @@ class UploadedFileTest extends TestCase
     public function failedUploadedFile()
     {
         foreach ([
-            UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE,
-            UPLOAD_ERR_PARTIAL, UPLOAD_ERR_NO_FILE,
-            UPLOAD_ERR_CANT_WRITE, UPLOAD_ERR_NO_TMP_DIR,
-            UPLOAD_ERR_EXTENSION, -1, ] as $error) {
+            UPLOAD_ERR_INI_SIZE,
+            UPLOAD_ERR_FORM_SIZE,
+            UPLOAD_ERR_PARTIAL,
+            UPLOAD_ERR_NO_FILE,
+            UPLOAD_ERR_CANT_WRITE,
+            UPLOAD_ERR_NO_TMP_DIR,
+            UPLOAD_ERR_EXTENSION,
+            -1,
+        ] as $error) {
             yield [new UploadedFile(
                 __DIR__.'/assert/source.txt',
                 'foo.txt',
