@@ -218,6 +218,10 @@ class FileTest extends TestCase
 
         chmod($filePath, 0000);
 
+        if (is_readable($filePath)) {
+            $this->markTestSkipped('Chmod is invalid.');
+        }
+
         $this->assertFalse($file->get('readable'));
     }
 

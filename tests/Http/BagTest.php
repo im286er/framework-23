@@ -134,13 +134,13 @@ class BagTest extends TestCase
 
         $this->assertSame($bag->get('foo|substr=1|intval'), 1234);
 
-        $this->assertSame($bag->get('foo|Tests\Http\custom_func=hello,**,concact'), 'hello-- 1234-concact');
+        $this->assertSame($bag->get('foo|Tests\\Http\\custom_func=hello,**,concact'), 'hello-- 1234-concact');
 
-        $this->assertSame($bag->filter('foo|Tests\Http\custom_func=hello,**,concact', null, 'substr=5'), '-- 1234-concact');
+        $this->assertSame($bag->filter('foo|Tests\\Http\\custom_func=hello,**,concact', null, 'substr=5'), '-- 1234-concact');
 
-        $this->assertSame($bag->filter('foo|substr=5', null, 'Tests\Http\custom_func=hello,**,concact'), 'hello-4-concact');
+        $this->assertSame($bag->filter('foo|substr=5', null, 'Tests\\Http\\custom_func=hello,**,concact'), 'hello-4-concact');
 
-        $this->assertSame($bag->get('foo|Tests\Http\custom_func=hello,**,MY_CONST'), 'hello-- 1234-hello const');
+        $this->assertSame($bag->get('foo|Tests\\Http\\custom_func=hello,**,MY_CONST'), 'hello-- 1234-hello const');
 
         $this->assertSame($bag->get('no|default=5'), 5);
         $this->assertSame($bag->get('no|default=helloworld'), 'helloworld');
@@ -157,9 +157,9 @@ class BagTest extends TestCase
         ];
         $bag = new Bag($parameters);
 
-        $this->assertSame($bag->get('foo\hello'), 'world');
-        $this->assertSame($bag->get('foo\namepace.sub'), 'i am here');
-        $this->assertSame($bag->get('foo\namepace.sub|substr=2'), 'am here');
+        $this->assertSame($bag->get('foo\\hello'), 'world');
+        $this->assertSame($bag->get('foo\\namepace.sub'), 'i am here');
+        $this->assertSame($bag->get('foo\\namepace.sub|substr=2'), 'am here');
     }
 
     public function testGetPartDataButNotArray()
@@ -169,7 +169,7 @@ class BagTest extends TestCase
         ];
         $bag = new Bag($parameters);
 
-        $this->assertSame($bag->get('bar\hello'), 'helloworld');
+        $this->assertSame($bag->get('bar\\hello'), 'helloworld');
     }
 
     public function testGetPartDataButSubNotFoundInArray()
@@ -179,7 +179,7 @@ class BagTest extends TestCase
         ];
         $bag = new Bag($parameters);
 
-        $this->assertSame($bag->get('bar\hello.world.sub', 'defaults'), 'defaults');
+        $this->assertSame($bag->get('bar\\hello.world.sub', 'defaults'), 'defaults');
     }
 
     public function testToString()

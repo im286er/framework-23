@@ -140,6 +140,10 @@ class FileResponseTest extends TestCase
 
         chmod($filePath, 0000);
 
+        if (is_readable($filePath)) {
+            $this->markTestSkipped('Chmod is invalid.');
+        }
+
         new FileResponse($filePath);
     }
 
@@ -157,6 +161,10 @@ class FileResponseTest extends TestCase
         $file = new File($filePath);
 
         chmod($filePath, 0000);
+
+        if (is_readable($filePath)) {
+            $this->markTestSkipped('Chmod is invalid.');
+        }
 
         new FileResponse($file);
     }
