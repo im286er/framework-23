@@ -50,14 +50,14 @@ class Log implements ILog
     /**
      * 日志过滤器.
      *
-     * @var callable
+     * @var \Closure
      */
     protected $filter;
 
     /**
      * 日志处理器.
      *
-     * @var callable
+     * @var \Closure
      */
     protected $processor;
 

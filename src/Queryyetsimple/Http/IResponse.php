@@ -536,7 +536,7 @@ interface IResponse
      *
      * @return $this
      */
-    public function setHeader($key, $value, $replace = true);
+    public function setHeader(string $key, string $value, bool $replace = true);
 
     /**
      * 批量设置响应头.

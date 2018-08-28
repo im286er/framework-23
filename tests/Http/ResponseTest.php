@@ -503,7 +503,7 @@ class ResponseTest extends TestCase
 
         $response->setContentLength(100);
 
-        $this->assertSame(100, $response->headers->get('Content-Length'));
+        $this->assertSame('100', $response->headers->get('Content-Length'));
     }
 
     public function testIsJson()
@@ -987,7 +987,7 @@ class ResponseTest extends TestCase
         endIfs();
 
         $this->assertSame('hello', $response->getContent());
-        $this->assertSame('Tue, 07 Aug 2018 00:00:00 GMT', $response->headers->get('Expires'));
+        $this->assertSame('2018-08-07 00:00:00', date('Y-m-d H:i:s', strtotime($response->headers->get('Expires'))));
         $this->assertSame(200, $response->getStatusCode());
         $this->assertTrue($response->isOk());
     }
@@ -1035,7 +1035,7 @@ class ResponseTest extends TestCase
         endIfs();
 
         $this->assertSame('hello', $response->getContent());
-        $this->assertSame('Tue, 07 Aug 2018 00:00:00 GMT', $response->headers->get('Last-Modified'));
+        $this->assertSame('2018-08-07 00:00:00', date('Y-m-d H:i:s', strtotime($response->headers->get('Last-Modified'))));
         $this->assertSame(200, $response->getStatusCode());
         $this->assertTrue($response->isOk());
     }
@@ -1227,7 +1227,7 @@ class ResponseTest extends TestCase
         setContentLength(50);
 
         $this->assertSame('hello', $response->getContent());
-        $this->assertSame(50, $response->headers->get('Content-Length'));
+        $this->assertSame('50', $response->headers->get('Content-Length'));
         $this->assertSame(200, $response->getStatusCode());
         $this->assertTrue($response->isOk());
     }
@@ -1249,7 +1249,7 @@ class ResponseTest extends TestCase
         setContentLength(50);
 
         $this->assertSame('hello', $response->getContent());
-        $this->assertSame(10, $response->headers->get('Content-Length'));
+        $this->assertSame('10', $response->headers->get('Content-Length'));
         $this->assertSame(200, $response->getStatusCode());
         $this->assertTrue($response->isOk());
     }

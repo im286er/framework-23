@@ -110,7 +110,7 @@ trait TControl
      *
      * @return bool
      */
-    public function checkTControl()
+    public function checkTControl(): bool
     {
         return $this->inFlowControl && !$this->isFlowControlTrue;
     }
