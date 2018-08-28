@@ -349,7 +349,7 @@ interface IProject extends IContainer
      *
      * @return \Leevel\Di\Provider
      */
-    public function makeProvider(string $provider);
+    public function makeProvider(string $provider): Provider;
 
     /**
      * 执行 bootstrap.
@@ -393,5 +393,5 @@ interface IProject extends IContainer
      *
      * @return \Leevel\Di\Provider
      */
-    public function register($provider);
+    public function register($provider): Provider;
 }
