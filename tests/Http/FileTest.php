@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
+use Leevel\Filesystem\Fso;
 use Leevel\Http\File;
 use Tests\TestCase;
 
@@ -39,7 +40,7 @@ class FileTest extends TestCase
         $notWriteable = __DIR__.'/assert/target/notWriteable';
 
         if (is_dir($notWriteable)) {
-            rmdir($notWriteable);
+            Fso::deleteDirectory($notWriteable, true);
         }
 
         $notWriteableFile = __DIR__.'/assert/test_writeable.txt';
@@ -142,6 +143,10 @@ class FileTest extends TestCase
         // 7 = 4+2+1 分别代表可读可写可执行
         mkdir(dirname($targetPath), 0444);
 
+        if (is_writable(dirname($targetPath))) {
+            $this->markTestSkipped('Mkdir with chmod is invalid.');
+        }
+
         $file = new File($filePath);
 
         $file->move(dirname($targetPath));
@@ -173,6 +178,10 @@ class FileTest extends TestCase
         // 设置目录只读
         // 7 = 4+2+1 分别代表可读可写可执行
         mkdir(dirname(dirname($targetPath)), 0444);
+
+        if (is_writable(dirname(dirname($targetPath)))) {
+            $this->markTestSkipped('Mkdir with chmod is invalid.');
+        }
 
         $file = new File($filePath);
 

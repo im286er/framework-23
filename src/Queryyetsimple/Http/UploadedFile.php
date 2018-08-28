@@ -75,7 +75,7 @@ class UploadedFile extends File
      *
      * @var bool
      */
-    private $test = false;
+    protected $test = false;
 
     /**
      * 构造函数
@@ -86,7 +86,7 @@ class UploadedFile extends File
      * @param null|string $mimeType
      * @param null|int    $error
      */
-    public function __construct(string $path, string $originalName, string $mimeType = null, int $error = null)
+    public function __construct(string $path, string $originalName, ?string $mimeType = null, ?int $error = null)
     {
         $this->originalName = $originalName;
         $this->mimeType = $mimeType ?: 'application/octet-stream';

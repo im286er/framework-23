@@ -534,6 +534,10 @@ eot;
         // 7 = 4+2+1 分别代表可读可写可执行
         mkdir(dirname($sourcePath), 0444);
 
+        if (is_writable(dirname($sourcePath))) {
+            $this->markTestSkipped('Mkdir with chmod is invalid.');
+        }
+
         $seccode->display('ABCD', $file);
     }
 }

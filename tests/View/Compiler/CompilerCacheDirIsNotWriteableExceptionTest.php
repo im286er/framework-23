@@ -75,6 +75,10 @@ class CompilerCacheDirIsNotWriteableExceptionTest extends TestCase
         // 7 = 4+2+1 分别代表可读可写可执行
         mkdir(dirname($dirname), 0444);
 
+        if (is_writable(dirname($dirname))) {
+            $this->markTestSkipped('Mkdir with chmod is invalid.');
+        }
+
         $parser->doCompile('hello world', $dirname.'/test.php', true);
     }
 }

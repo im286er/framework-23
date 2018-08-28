@@ -59,7 +59,7 @@ class RedirectResponseTest extends TestCase
     public function testRedirectResponseConstructorWrongStatusCode()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The HTTP status code is not a redirect ("404" given).');
+        $this->expectExceptionMessage('The HTTP status code is not a redirect (404 given).');
 
         $response = new RedirectResponse('foo.bar', 404);
     }

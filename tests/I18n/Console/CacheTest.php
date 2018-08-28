@@ -154,6 +154,10 @@ class CacheTest extends TestCase
         // 7 = 4+2+1 分别代表可读可写可执行
         mkdir($dirname, 0444);
 
+        if (is_writable($dirname)) {
+            $this->markTestSkipped('Mkdir with chmod is invalid.');
+        }
+
         $this->assertDirectoryExists($dirname);
 
         $result = $this->runCommand(
@@ -184,6 +188,10 @@ class CacheTest extends TestCase
         // 设置目录只读
         // 7 = 4+2+1 分别代表可读可写可执行
         mkdir(dirname($dirname), 0444);
+
+        if (is_writable(dirname($dirname))) {
+            $this->markTestSkipped('Mkdir with chmod is invalid.');
+        }
 
         $this->assertDirectoryExists(dirname($dirname));
 

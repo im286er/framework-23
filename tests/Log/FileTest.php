@@ -106,6 +106,10 @@ class FileTest extends TestCase
         mkdir($path, 0777);
         mkdir($path.'/development.info', 0444);
 
+        if (is_writable($path.'/development.info')) {
+            $this->markTestSkipped('Mkdir with chmod is invalid.');
+        }
+
         $data = $this->getLogData();
         $file->flush($data);
     }
@@ -124,6 +128,10 @@ class FileTest extends TestCase
         // 设置目录只读
         // 7 = 4+2+1 分别代表可读可写可执行
         mkdir($path, 0444);
+
+        if (is_writable($path)) {
+            $this->markTestSkipped('Mkdir with chmod is invalid.');
+        }
 
         $data = $this->getLogData();
         $file->flush($data);
