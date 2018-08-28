@@ -502,7 +502,7 @@ class SwaggerRouter
     protected function makeSwagger()
     {
         if (!function_exists('\\Swagger\\scan')) {
-            require_once __DIR__.'/../../../../../zircote/swagger-php/src/functions.php';
+            require_once dirname(__DIR__, 5).'/zircote/swagger-php/src/functions.php';
         }
 
         return \Swagger\scan($this->swaggerScan);
