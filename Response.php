@@ -344,7 +344,7 @@ class Response implements IResponse
      *
      * @return $this
      */
-    public function setHeader($key, $value, $replace = true)
+    public function setHeader(string $key, string $value, bool $replace = true)
     {
         if ($this->checkTControl()) {
             return $this;
@@ -788,7 +788,7 @@ class Response implements IResponse
             return $this;
         }
 
-        $this->setHeader('Content-Length', $contentLength);
+        $this->setHeader('Content-Length', (string) $contentLength);
 
         return $this;
     }
