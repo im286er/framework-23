@@ -137,7 +137,7 @@ class JsonResponse extends Response
     /**
      * 设置原生 JSON 数据.
      *
-     * @param string $json
+     * @param mixed $json
      *
      * @return $this
      */
