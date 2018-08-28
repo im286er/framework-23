@@ -195,8 +195,6 @@ class Bag implements IArray, IJson, Countable, IteratorAggregate, JsonSerializab
         }
 
         if ($filter) {
-            $options = $this->formatOptions($result, $options);
-
             $result = $this->filterValue($result, $defaults, $filter, $options);
         }
 
@@ -431,19 +429,6 @@ class Bag implements IArray, IJson, Countable, IteratorAggregate, JsonSerializab
         }
 
         return ctype_digit((string) $value);
-    }
-
-    /**
-     * 格式化参数.
-     *
-     * @param mixed $value
-     * @param array $options
-     *
-     * @since array
-     */
-    protected function formatOptions($value, array $options)
-    {
-        return $options;
     }
 
     /**
