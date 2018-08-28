@@ -247,14 +247,10 @@ class Project extends Container implements IProject
      * 设置应用路径.
      *
      * @param string $path
-     *
-     * @return $this
      */
     public function setAppPath(string $path)
     {
         $this->appPath = $path;
-
-        return $this;
     }
 
     /**
@@ -289,14 +285,10 @@ class Project extends Container implements IProject
      * 设置公共路径.
      *
      * @param string $path
-     *
-     * @return $this
      */
     public function setCommonPath(string $path)
     {
         $this->commonPath = $path;
-
-        return $this;
     }
 
     /**
@@ -316,14 +308,10 @@ class Project extends Container implements IProject
      * 设置运行时路径.
      *
      * @param string $path
-     *
-     * @return $this
      */
     public function setRuntimePath(string $path)
     {
         $this->runtimePath = $path;
-
-        return $this;
     }
 
     /**
@@ -343,14 +331,10 @@ class Project extends Container implements IProject
      * 设置存储路径.
      *
      * @param string $path
-     *
-     * @return $this
      */
     public function setStoragePath(string $path)
     {
         $this->storagePath = $path;
-
-        return $this;
     }
 
     /**
@@ -370,14 +354,10 @@ class Project extends Container implements IProject
      * 设置配置路径.
      *
      * @param string $path
-     *
-     * @return $this
      */
     public function setOptionPath(string $path)
     {
         $this->optionPath = $path;
-
-        return $this;
     }
 
     /**
@@ -397,14 +377,10 @@ class Project extends Container implements IProject
      * 设置语言包路径.
      *
      * @param string $path
-     *
-     * @return $this
      */
     public function setI18nPath(string $path)
     {
         $this->i18nPath = $path;
-
-        return $this;
     }
 
     /**
@@ -424,14 +400,10 @@ class Project extends Container implements IProject
      * 设置环境变量路径.
      *
      * @param string $path
-     *
-     * @return $this
      */
     public function setEnvPath(string $path)
     {
         $this->envPath = $path;
-
-        return $this;
     }
 
     /**
@@ -448,14 +420,10 @@ class Project extends Container implements IProject
      * 设置环境变量文件.
      *
      * @param string $file
-     *
-     * @return $this
      */
     public function setEnvFile($file)
     {
         $this->envFile = $file;
-
-        return $this;
     }
 
     /**
@@ -613,7 +581,7 @@ class Project extends Container implements IProject
      *
      * @return \Leevel\Di\Provider
      */
-    public function makeProvider(string $provider)
+    public function makeProvider(string $provider): Provider
     {
         return new $provider($this);
     }
@@ -718,7 +686,7 @@ class Project extends Container implements IProject
      *
      * @return \Leevel\Di\Provider
      */
-    public function register($provider)
+    public function register($provider): Provider
     {
         if (is_string($provider)) {
             $provider = $this->makeProvider($provider);
