@@ -319,7 +319,7 @@ interface IProject extends IContainer
      * @return null|string
      * @codeCoverageIgnore
      */
-    public function getPathByComposer(string $namespaces);
+    public function getPathByComposer($namespaces);
 
     /**
      * 是否开启 debug.
