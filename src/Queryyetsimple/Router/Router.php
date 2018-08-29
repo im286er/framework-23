@@ -160,7 +160,7 @@ class Router implements IRouter
      *
      * @return \Leevel\Http\IResponse
      */
-    public function dispatch(IRequest $request)
+    public function dispatch(IRequest $request): IResponse
     {
         $this->request = $request;
 
@@ -607,7 +607,7 @@ class Router implements IRouter
      *
      * @return \Leevel\Http\IResponse
      */
-    protected function dispatchToRoute(IRequest $request)
+    protected function dispatchToRoute(IRequest $request): IResponse
     {
         return $this->runRoute($request, $this->matchRouter());
     }
@@ -620,7 +620,7 @@ class Router implements IRouter
      *
      * @return \Leevel\Http\IResponse
      */
-    protected function runRoute(IRequest $request, callable $bind)
+    protected function runRoute(IRequest $request, callable $bind): IResponse
     {
         $this->throughMiddleware($this->request);
 

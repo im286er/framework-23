@@ -108,8 +108,6 @@ class OptionTest
 
 class ProviderDeferTest1 extends Provider
 {
-    public static $defer = true;
-
     public function register()
     {
         $_SERVER['providerDeferTest1'] = 1;
@@ -126,6 +124,11 @@ class ProviderDeferTest1 extends Provider
                 'Tests\\Bootstrap\\Bootstrap\\ProviderDeferTest1',
             ],
         ];
+    }
+
+    public static function isDeferred(): bool
+    {
+        return true;
     }
 }
 

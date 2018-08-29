@@ -180,7 +180,10 @@ class UploadedFileTest extends TestCase
         }
 
         $this->expectException(\Leevel\Http\FileException::class);
-        $this->expectExceptionMessage($exceptionMessage);
+
+        if (UPLOAD_ERR_INI_SIZE !== $file->getError()) {
+            $this->expectExceptionMessage($exceptionMessage);
+        }
 
         $file->move(__DIR__.'/assert/target');
     }

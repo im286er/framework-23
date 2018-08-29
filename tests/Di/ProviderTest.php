@@ -106,9 +106,6 @@ class ProviderTest extends TestCase
 
 class PrividerTest extends Provider
 {
-    /**
-     * 注册服务
-     */
     public function register()
     {
         $this->container->singleton('foo', function ($container) {
@@ -116,11 +113,6 @@ class PrividerTest extends Provider
         });
     }
 
-    /**
-     * 可用服务提供者.
-     *
-     * @return array
-     */
     public static function providers(): array
     {
         return [
@@ -134,16 +126,6 @@ class PrividerTest extends Provider
 
 class PrividerTest2 extends Provider
 {
-    /**
-     * 是否延迟载入.
-     *
-     * @var bool
-     */
-    public static $defer = true;
-
-    /**
-     * 注册服务
-     */
     public function register()
     {
         $this->container->singleton('world', function ($container) {
@@ -151,24 +133,21 @@ class PrividerTest2 extends Provider
         });
     }
 
-    /**
-     * 可用服务提供者.
-     *
-     * @return array
-     */
     public static function providers(): array
     {
         return [
             'world' => 'hello',
         ];
     }
+
+    public static function isDeferred(): bool
+    {
+        return true;
+    }
 }
 
 class PrividerTest3 extends Provider
 {
-    /**
-     * 注册服务
-     */
     public function register()
     {
     }
