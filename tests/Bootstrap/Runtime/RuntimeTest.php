@@ -73,7 +73,7 @@ class RuntimeTest extends TestCase
 
         $log = $this->createMock(ILog::class);
 
-        $log->method('error')->willReturn([]);
+        $log->method('error')->willReturn(null);
         $this->assertNull($log->error('hello world', []));
 
         $project->singleton(ILog::class, function () use ($log) {
