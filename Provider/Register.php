@@ -36,13 +36,6 @@ use Leevel\Throttler\Throttler;
 class Register extends Provider
 {
     /**
-     * 是否延迟载入.
-     *
-     * @var bool
-     */
-    public static $defer = true;
-
-    /**
      * 注册服务
      */
     public function register()
@@ -65,6 +58,14 @@ class Register extends Provider
             ],
             'Leevel\\Throttler\\Middleware\\Throttler',
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isDeferred(): bool
+    {
+        return true;
     }
 
     /**
