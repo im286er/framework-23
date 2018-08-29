@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Leevel\Router;
 
 use Leevel\Http\IRequest;
+use Leevel\Http\IResponse;
 
 /**
  * 路由解析接口.
@@ -159,7 +160,7 @@ interface IRouter
      *
      * @return \Leevel\Http\IResponse
      */
-    public function dispatch(IRequest $request);
+    public function dispatch(IRequest $request): IResponse;
 
     /**
      * 初始化请求
