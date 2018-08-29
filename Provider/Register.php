@@ -36,13 +36,6 @@ use Leevel\Filesystem\Manager;
 class Register extends Provider
 {
     /**
-     * 是否延迟载入.
-     *
-     * @var bool
-     */
-    public static $defer = true;
-
-    /**
      * 注册服务
      */
     public function register()
@@ -67,6 +60,14 @@ class Register extends Provider
                 'Leevel\\Filesystem\\IFilesystem',
             ],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isDeferred(): bool
+    {
+        return true;
     }
 
     /**
