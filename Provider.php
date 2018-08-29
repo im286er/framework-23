@@ -81,7 +81,7 @@ abstract class Provider
      */
     public function registerAlias()
     {
-        if (!static::$defer && $providers = static::providers()) {
+        if (!static::isDeferred() && $providers = static::providers()) {
             $this->container->alias($providers);
         }
     }
