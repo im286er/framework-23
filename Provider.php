@@ -34,13 +34,6 @@ use BadMethodCallException;
 abstract class Provider
 {
     /**
-     * 是否延迟载入.
-     *
-     * @var bool
-     */
-    public static $defer = false;
-
-    /**
      * IOC 容器.
      *
      * @var \Leevel\Di\IContainer
@@ -56,9 +49,7 @@ abstract class Provider
     {
         $this->container = $container;
 
-        if (!static::isDeferred()) {
-            $this->registerAlias();
-        }
+        $this->registerAlias();
     }
 
     /**
@@ -90,9 +81,19 @@ abstract class Provider
      */
     public function registerAlias()
     {
-        if (!static::isDeferred() && static::providers()) {
-            $this->container->alias(static::providers());
+        if (!static::$defer && $providers = static::providers()) {
+            $this->container->alias($providers);
         }
+    }
+
+    /**
+     * 是否延迟载入.
+     *
+     * @return bool
+     */
+    public static function isDeferred(): bool
+    {
+        return false;
     }
 
     /**
@@ -103,16 +104,6 @@ abstract class Provider
     public static function providers(): array
     {
         return [];
-    }
-
-    /**
-     * 是否延迟载入.
-     *
-     * @return bool
-     */
-    public static function isDeferred(): bool
-    {
-        return static::$defer;
     }
 
     /**
