@@ -33,9 +33,6 @@ array (
       'providers' => 
       array (
         0 => 'Tests\\Option\\Providers\\Foo',
-        1 => 'Demo\\Provider\\Register',
-        2 => 'Common\\Infra\\Provider\\Event',
-        3 => 'Common\\Infra\\Provider\\Router',
       ),
       'ignores' => 
       array (

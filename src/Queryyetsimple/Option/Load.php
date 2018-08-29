@@ -142,7 +142,7 @@ class Load
 
         foreach ($providers as $k => $provider) {
             if (!class_exists($provider)) {
-                unset($providers[$key]);
+                unset($providers[$k]);
 
                 continue;
             }

@@ -96,7 +96,7 @@ class KernelConsole1 extends KernelConsole
 
 class ProjectKernelConsole extends Projects
 {
-    public function getPathByComposer(string $namespaces)
+    public function getPathByComposer($namespaces)
     {
         return __DIR__.'/Commands/Console';
     }

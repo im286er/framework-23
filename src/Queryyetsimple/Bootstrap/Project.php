@@ -529,7 +529,7 @@ class Project extends Container implements IProject
      * @return null|string
      * @codeCoverageIgnore
      */
-    public function getPathByComposer(string $namespaces)
+    public function getPathByComposer($namespaces)
     {
         $namespaces = explode('\\', $namespaces);
 

@@ -34,8 +34,6 @@ use Leevel\Di\Provider;
  */
 class Bar extends Provider
 {
-    public static $defer = true;
-
     public function register()
     {
         $this->container->singleton('bar', function (IContainer $container) {
@@ -51,5 +49,13 @@ class Bar extends Provider
             ],
             'helloworld',
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isDeferred(): bool
+    {
+        return true;
     }
 }

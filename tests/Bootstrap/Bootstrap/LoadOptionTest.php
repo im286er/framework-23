@@ -92,7 +92,7 @@ class LoadOptionTest extends TestCase
         $this->assertNull($option->get('_env.foo'));
         $this->assertTrue($option->get('_env.debug'));
 
-        Fso::deleteDirectory($appPath.'/runtime/bootstrap', true);
+        Fso::deleteDirectory($appPath.'/runtime', true);
 
         $_ENV = [];
     }
