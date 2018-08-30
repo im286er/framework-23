@@ -696,7 +696,7 @@ class Router implements IRouter
      */
     protected function pathinfoRestful()
     {
-        if (isset($this->matchedData[static::ACTION])) {
+        if (!empty($this->matchedData[static::ACTION])) {
             return;
         }
 

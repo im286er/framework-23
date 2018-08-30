@@ -22,6 +22,7 @@ namespace Tests\Database\Ddd;
 
 use Carbon\Carbon;
 use DateTime;
+use DateTimeZone;
 use Leevel\Collection\Collection;
 use Leevel\Database\Ddd\Entity;
 use Tests\Database\Ddd\Entity\TestConversionEntity;
@@ -51,6 +52,9 @@ class ConversionTest extends TestCase
     {
         $entity = $this->makeEntity();
 
+        $old = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+
         $entity->{$field} = $source;
 
         $assertMethod = in_array($field, [
@@ -72,6 +76,8 @@ class ConversionTest extends TestCase
 
         $this->assertSame($prop, $this->getTestProperty($entity, $field));
         $this->{$assertMethod}($conversion, $entity->getProp($field));
+
+        date_default_timezone_set($old);
     }
 
     public function getBaseUseData()
@@ -152,28 +158,28 @@ class ConversionTest extends TestCase
             ['collection2', ['foo2' => 'bar2'], '{"foo2":"bar2"}', new Collection(['foo2' => 'bar2'])],
 
             // date = datetime
-            ['date1', $date1 = Carbon::create(2012, 1, 1, 0, 0, 0), (string) $date1, $date1],
-            ['date2', $date2 = new DateTime('2009-10-11'), '2009-10-11 00:00:00', $date2],
-            ['date3', 35, '1970-01-01 00:00:35', Carbon::create(1970, 1, 1, 0, 0, 35)],
-            ['date4', '2018-01-11', '2018-01-11 00:00:00', Carbon::create(2018, 1, 11, 0, 0, 0)],
-            ['date5', '2019-02-01 03:45:27', '2019-02-01 03:45:27', Carbon::create(2019, 2, 1, 3, 45, 27)],
-            ['datetime1', $date1 = Carbon::create(2012, 1, 1, 0, 0, 0), (string) $date1, $date1],
-            ['datetime2', $date2 = new DateTime('2009-10-11'), '2009-10-11 00:00:00', $date2],
-            ['datetime3', 35, '1970-01-01 00:00:35', Carbon::create(1970, 1, 1, 0, 0, 35)],
-            ['datetime4', '2018-01-11', '2018-01-11 00:00:00', Carbon::create(2018, 1, 11, 0, 0, 0)],
-            ['datetime5', '2019-02-01 03:45:27', '2019-02-01 03:45:27', Carbon::create(2019, 2, 1, 3, 45, 27)],
+            ['date1', $date1 = Carbon::create(2012, 1, 1, 0, 0, 0, 'UTC'), (string) $date1, $date1],
+            ['date2', $date2 = new DateTime('2009-10-11', new DateTimeZone('UTC')), '2009-10-11 00:00:00', $date2],
+            ['date3', 35, '1970-01-01 00:00:35', Carbon::create(1970, 1, 1, 0, 0, 35, 'UTC')],
+            ['date4', '2018-01-11', '2018-01-11 00:00:00', Carbon::create(2018, 1, 11, 0, 0, 0, 'UTC')],
+            ['date5', '2019-02-01 03:45:27', '2019-02-01 03:45:27', Carbon::create(2019, 2, 1, 3, 45, 27, 'UTC')],
+            ['datetime1', $date1 = Carbon::create(2012, 1, 1, 0, 0, 0, 'UTC'), (string) $date1, $date1],
+            ['datetime2', $date2 = new DateTime('2009-10-11', new DateTimeZone('UTC')), '2009-10-11 00:00:00', $date2],
+            ['datetime3', 35, '1970-01-01 00:00:35', Carbon::create(1970, 1, 1, 0, 0, 35, 'UTC')],
+            ['datetime4', '2018-01-11', '2018-01-11 00:00:00', Carbon::create(2018, 1, 11, 0, 0, 0, 'UTC')],
+            ['datetime5', '2019-02-01 03:45:27', '2019-02-01 03:45:27', Carbon::create(2019, 2, 1, 3, 45, 27, 'UTC')],
 
             // time = timetamp
-            ['time1', $date1 = Carbon::create(2012, 1, 1, 0, 0, 0), '2012-01-01 00:00:00', $date1->getTimestamp()],
-            ['time2', $date2 = new DateTime('2009-10-11'), '2009-10-11 00:00:00', $date2->getTimestamp()],
-            ['time3', 35, '1970-01-01 00:00:35', Carbon::create(1970, 1, 1, 0, 0, 35)->getTimestamp()],
-            ['time4', '2018-01-11', '2018-01-11 00:00:00', Carbon::create(2018, 1, 11, 0, 0, 0)->getTimestamp()],
-            ['time5', '2019-02-01 03:45:27', '2019-02-01 03:45:27', Carbon::create(2019, 2, 1, 3, 45, 27)->getTimestamp()],
-            ['timestamp1', $date1 = Carbon::create(2012, 1, 1, 0, 0, 0), '2012-01-01 00:00:00', $date1->getTimestamp()],
-            ['timestamp2', $date2 = new DateTime('2009-10-11'), '2009-10-11 00:00:00', $date2->getTimestamp()],
-            ['timestamp3', 35, '1970-01-01 00:00:35', Carbon::create(1970, 1, 1, 0, 0, 35)->getTimestamp()],
-            ['timestamp4', '2018-01-11', '2018-01-11 00:00:00', Carbon::create(2018, 1, 11, 0, 0, 0)->getTimestamp()],
-            ['timestamp5', '2019-02-01 03:45:27', '2019-02-01 03:45:27', Carbon::create(2019, 2, 1, 3, 45, 27)->getTimestamp()],
+            ['time1', $date1 = Carbon::create(2012, 1, 1, 0, 0, 0, 'UTC'), '2012-01-01 00:00:00', $date1->getTimestamp()],
+            ['time2', $date2 = new DateTime('2009-10-11', new DateTimeZone('UTC')), '2009-10-11 00:00:00', $date2->getTimestamp()],
+            ['time3', 35, '1970-01-01 00:00:35', Carbon::create(1970, 1, 1, 0, 0, 35, 'UTC')->getTimestamp()],
+            ['time4', '2018-01-11', '2018-01-11 00:00:00', Carbon::create(2018, 1, 11, 0, 0, 0, 'UTC')->getTimestamp()],
+            ['time5', '2019-02-01 03:45:27', '2019-02-01 03:45:27', Carbon::create(2019, 2, 1, 3, 45, 27, 'UTC')->getTimestamp()],
+            ['timestamp1', $date1 = Carbon::create(2012, 1, 1, 0, 0, 0, 'UTC'), '2012-01-01 00:00:00', $date1->getTimestamp()],
+            ['timestamp2', $date2 = new DateTime('2009-10-11', new DateTimeZone('UTC')), '2009-10-11 00:00:00', $date2->getTimestamp()],
+            ['timestamp3', 35, '1970-01-01 00:00:35', Carbon::create(1970, 1, 1, 0, 0, 35, 'UTC')->getTimestamp()],
+            ['timestamp4', '2018-01-11', '2018-01-11 00:00:00', Carbon::create(2018, 1, 11, 0, 0, 0, 'UTC')->getTimestamp()],
+            ['timestamp5', '2019-02-01 03:45:27', '2019-02-01 03:45:27', Carbon::create(2019, 2, 1, 3, 45, 27, 'UTC')->getTimestamp()],
         ];
     }
 

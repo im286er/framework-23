@@ -98,6 +98,10 @@ class MakeTest extends TestCase
         $dirname = dirname($file);
         mkdir($dirname, 0444, true);
 
+        if (is_writable($dirname)) {
+            $this->markTestSkipped('Mkdir with chmod is invalid.');
+        }
+
         $result = $this->runCommand(new MakeFile(), [
             'command'     => 'make:test',
             'name'        => 'test3',
@@ -127,6 +131,10 @@ class MakeTest extends TestCase
         $cacheDir = __DIR__.'/Command/cacheParentDir/sub';
         $dirname = dirname($cacheDir);
         mkdir($dirname, 0444, true);
+
+        if (is_writable($dirname)) {
+            $this->markTestSkipped('Mkdir with chmod is invalid.');
+        }
 
         $result = $this->runCommand(new MakeFile(), [
             'command'     => 'make:test',
