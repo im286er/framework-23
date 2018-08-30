@@ -46,14 +46,14 @@ class ConsoleTest extends TestCase
         unset($_SERVER['HTTP_X_REQUESTED_WITH']);
 
         $content = Console::trace([
-            'sql' => ['hello', 'world'],
+            'sql' => [['hello', 'world']],
         ]);
 
         $this->assertContains('<script type="text/javascript">', $content);
 
         $this->assertContains('LOADED.FILE', $content);
 
-        $this->assertContains('SQL.LOG (2)', $content);
+        $this->assertContains('SQL.LOG (1)', $content);
 
         unset($_SERVER['SERVER_SOFTWARE']);
     }
@@ -61,11 +61,11 @@ class ConsoleTest extends TestCase
     public function testJsonTrace()
     {
         $content = Console::jsonTrace([
-            'sql' => ['hello', 'world'],
+            'sql' => [['hello', 'world']],
         ]);
 
         $this->assertInternalType('array', $content);
 
-        $this->assertArrayHasKey('SQL.LOG (2)', $content);
+        $this->assertArrayHasKey('SQL.LOG (1)', $content);
     }
 }

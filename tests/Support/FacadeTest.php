@@ -112,6 +112,11 @@ class FacadeTest extends TestCase
         $test = new Test3();
 
         $this->assertSame($this->container, $test->container());
+
+        if (extension_loaded('leevel')) {
+            $this->markTestSkipped('Extension facade can not access reflection.');
+        }
+
         $this->assertArrayHasKey('test1', $this->getTestProperty($test, 'instances'));
         $this->assertArrayHasKey('test2', $this->getTestProperty($test, 'instances'));
         $this->assertArrayNotHasKey('test3', $this->getTestProperty($test, 'instances'));
