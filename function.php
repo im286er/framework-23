@@ -365,3 +365,16 @@ if (!function_exists('gettext')) {
         return Leevel::__($text, ...$arr);
     }
 }
+
+if (!function_exists('dd')) {
+    /**
+     * 调试一个变量.
+     *
+     * @param mixed $var
+     * @param bool  $simple
+     */
+    function dd($var, bool $simple = false)
+    {
+        Leevel::dd($var, $simple);
+    }
+}
