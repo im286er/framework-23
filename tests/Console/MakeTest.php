@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Tests\Console;
 
 use Leevel\Console\Make;
+use Leevel\Filesystem\Fso;
 use Tests\Console\Command\MakeFile;
 use Tests\TestCase;
 
@@ -36,6 +37,20 @@ use Tests\TestCase;
 class MakeTest extends TestCase
 {
     use BaseMake;
+
+    protected function setUp()
+    {
+        $dirs = [
+            __DIR__.'/Command/cache',
+            __DIR__.'/Command/cacheParentDir',
+        ];
+
+        foreach ($dirs as $dir) {
+            if (is_dir($dir)) {
+                Fso::deleteDirectory($dir, true);
+            }
+        }
+    }
 
     public function testBaseUse()
     {

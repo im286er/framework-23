@@ -42,7 +42,7 @@ class HtmlTest extends TestCase
         Fso::deleteDirectory(__DIR__.'/cache_html', true);
     }
 
-    public function testBaseUse()
+    public function t2estBaseUse()
     {
         $html = new Html([
             'debug'            => true,
@@ -70,7 +70,7 @@ class HtmlTest extends TestCase
         $this->assertSame('hello html,bar.', $result);
     }
 
-    public function testDisplayReturn()
+    public function t2estDisplayReturn()
     {
         $html = new Html([
             'debug'            => true,
@@ -89,7 +89,7 @@ class HtmlTest extends TestCase
         $this->assertSame('hello html,bar.', $result);
     }
 
-    public function testDisplayWithVar()
+    public function t2estDisplayWithVar()
     {
         $html = new Html([
             'debug'            => true,
@@ -122,7 +122,7 @@ class HtmlTest extends TestCase
         $html->display('html_test', ['foo' => 'bar'], null, false);
     }
 
-    public function testThemeCachePathIsNotSetException()
+    public function t2estThemeCachePathIsNotSetException()
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage(
@@ -141,7 +141,7 @@ class HtmlTest extends TestCase
         $html->display('html_test', ['foo' => 'bar'], null, false);
     }
 
-    public function testDebugSetFalse()
+    public function t2estDebugSetFalse()
     {
         $html = new Html([
             'theme_path'       => __DIR__.'/assert/default',
@@ -159,7 +159,7 @@ class HtmlTest extends TestCase
         $this->assertSame('hello html debug false,bar.', $result);
     }
 
-    public function testCacheLifetime()
+    public function t2estCacheLifetime()
     {
         $html = new Html([
             'theme_path'       => __DIR__.'/assert/default',
@@ -188,7 +188,7 @@ class HtmlTest extends TestCase
         $this->assertTrue(is_file($cachePath));
     }
 
-    public function testCacheLifetime2()
+    public function t2estCacheLifetime2()
     {
         $html = new Html([
             'theme_path'       => __DIR__.'/assert/default',
@@ -223,7 +223,7 @@ class HtmlTest extends TestCase
         $this->assertSame('hello html cachelifetime2,bar.', $result);
     }
 
-    public function testCacheLifetime3()
+    public function t2estCacheLifetime3()
     {
         $html = new Html([
             'theme_path'       => __DIR__.'/assert/default',
@@ -269,7 +269,7 @@ class HtmlTest extends TestCase
         $this->assertSame('hello html cachelifetime3,bar.', $result);
     }
 
-    public function testCacheLifetime4()
+    public function t2estCacheLifetime4()
     {
         $html = new Html([
             'theme_path'       => __DIR__.'/assert/default',

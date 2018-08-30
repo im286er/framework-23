@@ -20,9 +20,9 @@ declare(strict_types=1);
 
 namespace Tests\View;
 
-use Leevel\View\V8;
+use Leevel\View\V8js;
 use Tests\TestCase;
-use V8Js;
+use V8Js as V8Jss;
 
 /**
  * v8 test.
@@ -33,7 +33,7 @@ use V8Js;
  *
  * @version 1.0
  */
-class V8Test extends TestCase
+class V8jsTest extends TestCase
 {
     protected function setUp()
     {
@@ -44,10 +44,10 @@ class V8Test extends TestCase
 
     public function testV8jsSelf()
     {
-        $v8 = new V8js();
+        $v8js = new V8Jss();
 
         ob_start();
-        $v8->executeString('print("hello v8js!")');
+        $v8js->executeString('print("hello v8js!")');
         $content = ob_get_clean();
 
         $this->assertSame('hello v8js!', $content);
@@ -55,58 +55,58 @@ class V8Test extends TestCase
 
     public function testBaseUse()
     {
-        $v8 = new V8();
+        $v8js = new V8js();
 
-        $content = $v8->display(__DIR__.'/assert/demo1.js', [], null, false);
+        $content = $v8js->display(__DIR__.'/assert/demo1.js', [], null, false);
 
         $this->assertSame('hello v8 demo1.js!', $content);
 
-        $content = $v8->display(__DIR__.'/assert/demo1.js', [], null, true);
+        $content = $v8js->display(__DIR__.'/assert/demo1.js', [], null, true);
 
         $this->assertNull($content);
 
-        $this->assertInstanceof(V8js::class, $v8->getV8js());
+        $this->assertInstanceof(V8Jss::class, $v8js->getV8js());
     }
 
     public function testDiplayWithVar()
     {
-        $v8 = new V8();
+        $v8js = new V8js();
 
-        $content = $v8->display(__DIR__.'/assert/demo3.js', ['hello' => 'world', 'foo' => 'bar'], null, false);
+        $content = $v8js->display(__DIR__.'/assert/demo3.js', ['hello' => 'world', 'foo' => 'bar'], null, false);
 
         $this->assertSame('hello v8 demo3.js! foo = bar;hello = world', $content);
     }
 
     public function testDump()
     {
-        $v8 = new V8();
+        $v8js = new V8js();
 
-        $content = $v8->display(__DIR__.'/assert/demo2.js', [], null, false);
+        $content = $v8js->display(__DIR__.'/assert/demo2.js', [], null, false);
 
         $this->assertContains('string(18) "hello v8 demo2.js!"', $content);
     }
 
     public function testSelect()
     {
-        $v8 = new V8();
+        $v8js = new V8js();
 
-        $content = $v8->select('print("hello v8js for select!")');
+        $content = $v8js->select('print("hello v8js for select!")');
 
         $this->assertContains('hello v8js for select!', $content);
     }
 
     public function testExecute()
     {
-        $v8 = new V8();
+        $v8js = new V8js();
 
-        $content = $v8->execute('print("hello v8js for execute!")');
+        $content = $v8js->execute('print("hello v8js for execute!")');
 
         $this->assertSame(23, $content);
     }
 
     public function testArt()
     {
-        $v8 = new V8(['theme_path' => __DIR__.'/assert/default']);
+        $v8js = new V8js(['theme_path' => __DIR__.'/assert/default']);
 
         $listVar = [
             '摄影',
@@ -116,7 +116,7 @@ class V8Test extends TestCase
             '吉他',
         ];
 
-        $content = $v8->display(__DIR__.'/assert/art.js', ['list' => $listVar], null, false);
+        $content = $v8js->display(__DIR__.'/assert/art.js', ['list' => $listVar], null, false);
 
         $data = <<<'EOT'
 <ul>
@@ -138,9 +138,9 @@ EOT;
 
     public function testVue()
     {
-        $v8 = new V8(['theme_path' => __DIR__.'/assert/default']);
+        $v8js = new V8js(['theme_path' => __DIR__.'/assert/default']);
 
-        $content = $v8->display(__DIR__.'/assert/vue.js', ['msg' => 'hello v8js for vue'], null, false);
+        $content = $v8js->display(__DIR__.'/assert/vue.js', ['msg' => 'hello v8js for vue'], null, false);
 
         $data = <<<'EOT'
 <div data-server-rendered="true">
@@ -152,9 +152,9 @@ EOT;
 
     public function testRequires()
     {
-        $v8 = new V8(['theme_path' => __DIR__.'/assert/default']);
+        $v8js = new V8js(['theme_path' => __DIR__.'/assert/default']);
 
-        $content = $v8->display(__DIR__.'/assert/requires.js', [], null, false);
+        $content = $v8js->display(__DIR__.'/assert/requires.js', [], null, false);
 
         $data = <<<'EOT'
 i am requireshello.js is found.[object Object]dir index.js was found.[object Object]

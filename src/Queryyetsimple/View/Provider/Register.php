@@ -22,6 +22,7 @@ namespace Leevel\View\Provider;
 
 use Leevel\Di\IContainer;
 use Leevel\Di\Provider;
+use Leevel\Kernel\IProject;
 use Leevel\View\Compiler;
 use Leevel\View\Manager;
 use Leevel\View\Parser;
@@ -126,11 +127,11 @@ class Register extends Provider
      */
     protected function viewTwigParser()
     {
-        $this->container->singleton('view.twig.parser', function (IContainer $container) {
+        $this->container->singleton('view.twig.parser', function (IProject $project) {
             return new Twig_Environment(new Twig_Loader_Filesystem(), [
                 'auto_reload' => true,
-                'debug'       => $container->development(),
-                'cache'       => $container->runtimePath('theme').'/'.$container['request']->app(),
+                'debug'       => $project->development(),
+                'cache'       => $project->runtimePath('theme').'/'.$project['request']->app(),
             ]);
         });
     }

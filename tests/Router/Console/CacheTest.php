@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Tests\Router\Console;
 
 use Leevel\Di\IContainer;
+use Leevel\Filesystem\Fso;
 use Leevel\Kernel\IProject;
 use Leevel\Router\Console\Cache;
 use Leevel\Router\IRouter;
@@ -39,6 +40,20 @@ use Tests\TestCase;
 class CacheTest extends TestCase
 {
     use BaseCommand;
+
+    protected function setUp()
+    {
+        $dirs = [
+            __DIR__.'/dirWriteable',
+            __DIR__.'/parentDirWriteable',
+        ];
+
+        foreach ($dirs as $dir) {
+            if (is_dir($dir)) {
+                Fso::deleteDirectory($dir, true);
+            }
+        }
+    }
 
     public function testBaseUse()
     {
@@ -189,7 +204,7 @@ class CacheTest extends TestCase
             }
         );
 
-        $this->assertContains('not', $result);
+        $this->assertContains(sprintf('Dir %s is', $dirname), $result);
 
         rmdir($dirname);
     }
