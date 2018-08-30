@@ -144,11 +144,7 @@ class Dispatch implements IDispatch
 
             if (preg_match($key, $event, $res)) {
                 foreach ($item as $priority => $value) {
-                    if (!isset($listeners[$priority])) {
-                        $listeners[$priority] = [];
-                    }
-
-                    $listeners[$priority] = array_merge($listeners[$priority], $value);
+                    $listeners[$priority] = array_merge($listeners[$priority] ?? [], $value);
                 }
             }
         }
