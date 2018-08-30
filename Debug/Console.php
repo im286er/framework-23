@@ -141,7 +141,7 @@ console.log( \'%cThe PHP Framework For Code Poem As Free As Wind %c(http://www.q
      *
      * @return string
      */
-    protected static function formatMessage($item)
+    protected static function formatMessage(array $item)
     {
         return addslashes(
             $item[0].' '.json_encode($item[1], JSON_UNESCAPED_UNICODE)
