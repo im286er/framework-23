@@ -21,10 +21,10 @@ declare(strict_types=1);
 namespace Leevel\View;
 
 use RuntimeException;
-use V8Js;
+use V8Js as V8Jss;
 
 /**
- * v8 模板处理类.
+ * v8js 模板处理类.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
@@ -33,7 +33,7 @@ use V8Js;
  * @version 1.0
  * @codeCoverageIgnore
  */
-class V8 extends Connect implements IConnect
+class V8js extends Connect implements IConnect
 {
     /**
      * 配置.
@@ -81,7 +81,7 @@ class V8 extends Connect implements IConnect
 
         parent::__construct($option);
 
-        $this->v8js = new V8Js('$');
+        $this->v8js = new V8Jss('$');
 
         foreach (['base', 'dd', 'dump', 'echo', 'html', 'load', 'module'] as $item) {
             $this->{'init'.ucwords($item)}();
@@ -93,7 +93,7 @@ class V8 extends Connect implements IConnect
      *
      * @return \V8js
      */
-    public function getV8js(): V8js
+    public function getV8js(): V8Jss
     {
         return $this->v8js;
     }
@@ -106,7 +106,7 @@ class V8 extends Connect implements IConnect
      * @param string $ext     后缀
      * @param bool   $display 是否显示
      *
-     * @return string
+     * @return string|void
      */
     public function display(?string $file = null, array $vars = [], ?string $ext = null, bool $display = true)
     {

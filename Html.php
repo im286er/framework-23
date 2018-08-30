@@ -73,7 +73,7 @@ class Html extends Connect implements IConnect
      * @param string $ext     后缀
      * @param bool   $display 是否显示
      *
-     * @return string
+     * @return string|void
      */
     public function display(?string $file = null, array $vars = [], ?string $ext = null, bool $display = true)
     {
