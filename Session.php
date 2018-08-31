@@ -526,7 +526,7 @@ class Session implements ISession
     /**
      * 取得 SESSION 名字.
      *
-     * @return string
+     * @return null|string
      */
     public function getName(): ?string
     {
@@ -546,7 +546,7 @@ class Session implements ISession
     /**
      * 取得 SESSION ID.
      *
-     * @return string
+     * @return null|string
      */
     public function getId(): ?string
     {
@@ -555,6 +555,8 @@ class Session implements ISession
 
     /**
      * 重新生成 SESSION ID.
+     *
+     * @return string
      */
     public function regenerateId(): string
     {
