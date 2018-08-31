@@ -338,7 +338,6 @@ class Str
         }
 
         $hover = (int) (floor($sec / 3600));
-        $result = '';
 
         if (0 === $hover) {
             if (0 === ($min = (int) (floor($sec / 60)))) {
@@ -346,7 +345,8 @@ class Str
             }
 
             return $min.' '.($lang['minutes'] ?? 'minutes ago');
-        } elseif ($hover < 24) {
+        }
+        if ($hover < 24) {
             return $hover.' '.($lang['hours'] ?? 'hours ago');
         }
 
