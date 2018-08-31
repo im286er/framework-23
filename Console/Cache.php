@@ -58,7 +58,7 @@ class Cache extends Command
      */
     public function handle(IProject $project, IRouter $router)
     {
-        $this->line('Start to do cache router.');
+        $this->line('Start to cache router.');
 
         $data = [
             'basepaths'   => $router->getBasepaths(),
