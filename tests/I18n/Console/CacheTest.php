@@ -80,8 +80,15 @@ class CacheTest extends TestCase
             }
         );
 
+        $result = $this->normalizeContent($result);
+
         $this->assertContains(
-            sprintf('I18n file %s cache successed.', $cacheFile),
+            $this->normalizeContent('Start to cache i18n.'),
+            $result
+        );
+
+        $this->assertContains(
+            $this->normalizeContent(sprintf('I18n file %s cache successed.', $cacheFile)),
             $result
         );
 
@@ -114,14 +121,21 @@ class CacheTest extends TestCase
             }
         );
 
+        $result = $this->normalizeContent($result);
+
         $this->assertContains(
-            sprintf('I18n file %s cache successed.', $cacheFile),
+            $this->normalizeContent('Start to cache i18n.'),
+            $result
+        );
+
+        $this->assertContains(
+            $this->normalizeContent(sprintf('I18n file %s cache successed.', $cacheFile)),
             $result
         );
 
         // 如果换成文件存在，则包含警告信息
         $this->assertContains(
-            sprintf('I18n cache file %s is already exits.', $cacheFile),
+            $this->normalizeContent(sprintf('I18n cache file %s is already exits.', $cacheFile)),
             $result
         );
 
@@ -149,8 +163,15 @@ class CacheTest extends TestCase
             }
         );
 
+        $result = $this->normalizeContent($result);
+
         $this->assertContains(
-            sprintf('I18n file %s cache successed.', $cacheFile),
+            $this->normalizeContent('Start to cache i18n.'),
+            $result
+        );
+
+        $this->assertContains(
+            $this->normalizeContent(sprintf('I18n file %s cache successed.', $cacheFile)),
             $result
         );
 
@@ -190,7 +211,17 @@ class CacheTest extends TestCase
             }
         );
 
-        $this->assertContains(sprintf('Dir %s is', $dirname), $result);
+        $result = $this->normalizeContent($result);
+
+        $this->assertContains(
+            $this->normalizeContent('Start to cache i18n.'),
+            $result
+        );
+
+        $this->assertContains(
+            $this->normalizeContent(sprintf('Dir %s is not writeable.', $dirname)),
+            $result
+        );
 
         rmdir($dirname);
     }
@@ -227,7 +258,17 @@ class CacheTest extends TestCase
             }
         );
 
-        $this->assertContains('Unable to create the', $result);
+        $result = $this->normalizeContent($result);
+
+        $this->assertContains(
+            $this->normalizeContent('Start to cache i18n.'),
+            $result
+        );
+
+        $this->assertContains(
+            $this->normalizeContent(sprintf('Unable to create the %s directory.', $dirname)),
+            $result
+        );
 
         rmdir(dirname($dirname));
     }
