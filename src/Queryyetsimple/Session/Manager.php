@@ -36,7 +36,7 @@ class Manager extends Managers
     /**
      * 返回 session 配置.
      *
-     * @return arrat
+     * @return array
      */
     public function getSessionOption(): array
     {

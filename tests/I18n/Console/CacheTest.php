@@ -56,6 +56,11 @@ class CacheTest extends TestCase
         }
     }
 
+    protected function tearDown()
+    {
+        $this->setUp();
+    }
+
     public function testBaseUse()
     {
         $cacheFile = __DIR__.'/i18n_cache.php';

@@ -55,6 +55,11 @@ class CacheTest extends TestCase
         }
     }
 
+    protected function tearDown()
+    {
+        $this->setUp();
+    }
+
     public function testBaseUse()
     {
         $cacheFile = __DIR__.'/router_cache.php';

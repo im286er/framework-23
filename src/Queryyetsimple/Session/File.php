@@ -55,7 +55,7 @@ class File extends Connect
     {
         $this->option = array_merge($this->option, $option);
 
-        parent::__construct($this->createCache(), $option);
+        parent::__construct($this->createCache());
     }
 
     /**
