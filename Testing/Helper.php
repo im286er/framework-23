@@ -82,4 +82,9 @@ trait Helper
 
         return $method;
     }
+
+    protected function normalizeContent(string $content): string
+    {
+        return str_replace([' ', "\t", "\n", "\r"], '', $content);
+    }
 }
