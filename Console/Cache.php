@@ -64,7 +64,7 @@ class Cache extends Command
 
         $data = $i18n->all();
 
-        $i18nDefault = $option->get('i18n\default');
+        $i18nDefault = $option->get('i18n\\default');
 
         $cachePath = $project->i18nCachedPath($i18nDefault);
 
