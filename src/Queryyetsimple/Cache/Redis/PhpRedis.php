@@ -35,6 +35,13 @@ use RuntimeException;
 class PhpRedis implements IConnect
 {
     /**
+     * redis 句柄.
+     *
+     * @var handle
+     */
+    protected $handle;
+
+    /**
      * 配置.
      *
      * @var array
