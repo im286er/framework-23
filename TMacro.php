@@ -73,7 +73,7 @@ trait TMacro
      * @param string   $name
      * @param callable $macro
      */
-    public static function macro($name, callable $macro)
+    public static function macro(string $name, callable $macro)
     {
         static::$macro[$name] = $macro;
     }
@@ -85,7 +85,7 @@ trait TMacro
      *
      * @return bool
      */
-    public static function hasMacro($name)
+    public static function hasMacro(string $name)
     {
         return isset(static::$macro[$name]);
     }
