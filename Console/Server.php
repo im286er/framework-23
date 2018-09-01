@@ -69,6 +69,11 @@ class Server extends Command
 
         $this->line("<info>The QueryPHP server started:</info> <http://{$this->host()}:{$this->port()}>");
 
+        $this->table(['key', 'value'], [
+            ['php', $this->php()],
+            ['server', $this->server()],
+        ]);
+
         passthru($this->normalizeCommand(), $status);
 
         return $status;
