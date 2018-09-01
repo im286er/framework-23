@@ -312,4 +312,22 @@ class Fso
     {
         return pathinfo($path, PATHINFO_FILENAME);
     }
+
+    /**
+     * 创建软连接.
+     *
+     * @param string $target
+     * @param string $link
+     * @codeCoverageIgnore
+     */
+    public static function link(string $target, string $link)
+    {
+        if (DIRECTORY_SEPARATOR !== '\\') {
+            return symlink($target, $link);
+        }
+
+        $mode = is_dir($target) ? 'J' : 'H';
+
+        exec("mklink /{$mode} \"{$link}\" \"{$target}\"");
+    }
 }

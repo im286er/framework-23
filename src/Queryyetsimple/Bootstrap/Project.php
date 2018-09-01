@@ -83,6 +83,13 @@ class Project extends Container implements IProject
     protected $storagePath;
 
     /**
+     * 资源路径.
+     *
+     * @var string
+     */
+    protected $publicPath;
+
+    /**
      * 配置路径.
      *
      * @var string
@@ -347,6 +354,29 @@ class Project extends Container implements IProject
     public function storagePath(string $path = '')
     {
         return ($this->storagePath ?? $this->path.DIRECTORY_SEPARATOR.'storage').
+            $this->normalizePath($path);
+    }
+
+    /**
+     * 设置资源路径.
+     *
+     * @param string $path
+     */
+    public function setPublicPath(string $path)
+    {
+        $this->publicPath = $path;
+    }
+
+    /**
+     * 资源路径.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function publicPath(string $path = '')
+    {
+        return ($this->publicPath ?? $this->path.DIRECTORY_SEPARATOR.'public').
             $this->normalizePath($path);
     }
 

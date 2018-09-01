@@ -183,6 +183,22 @@ interface IProject extends IContainer
     public function storagePath(string $path = '');
 
     /**
+     * 设置资源路径.
+     *
+     * @param string $path
+     */
+    public function setPublicPath(string $path);
+
+    /**
+     * 资源路径.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function publicPath(string $path = '');
+
+    /**
      * 设置配置路径.
      *
      * @param string $path
