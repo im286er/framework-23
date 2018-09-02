@@ -100,7 +100,7 @@ abstract class Connect
      *
      * @return int
      */
-    protected function cacheTime($id, $defaultTime = 0): int
+    protected function cacheTime(string $id, int $defaultTime = 0): int
     {
         if (!$this->option['time_preset']) {
             return $defaultTime;

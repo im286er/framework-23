@@ -177,7 +177,7 @@ class File extends Connect implements IConnect
     {
         $filePath = $this->getCachePath($name);
 
-        $option['expire'] = $this->cacheTime($name, $option['expire']);
+        $option['expire'] = $this->cacheTime($name, (int) $option['expire']);
 
         if ($option['expire'] <= 0) {
             return true;

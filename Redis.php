@@ -100,7 +100,7 @@ class Redis extends Connect implements IConnect
             $data = serialize($data);
         }
 
-        $option['expire'] = $this->cacheTime($name, $option['expire']);
+        $option['expire'] = $this->cacheTime($name, (int) $option['expire']);
 
         $this->handle->set(
             $this->getCacheName($name), $data,
