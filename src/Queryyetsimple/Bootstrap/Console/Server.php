@@ -87,11 +87,10 @@ class Server extends Command
     protected function normalizeCommand(): string
     {
         return sprintf(
-            '%s -S %s:%d -t %s %s',
+            '%s -S %s:%d -t %s',
             escapeshellarg($this->php()),
             $this->host(),
             $this->port(),
-            escapeshellarg(dirname($this->server())),
             escapeshellarg($this->server())
         );
     }
@@ -123,8 +122,7 @@ class Server extends Command
      */
     protected function server(): string
     {
-        return $this->option('server') ?:
-            ($this->project->path('www').DIRECTORY_SEPARATOR.'server.php');
+        return $this->option('server') ?: $this->project->path('www');
     }
 
     /**
