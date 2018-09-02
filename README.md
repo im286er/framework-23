@@ -25,6 +25,8 @@ QueryPHP was based on the DoYouHaoBaby framework，we have a large code refactor
 
 <p>DoYouHaoBaby released 0.0.1 version at 2010/10/03, the last version was released in 2014/10 version 3, and now it has stopped maintenance.</p>
 
+<a href="https://raw.githubusercontent.com/hunzhiwange/framework/master/doyouhaobaby-googlecode.jpg" target="_blank">DoYouHaoBaby In Googlecode</a>
+
 * Site: <https://www.queryphp.com/>
 * API: <http://api.queryphp.com>
 * Document: <https://www.leevel.vip/>
@@ -40,14 +42,6 @@ QueryPHP was based on the DoYouHaoBaby framework，we have a large code refactor
  * Test: <https://github.com/queryyetsimple/tests/>
  * Package: <https://github.com/queryyetsimple/>
 
-# 旧日时光，时光不再...
-
-DoYouHaoBaby 框架成立于 2010 年，全名 The DoYouHaoBaby PHP Framework，最早于 2010.10.03 日发布了第一个版本，此后经历了多个版本的迭代。2016 年下半年晚些时候开始进行战略重构，并启用全新的品牌 QueryPHP，希望为国内 PHP 社区提供一款高度工程化面向生产环境的高可用 PHP 框架。
-
-DoYouHaoBaby 是作者小牛仔于 2010 年 10 月发布的一个作品，那个时候刚刚 20 岁正青春。八年磨一剑，只珍朝夕。
-
-<a href="https://raw.githubusercontent.com/hunzhiwange/framework/master/doyouhaobaby-googlecode.jpg" target="_blank">DoYouHaoBaby In Googlecode</a>
-
 ## Optional C Extension
 
 <p>
@@ -62,10 +56,6 @@ DoYouHaoBaby 是作者小牛仔于 2010 年 10 月发布的一个作品，那个
   <a href="http://pecl.php.net/package/v8js">
     <img alt="V8js Version" src="https://img.shields.io/badge/v8js-%3E=2.1.0-brightgreen.svg" /></a>
 </p>
-
-![](php7_swoole_cextension_redis.png)
-
-<a href="https://github.com/ThinkDevelopers/PHPConChina/blob/master/PHPCON2016/PHP7%2BSwoole%E5%BC%80%E5%8F%91%E8%B6%85%E9%AB%98%E6%80%A7%E8%83%BD%E5%90%8E%E5%8F%B0%E7%A8%8B%E5%BA%8F--%E9%9F%A9%E5%A4%A9%E5%B3%B0%40PHPCon2016.pdf" target="_blank">@PHP7+Swoole开发超高性能后台程序--韩天峰@PHPCon2016.pdf</a>
 
 We think the performance of PHP applications is very important and the development of pleasure also needs to be considered, and that's why we have developed the QueryPHP framework to achieve great ideals.
 
