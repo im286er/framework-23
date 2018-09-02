@@ -25,7 +25,7 @@ QueryPHP was based on the DoYouHaoBaby framework，we have a large code refactor
 
 <p>DoYouHaoBaby released 0.0.1 version at 2010/10/03, the last version was released in 2014/10 version 3, and now it has stopped maintenance.</p>
 
-<a href="https://raw.githubusercontent.com/hunzhiwange/framework/master/doyouhaobaby-googlecode.jpg" target="_blank">DoYouHaoBaby In Googlecode</a>
+<<a href="https://raw.githubusercontent.com/hunzhiwange/framework/master/doyouhaobaby-googlecode.jpg" target="_blank">The history of DoYouHaoBaby On Google Code.</a>>
 
 * Site: <https://www.queryphp.com/>
 * API: <http://api.queryphp.com>
