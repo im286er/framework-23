@@ -199,6 +199,22 @@ interface IProject extends IContainer
     public function publicPath(string $path = '');
 
     /**
+     * 设置主题路径.
+     *
+     * @param string $path
+     */
+    public function setThemesPath(string $path);
+
+    /**
+     * 主题路径.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function themesPath(string $path = '');
+
+    /**
      * 设置配置路径.
      *
      * @param string $path

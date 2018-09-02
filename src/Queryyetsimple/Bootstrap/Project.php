@@ -90,6 +90,13 @@ class Project extends Container implements IProject
     protected $publicPath;
 
     /**
+     * 主题路径.
+     *
+     * @var string
+     */
+    protected $themesPath;
+
+    /**
      * 配置路径.
      *
      * @var string
@@ -377,6 +384,29 @@ class Project extends Container implements IProject
     public function publicPath(string $path = '')
     {
         return ($this->publicPath ?? $this->path.DIRECTORY_SEPARATOR.'public').
+            $this->normalizePath($path);
+    }
+
+    /**
+     * 设置主题路径.
+     *
+     * @param string $path
+     */
+    public function setThemesPath(string $path)
+    {
+        $this->themesPath = $path;
+    }
+
+    /**
+     * 主题路径.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function themesPath(string $path = '')
+    {
+        return ($this->themesPath ?? $this->path.DIRECTORY_SEPARATOR.'themes').
             $this->normalizePath($path);
     }
 

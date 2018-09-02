@@ -23,10 +23,6 @@ use Leevel\Di\IContainer;
 use Leevel\Log\ILog;
 use Leevel\Support\Debug\Dump;
 
-if (class_exists('\Leevel')) {
-    return;
-}
-
 /**
  * 函数库.
  *
