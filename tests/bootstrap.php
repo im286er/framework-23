@@ -45,6 +45,9 @@ if (false === is_file($vendorDir.'/autoload.php')) {
 
 include $vendorDir.'/autoload.php';
 
+// Do not use composer.autoload.files.
+require_once __DIR__.'/../src/Queryyetsimple/Bootstrap/function.php';
+
 spl_autoload_register(function ($class) {
     if (0 === stripos($class, 'Tests\\')) {
         $path = __DIR__.'/'.strtr(substr($class, 5), '\\', '/').'.php';
