@@ -122,16 +122,15 @@ class Load
      * 刷新缓存数据.
      *
      * @param array|string $names
-     * @param array        $option
      */
-    public function refresh($names, array $option = [])
+    public function refresh($names)
     {
-        $names = is_array($names) ? $names : [
+        $tmp = is_array($names) ? $names : [
             $names,
         ];
 
-        foreach ($names as $name) {
-            $this->delete($name, $option);
+        foreach ($tmp as $name) {
+            $this->delete($name);
         }
     }
 
@@ -165,11 +164,10 @@ class Load
      * 删除缓存数据.
      *
      * @param string $name
-     * @param array  $option
      */
-    protected function delete($name, array $options = [])
+    protected function delete($name)
     {
-        $this->deletePersistence($name, $options);
+        $this->deletePersistence($name);
     }
 
     /**
@@ -263,11 +261,10 @@ class Load
      * 清除缓存.
      *
      * @param string $name
-     * @param array  $option
      */
-    protected function deletePersistence($name, array $option = [])
+    protected function deletePersistence($name)
     {
-        $this->cache->delete($name, $option);
+        $this->cache->delete($name);
     }
 
     /**
