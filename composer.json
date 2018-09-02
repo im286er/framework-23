@@ -105,7 +105,8 @@
                 "Leevel\\I18n\\Console",
                 "Leevel\\Mvc\\Console",
                 "Leevel\\Option\\Console",
-                "Leevel\\Router\\Console"
+                "Leevel\\Router\\Console",
+                "Leevel\\View\\Console"
             ]
         }
     },
