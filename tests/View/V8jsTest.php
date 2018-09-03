@@ -106,7 +106,7 @@ class V8jsTest extends TestCase
 
     public function testArt()
     {
-        $v8js = new V8js(['theme_path' => __DIR__.'/assert/default']);
+        $v8js = new V8js(['theme_path' => __DIR__.'/assert']);
 
         $listVar = [
             '摄影',
@@ -138,7 +138,7 @@ EOT;
 
     public function testVue()
     {
-        $v8js = new V8js(['theme_path' => __DIR__.'/assert/default']);
+        $v8js = new V8js(['theme_path' => __DIR__.'/assert']);
 
         $content = $v8js->display(__DIR__.'/assert/vue.js', ['msg' => 'hello v8js for vue'], null, false);
 
@@ -152,7 +152,7 @@ EOT;
 
     public function testRequires()
     {
-        $v8js = new V8js(['theme_path' => __DIR__.'/assert/default']);
+        $v8js = new V8js(['theme_path' => __DIR__.'/assert']);
 
         $content = $v8js->display(__DIR__.'/assert/requires.js', [], null, false);
 

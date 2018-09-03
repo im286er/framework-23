@@ -97,53 +97,6 @@ class CacheTest extends TestCase
         unlink($cacheFile);
     }
 
-    public function testExists()
-    {
-        $cacheFile = __DIR__.'/i18n_cache2.php';
-
-        $cacheData = [
-            '中国'   => 'china',
-            '成都'   => 'cd',
-        ];
-
-        file_put_contents($cacheFile, 'hello');
-
-        $this->assertTrue(is_file($cacheFile));
-        $this->assertSame('hello', file_get_contents($cacheFile));
-
-        $result = $this->runCommand(
-            new Cache(),
-            [
-                'command' => 'i18n:cache',
-            ],
-            function ($container) use ($cacheFile, $cacheData) {
-                $this->initContainerService($container, $cacheFile, $cacheData);
-            }
-        );
-
-        $result = $this->normalizeContent($result);
-
-        $this->assertContains(
-            $this->normalizeContent('Start to cache i18n.'),
-            $result
-        );
-
-        $this->assertContains(
-            $this->normalizeContent(sprintf('I18n file %s cache successed.', $cacheFile)),
-            $result
-        );
-
-        // 如果换成文件存在，则包含警告信息
-        $this->assertContains(
-            $this->normalizeContent(sprintf('I18n cache file %s is already exits.', $cacheFile)),
-            $result
-        );
-
-        $this->assertSame($cacheData, (array) (include $cacheFile));
-
-        unlink($cacheFile);
-    }
-
     public function testDirNotExists()
     {
         $cacheFile = __DIR__.'/dirNotExists/i18n_cache.php';

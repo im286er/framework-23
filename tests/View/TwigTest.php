@@ -45,7 +45,7 @@ class TwigTest extends TestCase
     public function testBaseUse()
     {
         $twig = new Twig([
-            'theme_path' => __DIR__.'/assert/default',
+            'theme_path' => __DIR__.'/assert',
         ]);
 
         $twig->setParseResolver(function () {
@@ -71,7 +71,7 @@ class TwigTest extends TestCase
     public function testDisplayReturn()
     {
         $twig = new Twig([
-            'theme_path' => __DIR__.'/assert/default',
+            'theme_path' => __DIR__.'/assert',
         ]);
 
         $twig->setParseResolver(function () {
@@ -88,7 +88,7 @@ class TwigTest extends TestCase
     public function testDisplayWithVar()
     {
         $twig = new Twig([
-            'theme_path' => __DIR__.'/assert/default',
+            'theme_path' => __DIR__.'/assert',
         ]);
 
         $twig->setParseResolver(function () {
@@ -108,7 +108,7 @@ class TwigTest extends TestCase
         );
 
         $twig = new Twig([
-            'theme_path' => __DIR__.'/assert/default',
+            'theme_path' => __DIR__.'/assert',
         ]);
 
         $twig->display('twig_test', ['foo' => 'bar'], null, false);
@@ -118,7 +118,6 @@ class TwigTest extends TestCase
     {
         return new Twig_Environment(new Twig_Loader_Filesystem(), [
             'auto_reload' => true,
-            'debug'       => true,
             'cache'       => __DIR__.'/cache',
         ]);
     }

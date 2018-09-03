@@ -72,22 +72,18 @@ class RegisterTest extends TestCase
     {
         $container = new ExtendContainer();
 
-        $this->assertSame(__DIR__.'/assert/default', $container->themePath());
+        $this->assertSame(__DIR__.'/assert', $container->themesPath());
         $this->assertSame(__DIR__.'/cache_theme', $container->runtimePath('theme'));
 
         $option = new Option([
             'view' => [
                 'default'               => 'html',
-                'theme_name'            => 'default',
-                'theme_path_default'    => '',
                 'action_fail'           => 'public+fail',
                 'action_success'        => 'public+success',
-                'controlleraction_depr' => '/',
                 'connect'               => [
                     'html' => [
                         'driver'         => 'html',
                         'suffix'         => '.html',
-                        'cache_lifetime' => 2592000,
                     ],
                 ],
             ],
@@ -126,9 +122,9 @@ class ExtendContainer extends Container
         return true;
     }
 
-    public function themePath()
+    public function themesPath()
     {
-        return __DIR__.'/assert/default';
+        return __DIR__.'/assert';
     }
 
     public function runtimePath($type)

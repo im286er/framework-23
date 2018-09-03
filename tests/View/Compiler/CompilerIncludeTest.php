@@ -50,12 +50,12 @@ eot;
         $this->assertSame($compiled, $parser->doCompile($source, null, true));
 
         $source = <<<'eot'
-{~$headTpl = Leevel::themePath() . '/' . '/header.html'}
+{~$headTpl = Leevel::themesPath() . '/' . '/header.html'}
 <include file="$headTpl">
 eot;
 
         $compiled = <<<'eot'
-<?php $headTpl = Leevel::themePath() . '/' . '/header.html'; ?>
+<?php $headTpl = Leevel::themesPath() . '/' . '/header.html'; ?>
 <?php $this->display($headTpl, [], '', true); ?>
 eot;
 

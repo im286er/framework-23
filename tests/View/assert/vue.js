@@ -1,7 +1,7 @@
 load('vue');
 
 var vm = new Vue({
-  template: html('v8+vue'),
+  template: html('v8_vue'),
   data: {
     msg: $.msg
   }

@@ -101,58 +101,6 @@ class CacheTest extends TestCase
         unlink($cacheFile);
     }
 
-    public function testExists()
-    {
-        $cacheFile = __DIR__.'/router_cache2.php';
-
-        $routerData = [
-            'basepaths' => [
-                'foo',
-                'bar',
-            ],
-            'groups'      => [],
-            'routers'     => [],
-            'middlewares' => [],
-        ];
-
-        file_put_contents($cacheFile, 'hello');
-
-        $this->assertTrue(is_file($cacheFile));
-        $this->assertSame('hello', file_get_contents($cacheFile));
-
-        $result = $this->runCommand(
-            new Cache(),
-            [
-                'command' => 'router:cache',
-            ],
-            function ($container) use ($cacheFile, $routerData) {
-                $this->initContainerService($container, $cacheFile, $routerData);
-            }
-        );
-
-        $result = $this->normalizeContent($result);
-
-        $this->assertContains(
-            $this->normalizeContent('Start to cache router.'),
-            $result
-        );
-
-        $this->assertContains(
-            $this->normalizeContent(sprintf('Router file %s cache successed.', $cacheFile)),
-            $result
-        );
-
-        // 如果换成文件存在，则包含警告信息
-        $this->assertContains(
-            $this->normalizeContent(sprintf('Router cache file %s is already exits.', $cacheFile)),
-            $result
-        );
-
-        $this->assertSame($routerData, (array) (include $cacheFile));
-
-        unlink($cacheFile);
-    }
-
     public function testDirNotExists()
     {
         $cacheFile = __DIR__.'/dirNotExists/router_cache.php';

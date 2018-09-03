@@ -96,53 +96,6 @@ class CacheTest extends TestCase
         unlink($cacheFile);
     }
 
-    public function testExists()
-    {
-        $cacheFile = __DIR__.'/option_cache2.php';
-
-        $optionData = [
-            'foo'   => 'bar',
-            'hello' => 'world',
-        ];
-
-        file_put_contents($cacheFile, 'hello');
-
-        $this->assertTrue(is_file($cacheFile));
-        $this->assertSame('hello', file_get_contents($cacheFile));
-
-        $result = $this->runCommand(
-            new Cache(),
-            [
-                'command' => 'option:cache',
-            ],
-            function ($container) use ($cacheFile, $optionData) {
-                $this->initContainerService($container, $cacheFile, $optionData);
-            }
-        );
-
-        $result = $this->normalizeContent($result);
-
-        $this->assertContains(
-            $this->normalizeContent('Start to cache option.'),
-            $result
-        );
-
-        $this->assertContains(
-            $this->normalizeContent(sprintf('Option file %s cache successed.', $cacheFile)),
-            $result
-        );
-
-        // 如果换成文件存在，则包含警告信息
-        $this->assertContains(
-            $this->normalizeContent(sprintf('Option cache file %s is already exits.', $cacheFile)),
-            $result
-        );
-
-        $this->assertSame($optionData, (array) (include $cacheFile));
-
-        unlink($cacheFile);
-    }
-
     public function testDirNotExists()
     {
         $cacheFile = __DIR__.'/dirNotExists/option_cache.php';

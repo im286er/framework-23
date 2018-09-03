@@ -37,7 +37,7 @@ class PhpuiTest extends TestCase
     public function testBaseUse()
     {
         $phpui = new Phpui([
-            'theme_path' => __DIR__.'/assert/default',
+            'theme_path' => __DIR__.'/assert',
         ]);
 
         $phpui->setVar('foo', 'bar');
@@ -55,7 +55,7 @@ class PhpuiTest extends TestCase
     public function testDisplayReturn()
     {
         $phpui = new Phpui([
-            'theme_path' => __DIR__.'/assert/default',
+            'theme_path' => __DIR__.'/assert',
         ]);
 
         $phpui->setVar('foo', 'bar');
@@ -68,7 +68,7 @@ class PhpuiTest extends TestCase
     public function testDisplayWithVar()
     {
         $phpui = new Phpui([
-            'theme_path' => __DIR__.'/assert/default',
+            'theme_path' => __DIR__.'/assert',
         ]);
 
         $result = $phpui->display('phpui_test', ['foo' => 'bar'], null, false);
@@ -79,7 +79,7 @@ class PhpuiTest extends TestCase
     public function testSetOption()
     {
         $phpui = new Phpui([
-            'theme_path' => __DIR__.'/assert/default',
+            'theme_path' => __DIR__.'/assert',
         ]);
 
         $phpui->setOption('suffix', '.foo');
@@ -92,24 +92,12 @@ class PhpuiTest extends TestCase
     public function testParseFileForFullPath()
     {
         $phpui = new Phpui([
-            'theme_path' => __DIR__.'/assert/default',
+            'theme_path' => __DIR__.'/assert',
         ]);
 
-        $result = $phpui->display(__DIR__.'/assert/default/phpui_test_pullpath.php', ['foo' => 'bar'], null, false);
+        $result = $phpui->display(__DIR__.'/assert/phpui_test_pullpath.php', ['foo' => 'bar'], null, false);
 
         $this->assertSame('hello phpui for fullpath,bar.', $result);
-    }
-
-    public function testParseFileForDefaultControllerAndAction()
-    {
-        $phpui = new Phpui([
-            'theme_path'      => __DIR__.'/assert/default',
-            'controller_name' => 'phpui_test',
-        ]);
-
-        $result = $phpui->display('', ['foo' => 'bar'], null, false);
-
-        $this->assertSame('hello phpui for default controller and action,bar.', $result);
     }
 
     public function testParseFileThemeNotSet()
@@ -132,20 +120,8 @@ class PhpuiTest extends TestCase
         );
 
         $phpui = new Phpui([
-            'theme_path' => __DIR__.'/assert/default',
+            'theme_path' => __DIR__.'/assert',
         ]);
-
-        $phpui->display('phpui_test_not_found.php', ['foo' => 'bar'], null, false);
-    }
-
-    public function testParseDefaultFileThemeNotSet()
-    {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage(
-            'Theme path must be set.'
-        );
-
-        $phpui = new Phpui();
 
         $phpui->display('phpui_test_not_found.php', ['foo' => 'bar'], null, false);
     }
@@ -153,24 +129,12 @@ class PhpuiTest extends TestCase
     public function testParseFileForTheme()
     {
         $phpui = new Phpui([
-            'theme_path' => __DIR__.'/assert/default',
+            'theme_path' => __DIR__.'/assert',
         ]);
 
-        $result = $phpui->display('dark@phpui_test_theme', ['foo' => 'bar'], null, false);
+        $result = $phpui->display('dark/phpui_test_theme', ['foo' => 'bar'], null, false);
 
         $this->assertSame('hello phpui for theme,bar.', $result);
-    }
-
-    public function testThemePathDefault()
-    {
-        $phpui = new Phpui([
-            'theme_path'         => __DIR__.'/assert/default',
-            'theme_path_default' => __DIR__.'/assert/common',
-        ]);
-
-        $result = $phpui->display('phpui_test_header', ['foo' => 'bar'], null, false);
-
-        $this->assertSame('hello phpui for common header,bar.', $result);
     }
 
     public function testThemeNameIsNotDefault()
@@ -183,17 +147,5 @@ class PhpuiTest extends TestCase
         $result = $phpui->display('phpui_test_custom', ['foo' => 'bar'], null, false);
 
         $this->assertSame('hello phpui for custom theme name,bar.', $result);
-    }
-
-    public function testThemeNameIsNotDefaultToFindInDefault()
-    {
-        $phpui = new Phpui([
-            'theme_path' => __DIR__.'/assert/custom',
-            'theme_name' => 'custom',
-        ]);
-
-        $result = $phpui->display('phpui_test_custom_find_in_default', ['foo' => 'bar'], null, false);
-
-        $this->assertSame('hello phpui for custom find in default,bar.', $result);
     }
 }

@@ -2,11 +2,11 @@
 print('i am requires');
 
 // file
-var hello = require('v8+hello');
+var hello = require('v8_hello');
 
 print(hello);
 
 // dir
-var dir = require('v8+dir');
+var dir = require('v8_dir');
 
 print(dir);

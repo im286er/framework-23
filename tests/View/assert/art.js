@@ -1,6 +1,6 @@
 load('art');
 
-var source = html('v8+art');
+var source = html('v8_art');
 
 var html = template.render(source, $);
 
