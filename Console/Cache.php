@@ -69,25 +69,9 @@ class Cache extends Command
 
         $cachePath = $project->routerCachedPath();
 
-        $this->checkCacheExists($cachePath);
-
         $this->writeCache($cachePath, $data);
 
         $this->info(sprintf('Router file %s cache successed.', $cachePath));
-    }
-
-    /**
-     * 验证缓存.
-     *
-     * @param string $cachePath
-     */
-    protected function checkCacheExists(string $cachePath)
-    {
-        if (is_file($cachePath)) {
-            $this->warn(sprintf('Router cache file %s is already exits.', $cachePath));
-
-            unlink($cachePath);
-        }
     }
 
     /**
