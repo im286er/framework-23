@@ -68,27 +68,9 @@ class Cache extends Command
 
         $cachePath = $project->i18nCachedPath($i18nDefault);
 
-        $this->checkCacheExists($cachePath);
-
         $this->writeCache($cachePath, $data);
 
         $this->info(sprintf('I18n file %s cache successed.', $cachePath));
-    }
-
-    /**
-     * 验证缓存.
-     *
-     * @param string $cachePath
-     *
-     * @return bool
-     */
-    protected function checkCacheExists(string $cachePath)
-    {
-        if (is_file($cachePath)) {
-            $this->warn(sprintf('I18n cache file %s is already exits.', $cachePath));
-
-            unlink($cachePath);
-        }
     }
 
     /**
