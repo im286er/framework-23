@@ -132,20 +132,8 @@ class PhpuiTest extends TestCase
             'theme_path' => __DIR__.'/assert',
         ]);
 
-        $result = $phpui->display('dark/phpui_test_theme', ['foo' => 'bar'], null, false);
+        $result = $phpui->display('sub/phpui_test_sub', ['foo' => 'bar'], null, false);
 
-        $this->assertSame('hello phpui for theme,bar.', $result);
-    }
-
-    public function testThemeNameIsNotDefault()
-    {
-        $phpui = new Phpui([
-            'theme_path' => __DIR__.'/assert/custom',
-            'theme_name' => 'custom',
-        ]);
-
-        $result = $phpui->display('phpui_test_custom', ['foo' => 'bar'], null, false);
-
-        $this->assertSame('hello phpui for custom theme name,bar.', $result);
+        $this->assertSame('hello phpui for sub,bar.', $result);
     }
 }

@@ -136,24 +136,6 @@ class HtmlTest extends TestCase
         $html->display('html_test', ['foo' => 'bar'], null, false);
     }
 
-    public function testDebugSetFalse()
-    {
-        $html = new Html([
-            'theme_path'       => __DIR__.'/assert',
-            'cache_path'       => __DIR__.'/cache_html',
-        ]);
-
-        $html->setParseResolver(function () {
-            return $this->makeHtml();
-        });
-
-        $html->setVar('foo', 'bar');
-
-        $result = $html->display('html_test_debug_false', [], null, false);
-
-        $this->assertSame('hello html debug false,bar.', $result);
-    }
-
     public function testCacheLifetime()
     {
         $html = new Html([
