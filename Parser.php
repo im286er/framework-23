@@ -160,7 +160,7 @@ class Parser implements IParser
      *
      * @param \Leevel\View\ICompiler $compiler
      */
-    public function __construct(icompiler $compiler)
+    public function __construct(ICompiler $compiler)
     {
         $this->compiler = $compiler;
     }

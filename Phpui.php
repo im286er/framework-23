@@ -37,12 +37,7 @@ class Phpui extends Connect implements IConnect
      * @var array
      */
     protected $option = [
-        'controller_name'       => 'index',
-        'action_name'           => 'index',
-        'controlleraction_depr' => '_',
-        'theme_name'            => 'default',
         'theme_path'            => '',
-        'theme_path_default'    => '',
         'suffix'                => '.php',
     ];
 

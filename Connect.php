@@ -152,11 +152,6 @@ abstract class Connect
             $file = $this->parseFile($file, $ext);
         }
 
-        // 分析默认视图文件
-        if (!is_file($file)) {
-            $file = $this->parseDefaultFile($file);
-        }
-
         if (!is_file($file)) {
             throw new RuntimeException(
                 sprintf('Template file %s does not exist.', $file)
@@ -178,7 +173,7 @@ abstract class Connect
     {
         $tpl = trim(str_replace('->', '.', $tpl));
 
-        // 完整路径或者变量
+        // 完整路径或者变量以及表达式路径
         if (pathinfo($tpl, PATHINFO_EXTENSION) ||
             0 === strpos($tpl, '$') ||
             false !== strpos($tpl, '(')) {
@@ -189,28 +184,8 @@ abstract class Connect
             throw new RuntimeException('Theme path must be set.');
         }
 
-        // 空取默认控制器和方法
-        if ('' === $tpl) {
-            $tpl = $this->option['controller_name'].
-                    $this->option['controlleraction_depr'].
-                    $this->option['action_name'];
-        }
-
-        // 分析主题
-        if (false !== strpos($tpl, '@')) {
-            $arr = explode('@', $tpl);
-            $theme = array_shift($arr);
-            $tpl = array_shift($arr);
-        }
-
-        $tpl = str_replace([
-            '+',
-            ':',
-        ], $this->option['controlleraction_depr'], $tpl);
-
-        return dirname($this->option['theme_path']).'/'.
-                ($theme ?? $this->option['theme_name']).'/'.
-                $tpl.($ext ?: $this->option['suffix']);
+        return $this->option['theme_path'].'/'.$tpl.
+            ($ext ?: $this->option['suffix']);
     }
 
     /**
@@ -229,46 +204,5 @@ abstract class Connect
             '->',
             '::',
         ], $content);
-    }
-
-    /**
-     * 匹配默认地址（文件不存在）.
-     *
-     * @param string $tpl 文件地址
-     *
-     * @return string
-     */
-    protected function parseDefaultFile(?string $tpl = null)
-    {
-        if (!$this->option['theme_path']) {
-            throw new RuntimeException('Theme path must be set.');
-        }
-
-        $source = $tpl;
-
-        // 物理路径
-        if (false !== strpos($tpl, ':') ||
-            0 === strpos($tpl, '/') ||
-            0 === strpos($tpl, '\\')) {
-            $tpl = str_replace(
-                str_replace('\\', '/', $this->option['theme_path'].'/'),
-                '',
-                str_replace('\\', '/', ($tpl))
-            );
-        }
-
-        // 备用地址
-        if ($this->option['theme_path_default'] &&
-            is_file(($tempTpl = $this->option['theme_path_default'].'/'.$tpl))) {
-            return $tempTpl;
-        }
-
-        // default 主题
-        if ('default' !== $this->option['theme_name'] &&
-            is_file(($tempTpl = dirname($this->option['theme_path']).'/default/'.$tpl))) {
-            return $tempTpl;
-        }
-
-        return $source;
     }
 }

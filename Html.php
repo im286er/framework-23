@@ -53,16 +53,9 @@ class Html extends Connect implements IConnect
      * @var array
      */
     protected $option = [
-        'debug'                 => false,
-        'controller_name'       => 'index',
-        'action_name'           => 'index',
-        'controlleraction_depr' => '_',
-        'theme_name'            => 'default',
         'theme_path'            => '',
-        'theme_path_default'    => '',
         'suffix'                => '.html',
-        'theme_cache_path'      => '',
-        'cache_lifetime'        => 2592000,
+        'cache_path'            => '',
     ];
 
     /**
@@ -119,6 +112,26 @@ class Html extends Connect implements IConnect
     }
 
     /**
+     * 获取编译路径.
+     *
+     * @param string $file
+     *
+     * @return string
+     */
+    public function getCachePath(string $file)
+    {
+        if (!$this->option['cache_path']) {
+            throw new RuntimeException('Theme cache path must be set.');
+        }
+
+        $file = str_replace('//', '/', str_replace('\\', '/', $file));
+
+        $file = basename($file, '.'.pathinfo($file, PATHINFO_EXTENSION)).'.'.md5($file).'.php';
+
+        return $this->option['cache_path'].'/'.$file;
+    }
+
+    /**
      * 解析 parse.
      *
      * @return \Leevel\View\IParser
@@ -147,30 +160,6 @@ class Html extends Connect implements IConnect
     }
 
     /**
-     * 获取编译路径.
-     *
-     * @param string $file
-     *
-     * @return string
-     */
-    protected function getCachePath(string $file)
-    {
-        if (!$this->option['theme_cache_path']) {
-            throw new RuntimeException('Theme cache path must be set.');
-        }
-
-        // 统一斜线
-        $file = str_replace('//', '/', str_replace('\\', '/', $file));
-
-        // 统一缓存文件
-        $file = basename($file, '.'.pathinfo($file, PATHINFO_EXTENSION)).
-            '.'.md5($file).'.php';
-
-        // 返回真实路径
-        return $this->option['theme_cache_path'].'/'.$file;
-    }
-
-    /**
      * 判断缓存是否过期
      *
      * @param string $file
@@ -180,27 +169,10 @@ class Html extends Connect implements IConnect
      */
     protected function isCacheExpired(string $file, string $cachepath)
     {
-        // 开启调试
-        if ($this->option['debug']) {
-            return true;
-        }
-
-        // 缓存文件不存在过期
         if (!is_file($cachepath)) {
             return true;
         }
 
-        // 编译过期时间为 <= 0 表示永不过期
-        if ($this->option['cache_lifetime'] <= 0) {
-            return false;
-        }
-
-        // 缓存时间到期
-        if (filemtime($cachepath) + (int) ($this->option['cache_lifetime']) < time()) {
-            return true;
-        }
-
-        // 文件有更新
         if (filemtime($file) >= filemtime($cachepath)) {
             return true;
         }

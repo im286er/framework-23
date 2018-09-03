@@ -150,10 +150,8 @@ class Manager extends Managers
 
         $options = [
             'debug'            => $this->container->development(),
-            'controller_name'  => $request->controller(),
-            'action_name'      => $request->action(),
-            'theme_path'       => $this->container->themePath(true),
-            'theme_cache_path' => $this->container->runtimePath('theme').'/'.strtolower($request->app()),
+            'theme_path'       => $this->container->themesPath(),
+            'cache_path'       => $this->container->runtimePath('theme'),
         ];
 
         return $options;
