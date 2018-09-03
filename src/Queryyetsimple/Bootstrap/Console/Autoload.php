@@ -76,8 +76,6 @@ class Autoload extends Command
 
         $cachePath = $this->autoloadCachedPath();
 
-        $this->checkCacheExists($cachePath);
-
         $this->writeCache($cachePath, $data);
 
         $this->info(sprintf('Autoload file %s cache successed.', $cachePath));
@@ -270,18 +268,6 @@ class Autoload extends Command
     protected function getFileContent(string $path): array
     {
         return json_decode(file_get_contents($path), true);
-    }
-
-    /**
-     * 验证缓存.
-     *
-     * @param string $cachePath
-     */
-    protected function checkCacheExists(string $cachePath)
-    {
-        if (is_file($cachePath)) {
-            $this->warn(sprintf('Autoload cache file %s is already exits.', $cachePath));
-        }
     }
 
     /**

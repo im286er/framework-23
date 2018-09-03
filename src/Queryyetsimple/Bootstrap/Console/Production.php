@@ -22,8 +22,6 @@ namespace Leevel\Bootstrap\Console;
 
 use Leevel\Console\Command;
 use Leevel\Console\Option;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * 生产环境性能一键优化.
@@ -58,30 +56,17 @@ class Production extends Command
     {
         $this->line('Start to optimize you app.');
 
-        $progressBar = new ProgressBar(new ConsoleOutput(), 100);
-
-        $progressBar->advance(1);
-
-        $progressBar->setFormat('%current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%');
-
         $this->callRouter();
-
-        $progressBar->advance(24);
 
         $this->callOption();
 
-        $progressBar->advance(25);
-
         $this->callI18n();
 
-        $progressBar->advance(25);
+        $this->callView();
 
         $this->callAutoload();
 
-        $progressBar->finish();
-
-        $this->line(PHP_EOL);
-
+        $this->line('');
         $this->info('Optimize successed.');
     }
 
@@ -90,8 +75,7 @@ class Production extends Command
      */
     protected function callRouter(): void
     {
-        $this->line(PHP_EOL);
-
+        $this->line('');
         $this->call('router:cache');
     }
 
@@ -100,8 +84,7 @@ class Production extends Command
      */
     protected function callOption(): void
     {
-        $this->line(PHP_EOL);
-
+        $this->line('');
         $this->call('option:cache');
     }
 
@@ -110,9 +93,17 @@ class Production extends Command
      */
     protected function callI18n(): void
     {
-        $this->line(PHP_EOL);
-
+        $this->line('');
         $this->call('i18n:cache');
+    }
+
+    /**
+     * 执行视图缓存.
+     */
+    protected function callView(): void
+    {
+        $this->line('');
+        $this->call('view:cache');
     }
 
     /**
@@ -120,8 +111,7 @@ class Production extends Command
      */
     protected function callAutoload(): void
     {
-        $this->line(PHP_EOL);
-
+        $this->line('');
         $this->call('autoload', [
             '--composer' => $this->composer(),
         ]);

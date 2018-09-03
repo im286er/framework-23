@@ -65,25 +65,9 @@ class Cache extends Command
 
         $cachePath = $project->optionCachedPath();
 
-        $this->checkCacheExists($cachePath);
-
         $this->writeCache($cachePath, $data);
 
         $this->info(sprintf('Option file %s cache successed.', $cachePath));
-    }
-
-    /**
-     * 验证缓存.
-     *
-     * @param string $cachePath
-     */
-    protected function checkCacheExists(string $cachePath)
-    {
-        if (is_file($cachePath)) {
-            $this->warn(sprintf('Option cache file %s is already exits.', $cachePath));
-
-            unlink($cachePath);
-        }
     }
 
     /**
