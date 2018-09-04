@@ -147,7 +147,6 @@ abstract class Connect
      */
     protected function parseDisplayFile(?string $file = null, ?string $ext = '')
     {
-        // 加载视图文件
         if (!is_file($file)) {
             $file = $this->parseFile($file, $ext);
         }
