@@ -144,16 +144,13 @@ class Manager extends Managers
      *
      * @return array
      */
-    protected function viewOptionCommon()
+    protected function viewOptionCommon(): array
     {
         $request = $this->container['request'];
 
-        $options = [
-            'debug'            => $this->container->development(),
+        return [
             'theme_path'       => $this->container->themesPath(),
             'cache_path'       => $this->container->runtimePath('theme'),
         ];
-
-        return $options;
     }
 }
