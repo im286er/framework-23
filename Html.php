@@ -68,7 +68,7 @@ class Html extends Connect implements IConnect
      *
      * @return string|void
      */
-    public function display(?string $file = null, array $vars = [], ?string $ext = null, bool $display = true)
+    public function display(string $file, array $vars = [], ?string $ext = null, bool $display = true)
     {
         // 加载视图文件
         $file = $this->parseDisplayFile($file, $ext);

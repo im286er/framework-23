@@ -41,7 +41,7 @@ interface IConnect
      *
      * @return string|void
      */
-    public function display(?string $file = null, array $vars = [], ?string $ext = null, bool $display = true);
+    public function display(string $file, array $vars = [], ?string $ext = null, bool $display = true);
 
     /**
      * 设置模板变量.
