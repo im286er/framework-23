@@ -57,8 +57,6 @@ class LinkPublic extends Command
      */
     public function handle(IProject $project)
     {
-        $this->project = $project;
-
         if (file_exists($link = $project->path('www/public'))) {
             return $this->error(
                 sprintf('The `%s` directory already exists.', $link)
