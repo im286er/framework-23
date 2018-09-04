@@ -59,7 +59,7 @@ class Clear extends Command
     {
         $this->line('Start to clear cache i18n.');
 
-        $i18nDefault = $option->get('i18n\default');
+        $i18nDefault = $option->get('i18n\\default');
 
         $cachePath = $project->i18nCachedPath($i18nDefault);
 
