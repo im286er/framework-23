@@ -86,5 +86,5 @@ interface IView
      *
      * @return string
      */
-    public function display($file = null, array $vars = [], $ext = null);
+    public function display(string $file, array $vars = [], ?string $ext = null);
 }
