@@ -18,54 +18,51 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\I18n\Console;
+namespace Leevel\Bootstrap\Console;
 
 use Leevel\Console\Command;
 use Leevel\Kernel\IProject;
-use Leevel\Option\IOption;
 
 /**
- * 语言包缓存清理.
+ * 自动加载缓存清理.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2018.05.06
+ * @since 2018.09.04
  *
  * @version 1.0
+ * @codeCoverageIgnore
  */
-class Clear extends Command
+class AutoloadClear extends Command
 {
     /**
      * 命令名字.
      *
      * @var string
      */
-    protected $name = 'i18n:clear';
+    protected $name = 'autoload:clear';
 
     /**
      * 命令行描述.
      *
      * @var string
      */
-    protected $description = 'Clear cache of i18n';
+    protected $description = 'Clear cache of autoload';
 
     /**
      * 响应命令.
      *
      * @param \Leevel\Kernel\IProject $project
-     * @param \Leevel\Option\IOption  $option
      */
-    public function handle(IProject $project, IOption $option)
+    public function handle(IProject $project)
     {
-        $this->line('Start to clear cache i18n.');
+        $this->line('Start to clear cache autoload.');
 
-        $i18nDefault = $option->get('i18n\\default');
-
-        $cachePath = $project->i18nCachedPath($i18nDefault);
+        $cachePath = $project->runtimePath('bootstrap/classmap.php');
 
         $this->clearCache($cachePath);
 
-        $this->info(sprintf('I18n file %s cache clear successed.', $cachePath));
+        $this->info(sprintf('Autoload file %s cache clear successed.', $cachePath));
     }
 
     /**
@@ -76,7 +73,7 @@ class Clear extends Command
     protected function clearCache(string $cachePath)
     {
         if (!is_file($cachePath)) {
-            $this->warn('I18n cache files have been cleaned up.');
+            $this->warn('Autoload cache files have been cleaned up.');
 
             return;
         }

@@ -18,20 +18,21 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Leevel\I18n\Console;
+namespace Leevel\Session\Console;
 
 use Leevel\Console\Command;
+use Leevel\Filesystem\Fso;
 use Leevel\Kernel\IProject;
-use Leevel\Option\IOption;
 
 /**
- * 语言包缓存清理.
+ * session 文件缓存清理.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2018.05.06
+ * @since 2018.09.04
  *
  * @version 1.0
+ * @codeCoverageIgnore
  */
 class Clear extends Command
 {
@@ -40,48 +41,27 @@ class Clear extends Command
      *
      * @var string
      */
-    protected $name = 'i18n:clear';
+    protected $name = 'session:clear';
 
     /**
      * 命令行描述.
      *
      * @var string
      */
-    protected $description = 'Clear cache of i18n';
+    protected $description = 'Clear cache of session';
 
     /**
      * 响应命令.
      *
      * @param \Leevel\Kernel\IProject $project
-     * @param \Leevel\Option\IOption  $option
      */
-    public function handle(IProject $project, IOption $option)
+    public function handle(IProject $project)
     {
-        $this->line('Start to clear cache i18n.');
+        $this->line('Start to clear cache session.');
 
-        $i18nDefault = $option->get('i18n\\default');
+        Fso::deleteDirectory($cachePath = $project->runtimePath('session'), true);
 
-        $cachePath = $project->i18nCachedPath($i18nDefault);
-
-        $this->clearCache($cachePath);
-
-        $this->info(sprintf('I18n file %s cache clear successed.', $cachePath));
-    }
-
-    /**
-     * 删除缓存.
-     *
-     * @param string $cachePath
-     */
-    protected function clearCache(string $cachePath)
-    {
-        if (!is_file($cachePath)) {
-            $this->warn('I18n cache files have been cleaned up.');
-
-            return;
-        }
-
-        unlink($cachePath);
+        $this->info(sprintf('Session files in path %s cache clear successed.', $cachePath));
     }
 
     /**

@@ -195,17 +195,8 @@ class ProjectTest extends TestCase
     {
         $project = new Project($appPath = __DIR__.'/app');
 
-        $option = $this->createMock(IRequest::class);
-
-        $option->method('get')->willReturn('foo');
-        $this->assertEquals('foo', $option->get('view\\theme_name'));
-
-        $project->singleton('option', function () use ($option) {
-            return $option;
-        });
-
-        $this->assertSame($appPath.'/application/ui/theme/foo', $project->themePath());
-        $this->assertSame($appPath.'/application/blog/ui/theme/foo', $project->themePath('blog'));
+        $this->assertSame($appPath.'/application/ui/theme', $project->themePath());
+        $this->assertSame($appPath.'/application/blog/ui/theme', $project->themePath('blog'));
     }
 
     public function testCommonPath()

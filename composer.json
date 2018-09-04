@@ -30,7 +30,8 @@
         "nunomaduro/collision": "~2.0",
         "twig/twig": "~2.0",
         "zircote/swagger-php": "2.0.13",
-        "gettext/gettext": "^4.6.0"
+        "gettext/gettext": "^4.6.0",
+        "fzaninotto/faker": "^1.6"
     },
     "replace": {
         "leevel/auth": "self.version",
@@ -66,9 +67,7 @@
     },
     "require-dev": {
         "php-coveralls/php-coveralls":"^2.1",
-        "fzaninotto/faker": "^1.6",
         "phpunit/phpunit": "~7.0",
-        "league/flysystem-sftp": "^1.0",
         "hollodotme/phpunit-testdox-markdown": "^1.0"
     },
     "suggest": {
@@ -103,9 +102,11 @@
                 "Leevel\\Bootstrap\\Console",
                 "Leevel\\Database\\Console",
                 "Leevel\\I18n\\Console",
+                "Leevel\\Log\\Console",
                 "Leevel\\Mvc\\Console",
                 "Leevel\\Option\\Console",
                 "Leevel\\Router\\Console",
+                "Leevel\\Session\\Console",
                 "Leevel\\View\\Console"
             ]
         }

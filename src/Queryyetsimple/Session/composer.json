@@ -28,7 +28,8 @@
         "leevel": {
             "providers": [
                 "Leevel\\Session\\Provider\\Register"
-            ]
+            ],
+            "commands": "Leevel\\Session\\Console"
         }
     },
     "minimum-stability": "dev"
