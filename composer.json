@@ -33,7 +33,8 @@
         "leevel": {
             "providers": [
                 "Leevel\\View\\Provider\\Register"
-            ]
+            ],
+            "commands": "Leevel\\View\\Console"
         }
     },
     "minimum-stability": "dev"
