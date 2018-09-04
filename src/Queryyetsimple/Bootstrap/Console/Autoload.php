@@ -69,8 +69,10 @@ class Autoload extends Command
 
         $this->line('Start to cache autoload.');
 
-        $this->line('Exec composer dump-autoload -o.');
-        exec($this->normalizeComposerCommand());
+        if (false === $this->ignore()) {
+            $this->line('Exec composer dump-autoload -o.');
+            exec($this->normalizeComposerCommand());
+        }
 
         $data = $this->data();
 
@@ -316,6 +318,16 @@ class Autoload extends Command
     }
 
     /**
+     * 取得忽略 composer 自身命令.
+     *
+     * @return bool
+     */
+    protected function ignore(): bool
+    {
+        return $this->option('ignore') ? true : false;
+    }
+
+    /**
      * 命令参数.
      *
      * @return array
@@ -339,6 +351,13 @@ class Autoload extends Command
                 Option::VALUE_OPTIONAL,
                 'Where is composer.',
                 'composer',
+            ],
+            [
+                'ignore',
+                null,
+                Option::VALUE_OPTIONAL,
+                'Ignore composer itself.',
+                null,
             ],
         ];
     }

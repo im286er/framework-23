@@ -21,53 +21,75 @@ declare(strict_types=1);
 namespace Leevel\Bootstrap\Console;
 
 use Leevel\Console\Command;
-use Leevel\Filesystem\Fso;
-use Leevel\Kernel\IProject;
 
 /**
- * apis 文档目录创建软连接到 apis.
+ * 创建系统支持的软连接.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
- * @since 2018.09.02
+ * @since 2018.09.04
  *
  * @version 1.0
  * @codeCoverageIgnore
  */
-class LinkApis extends Command
+class Links extends Command
 {
     /**
      * 命令名字.
      *
      * @var string
      */
-    protected $name = 'link:apis';
+    protected $name = 'links';
 
     /**
      * 命令行描述.
      *
      * @var string
      */
-    protected $description = 'Create a symbolic link from `apis` to `www/apis`';
+    protected $description = 'Create all symbolic links';
 
     /**
      * 响应命令.
-     *
-     * @param \Leevel\Kernel\IProject $project
      */
-    public function handle(IProject $project)
+    public function handle()
     {
-        if (file_exists($link = $project->path('www/apis'))) {
-            return $this->error(
-                sprintf('The `%s` directory already exists.', $link)
-            );
-        }
+        $this->line('Start to create symbolic links.');
 
-        Fso::link(
-            $path = $project->path('apis'), $link
-        );
+        $this->callApis();
 
-        $this->info(sprintf('Linked `%s` directory to `%s` successed.', $path, $link));
+        $this->callPublic();
+
+        $this->callStorage();
+
+        $this->line('');
+        $this->info('Links created successed.');
+    }
+
+    /**
+     * 执行创建 apis 软连接.
+     */
+    protected function callApis(): void
+    {
+        $this->line('');
+        $this->call('link:apis');
+    }
+
+    /**
+     * 执行创建 public 软连接.
+     */
+    protected function callPublic(): void
+    {
+        $this->line('');
+        $this->call('link:public');
+    }
+
+    /**
+     * 执行创建 storage 软连接.
+     */
+    protected function callStorage(): void
+    {
+        $this->line('');
+        $this->call('link:storage');
     }
 
     /**

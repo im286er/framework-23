@@ -78,8 +78,8 @@ class RegisterTest extends TestCase
         $option = new Option([
             'view' => [
                 'default'               => 'html',
-                'action_fail'           => 'public+fail',
-                'action_success'        => 'public+success',
+                'action_fail'           => 'public/fail',
+                'action_success'        => 'public/success',
                 'connect'               => [
                     'html' => [
                         'driver'         => 'html',
