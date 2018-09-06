@@ -21,14 +21,14 @@ declare(strict_types=1);
 namespace Leevel\Router;
 
 use InvalidArgumentException;
-use Swagger\Annotations\Swagger;
+use Swagger\Annotations\OpenApi;
 use Swagger\Context;
 
 /**
  * Swagger 注解路由
- * 1:忽略已删除的路由 deprecated 和带有 _ignore 的路由
- * 2:如果没有绑定路由参数 _bind,系统会尝试自动解析注解所在控制器方法.
- * 3:仅支持 zircote/swagger-php 2.x 系列，不支持 3.0.
+ * 1:忽略已删除的路由 deprecated 和带有 leevelIgnore 的路由
+ * 2:如果没有绑定路由参数 leevelBind,系统会尝试自动解析注解所在控制器方法.
+ * 3:只支持最新的 zircote/swagger-php 3，支持最新的 openapi 3.0 规范.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
@@ -90,7 +90,6 @@ class SwaggerRouter
         'scheme',
         'domain',
         'params',
-        'strict',
         'bind',
         'middlewares',
     ];
@@ -128,7 +127,9 @@ class SwaggerRouter
     public function addSwaggerScan(string $dir)
     {
         if (!is_dir($dir)) {
-            throw new InvalidArgumentException('Dir is exits.');
+            throw new InvalidArgumentException(
+                sprintf('Swagger scandir %s is exits.', $dir)
+            );
         }
 
         $this->swaggerScan[] = $dir;
@@ -142,10 +143,8 @@ class SwaggerRouter
     public function handle()
     {
         $swagger = $this->makeSwagger();
-
-        list($basepaths, $basepathPrefix) = $this->parseBasepaths($swagger);
+        $basepaths = $this->parseBasepaths($swagger);
         $groups = $this->parseGroups($swagger);
-
         $routers = [];
 
         if ($swagger->paths) {
@@ -154,7 +153,8 @@ class SwaggerRouter
                     $method = $path->{$m};
 
                     // 忽略已删除和带有忽略标记的路由
-                    if (!$method || true === $method->deprecated || (property_exists($method, '_ignore') && $method->_ignore)) {
+                    if (!$method || true === $method->deprecated ||
+                        (property_exists($method, 'leevelIgnore') && $method->leevelIgnore)) {
                         continue;
                     }
 
@@ -162,23 +162,38 @@ class SwaggerRouter
 
                     // 支持的自定义路由字段
                     foreach ($this->routerField as $f) {
-                        $field = '_'.$f;
-                        $routerTmp[$f] = property_exists($method, $field) ? $method->{$field} : null;
+                        $field = 'leevel'.ucfirst($f);
+
+                        if (property_exists($method, $field)) {
+                            $routerTmp[$f] = $method->{$field};
+                        }
                     }
 
                     // 根据源代码生成绑定
-                    if (!$routerTmp['bind']) {
+                    if (empty($routerTmp['bind'])) {
                         $routerTmp['bind'] = $this->parseBindBySource($method->_context);
                     }
 
                     // 解析中间件
-                    if ($routerTmp['middlewares']) {
+                    if (!empty($routerTmp['middlewares'])) {
                         $routerTmp['middlewares'] = $this->middlewareParser->handle($routerTmp['middlewares']);
                     }
 
-                    $routerPath = $path->path;
+                    $routerPath = '/'.trim($path->path, '/').'/';
+                    $basepathPrefix = '';
 
-                    if (strlen($routerPath) > 1 && preg_match('/^[A-Za-z]+$/', $routerPath[1])) {
+                    if ($basepaths) {
+                        foreach ($basepaths as $bp) {
+                            if (0 === strpos($routerPath, $bp)) {
+                                $basepathPrefix = $bp;
+                                $routerPath = substr($routerPath, strlen($bp));
+
+                                break;
+                            }
+                        }
+                    }
+
+                    if (strlen($routerPath) > 1) {
                         $prefix = $routerPath[1];
                     } else {
                         $prefix = '_';
@@ -195,23 +210,27 @@ class SwaggerRouter
                     }
 
                     // 解析域名
-                    $routerTmp['domain'] = $this->normalizeDomain($routerTmp['domain'], $this->domain);
+                    $routerTmp['domain'] = $this->normalizeDomain($routerTmp['domain'] ?? '', $this->domain);
 
                     if ($routerTmp['domain'] && false !== strpos($routerTmp['domain'], '{')) {
-                        list($routerTmp['domain_regex'], $routerTmp['domain_var']) = $this->ruleRegex($routerTmp['domain'], $routerTmp, true);
-                    } else {
-                        list($routerTmp['domain_regex'], $routerTmp['domain_var']) = [null, null];
+                        list($routerTmp['domain_regex'], $routerTmp['domain_var']) =
+                            $this->ruleRegex($routerTmp['domain'], $routerTmp, true);
+                    }
+
+                    if (!$routerTmp['domain']) {
+                        unset($routerTmp['domain']);
                     }
 
                     // 解析路由正则
                     $isStaticRoute = false;
 
                     $routerPath = $basepathPrefix.$routerPath;
+
                     if (false !== strpos($routerPath, '{')) {
-                        list($routerTmp['regex'], $routerTmp['var']) = $this->ruleRegex($routerPath, $routerTmp);
+                        list($routerTmp['regex'], $routerTmp['var']) =
+                            $this->ruleRegex($routerPath, $routerTmp);
                     } else {
                         $isStaticRoute = true;
-                        list($routerTmp['regex'], $routerTmp['var']) = [null, null];
                     }
 
                     if (true === $isStaticRoute) {
@@ -254,7 +273,8 @@ class SwaggerRouter
                     $groups = $this->parseToGroups($three);
 
                     foreach ($groups as $groupKey => $groupThree) {
-                        list($three['regex'][$groupKey], $three['map'][$groupKey]) = $this->parseGroupRegex($groupThree);
+                        list($three['regex'][$groupKey], $three['map'][$groupKey]) =
+                            $this->parseGroupRegex($groupThree);
                     }
                 }
             }
@@ -374,18 +394,18 @@ class SwaggerRouter
     /**
      * 分析分组标签.
      *
-     * @param \Swagger\Annotations\Swagger
+     * @param \Swagger\Annotations\OpenApi
      *
      * @return array
      */
-    protected function parseGroups(Swagger $swagger)
+    protected function parseGroups(OpenApi $swagger)
     {
         $groups = [];
 
         if ($swagger->tags) {
             foreach ($swagger->tags as $tag) {
-                if (property_exists($tag, '_group')) {
-                    $groups[] = '/'.$tag->_group;
+                if (property_exists($tag, 'leevelGroup')) {
+                    $groups[] = '/'.$tag->leevelGroup;
                 }
             }
         }
@@ -439,8 +459,7 @@ class SwaggerRouter
         }
 
         if (true === $forSingleRegex) {
-            $strict = ($routers['strict'] ?? IRouter::DEFAULT_STRICT) ? '$' : '';
-            $rule = '/^'.$rule.$strict.'/';
+            $rule = '/^'.$rule.'$/';
         }
 
         return [
@@ -474,32 +493,39 @@ class SwaggerRouter
     /**
      * 分析基础路径.
      *
-     * @param \Swagger\Annotations\Swagger $swagger
+     * @param \Swagger\Annotations\OpenApi $swagger
      *
      * @return array
      */
-    protected function parseBasepaths(Swagger $swagger): array
+    protected function parseBasepaths(OpenApi $swagger): array
     {
-        $basepaths = [];
-        $basepathPrefix = '';
-
-        if ($swagger->basePath) {
-            $basepaths[] = $swagger->basePath;
-            $basepathPrefix = $swagger->basePath;
+        if (!$swagger->externalDocs) {
+            return [];
         }
 
-        return [
-            $basepaths,
-            $basepathPrefix,
-        ];
+        $externalDocs = $swagger->externalDocs;
+
+        if (!property_exists($externalDocs, 'leevelBasepaths')) {
+            return [];
+        }
+
+        $basepaths = $externalDocs->leevelBasepaths;
+
+        $basepaths = is_array($basepaths) ? $basepaths : [$basepaths];
+
+        $basepaths = array_map(function (string $path) {
+            return '/'.trim($path, '/');
+        }, $basepaths);
+
+        return $basepaths;
     }
 
     /**
      * 生成 swagger.
      *
-     * @return \Swagger\Annotations\Swagger
+     * @return \Swagger\Annotations\OpenApi
      */
-    protected function makeSwagger()
+    protected function makeSwagger(): OpenApi
     {
         if (!function_exists('\\Swagger\\scan')) {
             require_once dirname(__DIR__, 5).'/zircote/swagger-php/src/functions.php';

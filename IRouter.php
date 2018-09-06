@@ -147,13 +147,6 @@ interface IRouter
     const DEFAULT_REGEX = '\S+';
 
     /**
-     * 默认严格匹配模式.
-     *
-     * @var string
-     */
-    const DEFAULT_STRICT = true;
-
-    /**
      * 分发请求到路由.
      *
      * @param \Leevel\Http\IRequest $request
