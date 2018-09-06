@@ -43,7 +43,7 @@ class RouterTest extends TestCase
         $pathInfo = '/:tests';
         $params = [];
         $method = 'GET';
-        $controllerDir = 'Router\Controller';
+        $controllerDir = 'Router\Controllers';
 
         $request = $this->createRequest($pathInfo, $params, $method);
         $router = $this->createRouter();
@@ -62,7 +62,7 @@ class RouterTest extends TestCase
         $pathInfo = '/:tests/hello/actionClass';
         $params = [];
         $method = 'GET';
-        $controllerDir = 'Router\Controller';
+        $controllerDir = 'Router\Controllers';
 
         $request = $this->createRequest($pathInfo, $params, $method);
         $router = $this->createRouter();
@@ -81,7 +81,7 @@ class RouterTest extends TestCase
         $pathInfo = '/:tests/hello/action_convert-foo_bar';
         $params = [];
         $method = 'GET';
-        $controllerDir = 'Router\Controller';
+        $controllerDir = 'Router\Controllers';
 
         $request = $this->createRequest($pathInfo, $params, $method);
         $router = $this->createRouter();
@@ -100,7 +100,7 @@ class RouterTest extends TestCase
         $pathInfo = '/:tests/sub/world/foo';
         $params = [];
         $method = 'GET';
-        $controllerDir = 'Router\Controller';
+        $controllerDir = 'Router\Controllers';
 
         $request = $this->createRequest($pathInfo, $params, $method);
         $router = $this->createRouter();
@@ -119,7 +119,7 @@ class RouterTest extends TestCase
         $pathInfo = '/:tests/sub/world/foo/bar';
         $params = [];
         $method = 'GET';
-        $controllerDir = 'Router\Controller';
+        $controllerDir = 'Router\Controllers';
 
         $request = $this->createRequest($pathInfo, $params, $method);
         $router = $this->createRouter();
@@ -138,7 +138,7 @@ class RouterTest extends TestCase
         $pathInfo = '/:tests/hello/extendsBase';
         $params = [];
         $method = 'GET';
-        $controllerDir = 'Router\Controller';
+        $controllerDir = 'Router\Controllers';
 
         $request = $this->createRequest($pathInfo, $params, $method);
         $router = new Router($container = new Container());
@@ -167,7 +167,7 @@ class RouterTest extends TestCase
         $pathInfo = '/:tests/restful/5';
         $params = [];
         $method = $method;
-        $controllerDir = 'Router\Controller';
+        $controllerDir = 'Router\Controllers';
 
         $request = $this->createRequest($pathInfo, $params, $method);
         $router = $this->createRouter();
