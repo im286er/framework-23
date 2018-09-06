@@ -83,16 +83,18 @@ class Url implements IMatch
 
         // 验证是否存在请求方法
         $method = strtolower($request->getMethod());
+
         if (!isset($urlRouters[$method])) {
             return [];
         }
+
         $urlRouters = $urlRouters[$method];
 
         $result = [];
 
         // 匹配基础路径
         $basepaths = $router->getBasepaths();
-        $pathInfoSource = $pathInfo = $request->getPathInfo();
+        $pathInfoSource = $pathInfo = rtrim($request->getPathInfo(), '/').'/';
 
         foreach ($basepaths as $path) {
             if (0 === strpos($pathInfo, $path)) {
@@ -112,6 +114,7 @@ class Url implements IMatch
 
         // 匹配首字母
         $firstLetter = $pathInfo[1];
+
         if (isset($urlRouters[$firstLetter])) {
             $urlRouters = $urlRouters[$firstLetter];
         } elseif (isset($urlRouters['_'])) {
@@ -123,6 +126,7 @@ class Url implements IMatch
         // 匹配分组
         $groups = $router->getGroups();
         $matchGroup = false;
+
         foreach ($groups as $group) {
             if (0 === strpos($pathInfo, $group)) {
                 $urlRouters = $urlRouters[$group];
@@ -164,7 +168,8 @@ class Url implements IMatch
     protected function matcheSuccessed(array $routers, array $matcheVars = [])
     {
         // 协议匹配
-        if (false === $this->matcheScheme($routers['scheme'])) {
+        if (!empty($routers['scheme']) &&
+            false === $this->matcheScheme($routers['scheme'])) {
             return false;
         }
 
@@ -174,7 +179,7 @@ class Url implements IMatch
         }
 
         $result = $this->router->matchePath($routers['bind']);
-        $exendParams = $result['params'];
+        $exendParams = $result['params'] ?? [];
         $result['params'] = [];
 
         // 域名匹配参数 {subdomain}.{domain}
@@ -188,7 +193,7 @@ class Url implements IMatch
         }
 
         // 额外参数 ['extend1' => 'foo']
-        if ($routers['params']) {
+        if (isset($routers['params']) && is_array($routers['params'])) {
             $result['params'] = array_merge($result['params'], $routers['params']);
         }
 
@@ -204,7 +209,7 @@ class Url implements IMatch
         unset($result['params']);
 
         // 中间件
-        $result[IRouter::MIDDLEWARES] = $routers['middlewares'];
+        $result[IRouter::MIDDLEWARES] = $routers['middlewares'] ?? [];
 
         // 匹配的变量
         $result[IRouter::VARS] = $this->matchedVars;
@@ -219,7 +224,7 @@ class Url implements IMatch
      *
      * @return bool
      */
-    protected function matcheScheme(?string $scheme): bool
+    protected function matcheScheme(string $scheme): bool
     {
         if ($scheme && $this->request->getScheme() !== $scheme) {
             return false;
@@ -239,14 +244,15 @@ class Url implements IMatch
     {
         $domainVars = [];
 
-        if ($routers['domain']) {
+        if (!empty($routers['domain'])) {
             //$host = $this->request->getHttpHost();
             $host = $this->request->getHost();
 
-            if ($routers['domain_regex']) {
+            if (!empty($routers['domain_regex'])) {
                 if (!preg_match($routers['domain_regex'], $host, $matches)) {
                     return false;
                 }
+
                 array_shift($matches);
 
                 foreach ($routers['domain_var'] as $var) {

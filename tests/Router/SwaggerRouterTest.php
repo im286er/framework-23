@@ -36,16 +36,16 @@ use Tests\TestCase;
  */
 class SwaggerRouterTest extends TestCase
 {
-    public function testSwaggerHandle()
+    public function testBaseUse()
     {
-        $swaggerRouter = new SwaggerRouter($this->createMiddlewareParser(), 'queryphp.cn', 'Tests\Router');
+        $swaggerRouter = new SwaggerRouter($this->createMiddlewareParser(), 'queryphp.cn', 'Tests\Router\Apps');
 
-        $scanDir = __DIR__.'/Petstore';
+        $scanDir = __DIR__.'/Apps/Petstore30';
 
         $swaggerRouter->addSwaggerScan($scanDir);
         $result = $swaggerRouter->handle();
 
-        $data = file_get_contents(__DIR__.'/router.data');
+        $data = file_get_contents($scanDir.'/router.data');
 
         $this->assertSame(
             $data,
@@ -55,16 +55,16 @@ class SwaggerRouterTest extends TestCase
         );
     }
 
-    public function testParseBindBySource()
+    public function t2estBindNotFoundForParseBindBySource()
     {
-        $swaggerRouter = new SwaggerRouter($this->createMiddlewareParser(), 'queryphp.cn', 'NotFound\Tests\Router');
+        $swaggerRouter = new SwaggerRouter($this->createMiddlewareParser(), 'queryphp.cn', 'NotFound\Tests\Router\Apps');
 
-        $scanDir = __DIR__.'/Petstore';
+        $scanDir = __DIR__.'/Apps/Petstore30';
 
         $swaggerRouter->addSwaggerScan($scanDir);
         $result = $swaggerRouter->handle();
 
-        $data = file_get_contents(__DIR__.'/router2.data');
+        $data = file_get_contents($scanDir.'/router.data');
 
         $this->assertSame(
             $data,
@@ -76,12 +76,12 @@ class SwaggerRouterTest extends TestCase
 
     public function testAddSwaggerScanCheckDir()
     {
+        $scanDir = __DIR__.'/Apps/PetstorenNotFound';
+
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf('Swagger scandir %s is exits.', $scanDir));
 
         $swaggerRouter = new SwaggerRouter($this->createMiddlewareParser());
-
-        $scanDir = __DIR__.'/Petstore__';
-
         $swaggerRouter->addSwaggerScan($scanDir);
     }
 

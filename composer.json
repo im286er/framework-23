@@ -29,9 +29,9 @@
         "swiftmailer/swiftmailer": "6.0.2",
         "nunomaduro/collision": "~2.0",
         "twig/twig": "~2.0",
-        "zircote/swagger-php": "2.0.13",
         "gettext/gettext": "^4.6.0",
-        "fzaninotto/faker": "^1.6"
+        "fzaninotto/faker": "^1.6",
+        "zircote/swagger-php": "dev-master"
     },
     "replace": {
         "leevel/auth": "self.version",
@@ -114,7 +114,7 @@
     "repositories": {
         "packagist": {
             "type": "composer",
-            "url": "https://packagist.org"
+            "url": "https://packagist.laravel-china.org"
         }
     },
     "minimum-stability": "dev",
