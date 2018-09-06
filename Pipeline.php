@@ -124,6 +124,7 @@ class Pipeline implements IPipeline
         if ($end) {
             $stage[] = $end;
         }
+
         $this->generator = $this->stageGenerator($stage);
 
         return $this->traverseGenerator(...$this->passed);
