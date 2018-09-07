@@ -22,11 +22,11 @@ namespace Tests\Router;
 
 use Leevel\Router\IRouter;
 use Leevel\Router\MiddlewareParser;
-use Leevel\Router\SwaggerRouter;
+use Leevel\Router\OpenApiRouter;
 use Tests\TestCase;
 
 /**
- * swagger 生成注解路由组件测试.
+ * openApi 生成注解路由组件测试.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
@@ -34,18 +34,18 @@ use Tests\TestCase;
  *
  * @version 1.0
  */
-class SwaggerRouterTest extends TestCase
+class OpenApiRouterTest extends TestCase
 {
     public function testBaseUse()
     {
-        $swaggerRouter = new SwaggerRouter($this->createMiddlewareParser(), 'queryphp.cn', 'Tests\Router\Apps');
+        $openApiRouter = new OpenApiRouter($this->createMiddlewareParser(), 'queryphp.cn', 'Tests\Router\Apps');
 
-        $scanDir = __DIR__.'/Apps/Petstore30';
+        $scandir = __DIR__.'/Apps/Petstore30';
 
-        $swaggerRouter->addSwaggerScan($scanDir);
-        $result = $swaggerRouter->handle();
+        $openApiRouter->addScandir($scandir);
+        $result = $openApiRouter->handle();
 
-        $data = file_get_contents($scanDir.'/router.data');
+        $data = file_get_contents($scandir.'/router.data');
 
         $this->assertSame(
             $data,
@@ -57,14 +57,14 @@ class SwaggerRouterTest extends TestCase
 
     public function t2estBindNotFoundForParseBindBySource()
     {
-        $swaggerRouter = new SwaggerRouter($this->createMiddlewareParser(), 'queryphp.cn', 'NotFound\Tests\Router\Apps');
+        $openApiRouter = new OpenApiRouter($this->createMiddlewareParser(), 'queryphp.cn', 'NotFound\Tests\Router\Apps');
 
-        $scanDir = __DIR__.'/Apps/Petstore30';
+        $scandir = __DIR__.'/Apps/Petstore30';
 
-        $swaggerRouter->addSwaggerScan($scanDir);
-        $result = $swaggerRouter->handle();
+        $openApiRouter->addScandir($scandir);
+        $result = $openApiRouter->handle();
 
-        $data = file_get_contents($scanDir.'/router.data');
+        $data = file_get_contents($scandir.'/router.data');
 
         $this->assertSame(
             $data,
@@ -74,15 +74,15 @@ class SwaggerRouterTest extends TestCase
         );
     }
 
-    public function testAddSwaggerScanCheckDir()
+    public function testAddScandirButNotFound()
     {
-        $scanDir = __DIR__.'/Apps/PetstorenNotFound';
+        $scandir = __DIR__.'/Apps/PetstorenNotFound';
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('Swagger scandir %s is exits.', $scanDir));
+        $this->expectExceptionMessage(sprintf('OpenApi scandir %s is exits.', $scandir));
 
-        $swaggerRouter = new SwaggerRouter($this->createMiddlewareParser());
-        $swaggerRouter->addSwaggerScan($scanDir);
+        $openApiRouter = new OpenApiRouter($this->createMiddlewareParser());
+        $openApiRouter->addScandir($scandir);
     }
 
     protected function createMiddlewareParser(): MiddlewareParser

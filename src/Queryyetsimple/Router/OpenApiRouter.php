@@ -25,10 +25,10 @@ use OpenApi\Annotations\OpenApi;
 use OpenApi\Context;
 
 /**
- * Swagger 注解路由
+ * OpenApi 注解路由
  * 1:忽略已删除的路由 deprecated 和带有 leevelIgnore 的路由
  * 2:如果没有绑定路由参数 leevelBind,系统会尝试自动解析注解所在控制器方法.
- * 3:只支持最新的 zircote/swagger-php 3，支持最新的 openapi 3.0 规范.
+ * 3:只支持最新的 zircote/swagger-php 3，支持最新的 OpenApi 3.0 规范.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
@@ -36,7 +36,7 @@ use OpenApi\Context;
  *
  * @version 1.0
  */
-class SwaggerRouter
+class OpenApiRouter
 {
     /**
      * 路由中间件分析器.
@@ -60,11 +60,11 @@ class SwaggerRouter
     protected $controllerDir = 'App\Controller';
 
     /**
-     * swagger 扫描目录.
+     * 扫描目录.
      *
      * @var array
      */
-    protected $swaggerScan = [];
+    protected $scandirs = [];
 
     /**
      * 支持的方法.
@@ -114,8 +114,8 @@ class SwaggerRouter
             $this->controllerDir = $controllerDir;
         }
 
-        // 忽略 swagger 扩展字段警告,改变 set_error_handler 抛出时机
-        // 补充基于标准 swagger 路由，并可以扩展注解路由的功能
+        // 忽略 OpenApi 扩展字段警告,改变 set_error_handler 抛出时机
+        // 补充基于标准 OpenApi 路由，并可以扩展注解路由的功能
         error_reporting(E_ERROR | E_PARSE | E_STRICT);
     }
 
@@ -124,36 +124,36 @@ class SwaggerRouter
      *
      * @param string $dir
      */
-    public function addSwaggerScan(string $dir)
+    public function addScandir(string $dir)
     {
         if (!is_dir($dir)) {
             throw new InvalidArgumentException(
-                sprintf('Swagger scandir %s is exits.', $dir)
+                sprintf('OpenApi scandir %s is exits.', $dir)
             );
         }
 
-        $this->swaggerScan[] = $dir;
+        $this->scandirs[] = $dir;
     }
 
     /**
-     * 处理 swagger 注解路由.
+     * 处理 OpenApi 注解路由.
      *
      * @return array
      */
     public function handle()
     {
-        $swagger = $this->makeSwagger();
-        $basepaths = $this->parseBasepaths($swagger);
-        $groups = $this->parseGroups($swagger);
+        $openApi = $this->makeOpenapi();
+        $basepaths = $this->parseBasepaths($openApi);
+        $groups = $this->parseGroups($openApi);
         $routers = [];
 
-        if ($swagger->paths) {
-            foreach ($swagger->paths as $path) {
+        if ($openApi->paths) {
+            foreach ($openApi->paths as $path) {
                 foreach ($this->methods as $m) {
                     $method = $path->{$m};
 
                     // 忽略已删除和带有忽略标记的路由
-                    if (!$method || true === $method->deprecated ||
+                    if (!is_object($method) || true === $method->deprecated ||
                         (property_exists($method, 'leevelIgnore') && $method->leevelIgnore)) {
                         continue;
                     }
@@ -364,7 +364,7 @@ class SwaggerRouter
     /**
      * 根据源代码生成绑定.
      *
-     * @param \Swagger\Context $context
+     * @param \OpenApi\Context $context
      *
      * @return null|string
      */
@@ -394,16 +394,16 @@ class SwaggerRouter
     /**
      * 分析分组标签.
      *
-     * @param \Swagger\Annotations\OpenApi
+     * @param \OpenApi\Annotations\OpenApi $openApi
      *
      * @return array
      */
-    protected function parseGroups(OpenApi $swagger)
+    protected function parseGroups(OpenApi $openApi)
     {
         $groups = [];
 
-        if ($swagger->tags) {
-            foreach ($swagger->tags as $tag) {
+        if ($openApi->tags) {
+            foreach ($openApi->tags as $tag) {
                 if (property_exists($tag, 'leevelGroup')) {
                     $groups[] = '/'.$tag->leevelGroup;
                 }
@@ -493,17 +493,17 @@ class SwaggerRouter
     /**
      * 分析基础路径.
      *
-     * @param \Swagger\Annotations\OpenApi $swagger
+     * @param \OpenApi\Annotations\OpenApi $openApi
      *
      * @return array
      */
-    protected function parseBasepaths(OpenApi $swagger): array
+    protected function parseBasepaths(OpenApi $openApi): array
     {
-        if (!$swagger->externalDocs) {
+        if (!$openApi->externalDocs) {
             return [];
         }
 
-        $externalDocs = $swagger->externalDocs;
+        $externalDocs = $openApi->externalDocs;
 
         if (!property_exists($externalDocs, 'leevelBasepaths')) {
             return [];
@@ -521,16 +521,16 @@ class SwaggerRouter
     }
 
     /**
-     * 生成 swagger.
+     * 生成 OpenApi.
      *
-     * @return \Swagger\Annotations\OpenApi
+     * @return \OpenApi\Annotations\OpenApi
      */
-    protected function makeSwagger(): OpenApi
+    protected function makeOpenapi(): OpenApi
     {
         if (!function_exists('\\OpenApi\\scan')) {
             require_once dirname(__DIR__, 5).'/zircote/swagger-php/src/functions.php';
         }
 
-        return \OpenApi\scan($this->swaggerScan);
+        return \OpenApi\scan($this->scandirs);
     }
 }

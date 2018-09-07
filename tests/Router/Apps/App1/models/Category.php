@@ -26,11 +26,11 @@ namespace Petstore30;
  *
  * @author  Donii Sergii <doniysa@gmail.com>
  *
- * @OAS\Schema(
+ * @OA\Schema(
  *     type="object",
  *     description="Pets Category",
  *     title="Pets Category",
- *     @OAS\Xml(
+ *     @OA\Xml(
  *         name="Category"
  *     )
  * )
@@ -38,7 +38,7 @@ namespace Petstore30;
 class Category
 {
     /**
-     * @OAS\Property(
+     * @OA\Property(
      *     title="ID",
      *     description="ID",
      *     format="int64",
@@ -49,7 +49,7 @@ class Category
     private $id;
 
     /**
-     * @OAS\Property(
+     * @OA\Property(
      *     title="Category name",
      *     description="Category name"
      * )
