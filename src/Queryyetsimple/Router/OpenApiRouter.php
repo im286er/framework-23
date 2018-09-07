@@ -179,6 +179,9 @@ class OpenApiRouter
                         $routerTmp['middlewares'] = $this->middlewareParser->handle($routerTmp['middlewares']);
                     }
 
+                    // 解析基础路径和分组
+                    // 基础路径如 /api/v1、/web/v2 等等
+                    // 分组例如 goods、orders
                     $routerPath = '/'.trim($path->path, '/').'/';
                     $basepathPrefix = '';
 
