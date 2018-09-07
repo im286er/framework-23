@@ -25,7 +25,7 @@ namespace Petstore30;
  *
  *
  * @author  Donii Sergii <doniysa@gmail.com>
- * @OAS\Schema(
+ * @OA\Schema(
  *     title="Order model",
  *     description="Order model",
  * )
@@ -33,7 +33,7 @@ namespace Petstore30;
 class Order
 {
     /**
-     * @OAS\Property(
+     * @OA\Property(
      *     format="int64",
      *     title="ID",
      *     default=1,
@@ -45,7 +45,7 @@ class Order
     private $id;
 
     /**
-     * @OAS\Property(
+     * @OA\Property(
      *     default=1,
      *     format="int64",
      *     description="Pet ID",
@@ -57,7 +57,7 @@ class Order
     private $petId;
 
     /**
-     * @OAS\Property(
+     * @OA\Property(
      *     default=12,
      *     format="in32",
      *     description="Quantity",
@@ -69,7 +69,7 @@ class Order
     private $quantity;
 
     /**
-     * @OAS\Property(
+     * @OA\Property(
      *     default="2017-02-02 18:31:45",
      *     format="datetime",
      *     description="Shipping date",
@@ -83,7 +83,7 @@ class Order
     private $shipDate;
 
     /**
-     * @OAS\Property(
+     * @OA\Property(
      *     default="placed",
      *     title="Order status",
      *     description="Order status",
@@ -96,7 +96,7 @@ class Order
     private $status;
 
     /**
-     * @OAS\Property(
+     * @OA\Property(
      *     default="false",
      *     format="int64",
      *     description="Complete status",

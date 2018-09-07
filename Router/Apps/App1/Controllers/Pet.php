@@ -29,22 +29,22 @@ namespace Tests\Router\Apps\App1\Controllers;
 class Pet
 {
     /**
-     * @OAS\Get(
+     * @OA\Get(
      *     path="/api/v1/petLeevel/{petId:[A-Za-z]+}/",
      *     tags={"pet"},
      *     summary="Just test the router",
      *     operationId="petLeevel",
-     *     @OAS\Parameter(
+     *     @OA\Parameter(
      *         name="petId",
      *         in="path",
      *         description="ID of pet to return",
      *         required=true,
-     *         @OAS\Schema(
+     *         @OA\Schema(
      *             type="integer",
      *             format="int64"
      *         )
      *     ),
-     *     @OAS\Response(
+     *     @OA\Response(
      *         response=405,
      *         description="Invalid input"
      *     ),
@@ -64,22 +64,22 @@ class Pet
     }
 
     /**
-     * @OAS\Get(
+     * @OA\Get(
      *     path="/api/v2/petLeevelIgnore/",
      *     tags={"pet"},
      *     summary="Just test ignore the router",
      *     operationId="petLeevelIgnore",
-     *     @OAS\Parameter(
+     *     @OA\Parameter(
      *         name="petId",
      *         in="path",
      *         description="ID of pet to return",
      *         required=true,
-     *         @OAS\Schema(
+     *         @OA\Schema(
      *             type="integer",
      *             format="int64"
      *         )
      *     ),
-     *     @OAS\Response(
+     *     @OA\Response(
      *         response=405,
      *         description="Invalid input"
      *     ),

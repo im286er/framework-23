@@ -19,11 +19,11 @@ declare(strict_types=1);
  */
 
 /**
- * @OAS\SecurityScheme(
+ * @OA\SecurityScheme(
  *     type="oauth2",
  *     name="petstore_auth",
  *     securityScheme="petstore_auth",
- *     @OAS\Flow(
+ *     @OA\Flow(
  *         flow="implicit",
  *         authorizationUrl="http://petstore.swagger.io/oauth/dialog",
  *         scopes={
@@ -32,7 +32,7 @@ declare(strict_types=1);
  *         }
  *     )
  * )
- * @OAS\SecurityScheme(
+ * @OA\SecurityScheme(
  *     type="apiKey",
  *     in="header",
  *     securityScheme="api_key",

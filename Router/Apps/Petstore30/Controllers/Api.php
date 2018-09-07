@@ -29,22 +29,22 @@ namespace Tests\Router\Apps\Petstore30\Controllers;
 class Api
 {
     /**
-     * @OAS\Get(
+     * @OA\Get(
      *     path="/api/v1/petLeevelForApi/{petId:[A-Za-z]+}/",
      *     tags={"pet"},
      *     summary="Just test the router",
      *     operationId="petLeevelForApi",
-     *     @OAS\Parameter(
+     *     @OA\Parameter(
      *         name="petId",
      *         in="path",
      *         description="ID of pet to return",
      *         required=true,
-     *         @OAS\Schema(
+     *         @OA\Schema(
      *             type="integer",
      *             format="int64"
      *         )
      *     ),
-     *     @OAS\Response(
+     *     @OA\Response(
      *         response=405,
      *         description="Invalid input"
      *     ),
@@ -58,22 +58,22 @@ class Api
     }
 
     /**
-     * @OAS\Get(
+     * @OA\Get(
      *     path="/api/v2/petLeevelV2Api/",
      *     tags={"pet"},
      *     summary="Just test ignore the router",
      *     operationId="petLeevelV2Api",
-     *     @OAS\Parameter(
+     *     @OA\Parameter(
      *         name="petId",
      *         in="path",
      *         description="ID of pet to return",
      *         required=true,
-     *         @OAS\Schema(
+     *         @OA\Schema(
      *             type="integer",
      *             format="int64"
      *         )
      *     ),
-     *     @OAS\Response(
+     *     @OA\Response(
      *         response=405,
      *         description="Invalid input"
      *     ),
@@ -88,22 +88,22 @@ class Api
     }
 
     /**
-     * @OAS\Get(
+     * @OA\Get(
      *     path="/api/v1/petLeevelIgnoreForApi/",
      *     tags={"pet"},
      *     summary="Just test ignore the router",
      *     operationId="petLeevelIgnoreForApi",
-     *     @OAS\Parameter(
+     *     @OA\Parameter(
      *         name="petId",
      *         in="path",
      *         description="ID of pet to return",
      *         required=true,
-     *         @OAS\Schema(
+     *         @OA\Schema(
      *             type="integer",
      *             format="int64"
      *         )
      *     ),
-     *     @OAS\Response(
+     *     @OA\Response(
      *         response=405,
      *         description="Invalid input"
      *     ),
