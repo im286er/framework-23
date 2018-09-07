@@ -26,7 +26,7 @@ use Leevel\Kernel\IProject;
 use Leevel\Router\IRouter;
 
 /**
- * swagger 路由缓存.
+ * openapi 路由缓存.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
@@ -48,7 +48,7 @@ class Cache extends Command
      *
      * @var string
      */
-    protected $description = 'Swagger as the router';
+    protected $description = 'OpenApi as the router';
 
     /**
      * 响应命令.

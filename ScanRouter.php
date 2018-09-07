@@ -24,7 +24,7 @@ use Leevel\Leevel;
 use Leevel\Router;
 
 /**
- * Swagger 路由扫描.
+ * openapi 路由扫描.
  *
  * @author Xiangmin Liu <635750556@qq.com>
  *
@@ -32,14 +32,14 @@ use Leevel\Router;
  *
  * @version 1.0
  */
-class ScanSwaggerRouter
+class ScanRouter
 {
     /**
-     * swagger 路由分析.
+     * openapi 路由分析.
      *
-     * @var \Leevel\Router\SwaggerRouter
+     * @var \Leevel\Router\OpenApiRouter
      */
-    protected $swaggerRouter;
+    protected $openApiRouter;
 
     /**
      * 构造函数.
@@ -48,10 +48,9 @@ class ScanSwaggerRouter
      */
     public function __construct(MiddlewareParser $middlewareParser)
     {
-        $this->swaggerRouter = new SwaggerRouter($middlewareParser, $this->getTopDomain(), $this->getController());
+        $this->openApiRouter = new OpenApiRouter($middlewareParser, $this->getTopDomain(), $this->getController());
 
-        // 添加扫描目录
-        $this->swaggerRouter->addSwaggerScan($this->getAppDir());
+        $this->openApiRouter->addScandir($this->getAppDir());
     }
 
     /**
@@ -61,7 +60,7 @@ class ScanSwaggerRouter
      */
     public function handle()
     {
-        return $this->swaggerRouter->handle();
+        return $this->openApiRouter->handle();
     }
 
     /**
