@@ -21,8 +21,8 @@ declare(strict_types=1);
 namespace Leevel\Router;
 
 use InvalidArgumentException;
-use Swagger\Annotations\OpenApi;
-use Swagger\Context;
+use OpenApi\Annotations\OpenApi;
+use OpenApi\Context;
 
 /**
  * Swagger 注解路由
@@ -527,10 +527,10 @@ class SwaggerRouter
      */
     protected function makeSwagger(): OpenApi
     {
-        if (!function_exists('\\Swagger\\scan')) {
+        if (!function_exists('\\OpenApi\\scan')) {
             require_once dirname(__DIR__, 5).'/zircote/swagger-php/src/functions.php';
         }
 
-        return \Swagger\scan($this->swaggerScan);
+        return \OpenApi\scan($this->swaggerScan);
     }
 }
