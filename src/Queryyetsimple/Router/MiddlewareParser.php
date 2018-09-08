@@ -54,18 +54,18 @@ class MiddlewareParser
      * 解析中间件
      * 最多 2 个层级支持
      *
-     * @param array|string $middlewares
+     * @param array $middlewares
      *
      * @return array
      */
-    public function handle($middlewares)
+    public function handle(array $middlewares)
     {
         $middlewareGroups = $this->router->getMiddlewareGroups();
         $middlewareAlias = $this->router->getMiddlewareAlias();
 
         $result = [];
 
-        foreach ((array) $middlewares as $m) {
+        foreach ($middlewares as $m) {
             if (!is_string($m)) {
                 throw new InvalidArgumentException('Middleware only allowed string.');
             }
@@ -73,7 +73,10 @@ class MiddlewareParser
             list($m, $params) = $this->parseMiddleware($m);
 
             if (isset($middlewareGroups[$m])) {
-                foreach ((array) $middlewareGroups[$m] as $item) {
+                $temp = is_array($middlewareGroups[$m]) ?
+                    $middlewareGroups[$m] : [$middlewareGroups[$m]];
+
+                foreach ($temp as $item) {
                     list($item, $params) = $this->parseMiddleware($item);
 
                     $result[] = $this->middlewareName($middlewareAlias[$item] ?? $item, $params);
@@ -87,6 +90,10 @@ class MiddlewareParser
             'handle'    => $this->normalizeMiddleware($result, 'handle'),
             'terminate' => $this->normalizeMiddleware($result, 'terminate'),
         ];
+
+        if (empty($result['handle']) && empty($result['terminate'])) {
+            return [];
+        }
 
         return $result;
     }
@@ -102,8 +109,11 @@ class MiddlewareParser
     protected function normalizeMiddleware(array $middlewares, string $method)
     {
         $middlewares = array_map(function ($item) use ($method) {
-            if (!class_exists($item) || !method_exists($item, $method)) {
-                return '';
+            $realClass = false === strpos($item, ':') ?
+                $item : array_shift(explode(':', $item));
+
+            if (!class_exists($realClass) || !method_exists($realClass, $method)) {
+                return false;
             }
 
             if (false === strpos($item, ':')) {
