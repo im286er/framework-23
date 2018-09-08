@@ -524,10 +524,11 @@ class Container implements IContainer, ArrayAccess
 
         if ($args) {
             $result = array_values($result);
+            $min = count($result);
 
             foreach ($args as $k => $value) {
                 if (is_int($k)) {
-                    $result[$k] = $value;
+                    $result[$k + $min] = $value;
                     $validArgs++;
                 }
             }
@@ -593,7 +594,8 @@ class Container implements IContainer, ArrayAccess
     protected function parseClassFromContainer(string $argsclass)
     {
         $itemMake = $this->make($argsclass);
-        if (false === $itemMake) {
+
+        if (is_string($itemMake)) {
             return false;
         }
 
@@ -605,6 +607,7 @@ class Container implements IContainer, ArrayAccess
         // 接口绑定实现
         if (class_exists($itemMake)) {
             $result = $this->make($itemMake);
+
             if (!is_object($result)) {
                 throw new InvalidArgumentException(
                     sprintf(
