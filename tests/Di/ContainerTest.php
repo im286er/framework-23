@@ -308,13 +308,15 @@ class ContainerTest extends TestCase
         $this->assertSame('hello', $result[0]);
 
         $result = $container->call(Test8::class.'@func2', ['world', 'foo', 'bar']);
-        $this->assertSame('world', $result[0]);
-        $this->assertSame('foo', $result[1]);
-        $this->assertSame('bar', $result[2]);
+        $this->assertSame('hello', $result[0]);
+        $this->assertSame('world', $result[1]);
+        $this->assertSame('foo', $result[2]);
+        $this->assertSame('bar', $result[3]);
 
         $result = $container->call(Test8::class.'@func2', ['world', 'arg1' => 'foo', 'bar']);
-        $this->assertSame('world', $result[0]);
-        $this->assertSame('bar', $result[1]);
+        $this->assertSame('foo', $result[0]);
+        $this->assertSame('world', $result[1]);
+        $this->assertSame('bar', $result[2]);
     }
 
     public function testCallWithCallableArray()
