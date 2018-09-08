@@ -58,16 +58,16 @@ class Throttler
      *
      * @param \Closure              $next
      * @param \Leevel\Http\IRequest $request
-     * @param int&string            $limit
-     * @param int&string            $time
+     * @param int                   $limit
+     * @param int                   $time
      */
-    public function handle(Closure $next, IRequest $request, $limit = 60, $time = 60)
+    public function handle(Closure $next, IRequest $request, int $limit = 60, int $time = 60)
     {
         $rateLimiter = $this->throttler->
 
         setRequest($request)->
 
-        create(null, (int) $limit, (int) $time);
+        create(null, $limit, $time);
 
         if ($rateLimiter->attempt()) {
             $e = new TooManyRequestsHttpException('Too many attempts.');
