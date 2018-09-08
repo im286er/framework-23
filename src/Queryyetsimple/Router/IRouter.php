@@ -292,8 +292,9 @@ interface IRouter
      * 匹配路径.
      *
      * @param string $path
+     * @param bool   $ignoreMiddleware
      *
      * @return array
      */
-    public function matchePath(string $path): array;
+    public function matchePath(string $path, bool $ignoreMiddleware = false): array;
 }
