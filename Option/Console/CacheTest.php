@@ -24,7 +24,6 @@ use Leevel\Di\IContainer;
 use Leevel\Filesystem\Fso;
 use Leevel\Kernel\IProject;
 use Leevel\Option\Console\Cache;
-use Leevel\Option\IOption;
 use Tests\Console\BaseCommand;
 use Tests\TestCase;
 
@@ -64,18 +63,13 @@ class CacheTest extends TestCase
     {
         $cacheFile = __DIR__.'/option_cache.php';
 
-        $optionData = [
-            'foo'   => 'bar',
-            'hello' => 'world',
-        ];
-
         $result = $this->runCommand(
             new Cache(),
             [
                 'command' => 'option:cache',
             ],
-            function ($container) use ($cacheFile, $optionData) {
-                $this->initContainerService($container, $cacheFile, $optionData);
+            function ($container) use ($cacheFile) {
+                $this->initContainerService($container, $cacheFile);
             }
         );
 
@@ -91,7 +85,14 @@ class CacheTest extends TestCase
             $result
         );
 
-        $this->assertSame($optionData, (array) (include $cacheFile));
+        $optionData = file_get_contents(__DIR__.'/assert/option.data');
+
+        $this->assertSame(
+            $optionData,
+            $this->varExport(
+                (array) (include $cacheFile)
+            )
+        );
 
         unlink($cacheFile);
     }
@@ -100,18 +101,13 @@ class CacheTest extends TestCase
     {
         $cacheFile = __DIR__.'/dirNotExists/option_cache.php';
 
-        $optionData = [
-            'foo'   => 'bar',
-            'hello' => 'world',
-        ];
-
         $result = $this->runCommand(
             new Cache(),
             [
                 'command' => 'option:cache',
             ],
-            function ($container) use ($cacheFile, $optionData) {
-                $this->initContainerService($container, $cacheFile, $optionData);
+            function ($container) use ($cacheFile) {
+                $this->initContainerService($container, $cacheFile);
             }
         );
 
@@ -127,7 +123,14 @@ class CacheTest extends TestCase
             $result
         );
 
-        $this->assertSame($optionData, (array) (include $cacheFile));
+        $optionData = file_get_contents(__DIR__.'/assert/option.data');
+
+        $this->assertSame(
+            $optionData,
+            $this->varExport(
+                (array) (include $cacheFile)
+            )
+        );
 
         unlink($cacheFile);
         rmdir(dirname($cacheFile));
@@ -158,8 +161,8 @@ class CacheTest extends TestCase
             [
                 'command' => 'option:cache',
             ],
-            function ($container) use ($cacheFile, $optionData) {
-                $this->initContainerService($container, $cacheFile, $optionData);
+            function ($container) use ($cacheFile) {
+                $this->initContainerService($container, $cacheFile);
             }
         );
 
@@ -225,26 +228,28 @@ class CacheTest extends TestCase
         rmdir(dirname($dirname));
     }
 
-    protected function initContainerService(IContainer $container, string $cacheFile, array $optionData)
+    protected function initContainerService(IContainer $container, string $cacheFile)
     {
         // 注册 project
         $project = $this->createMock(IProject::class);
 
         $this->assertInstanceof(IProject::class, $project);
 
+        $project->method('path')->willReturn(__DIR__.'/assert');
+        $this->assertEquals(__DIR__.'/assert', $project->path());
+
+        $project->method('envPath')->willReturn(__DIR__.'/assert');
+        $this->assertEquals(__DIR__.'/assert', $project->envPath());
+
+        $project->method('envFile')->willReturn('.env');
+        $this->assertEquals('.env', $project->envFile());
+
         $project->method('optionCachedPath')->willReturn($cacheFile);
         $this->assertEquals($cacheFile, $project->optionCachedPath());
 
+        $project->method('optionPath')->willReturn(__DIR__.'/assert/option');
+        $this->assertEquals(__DIR__.'/assert/option', $project->optionPath());
+
         $container->singleton(IProject::class, $project);
-
-        // 注册 option
-        $option = $this->createMock(IOption::class);
-
-        $this->assertInstanceof(IOption::class, $option);
-
-        $option->method('all')->willReturn($optionData);
-        $this->assertEquals($optionData, $option->all());
-
-        $container->singleton(IOption::class, $option);
     }
 }
