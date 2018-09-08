@@ -143,7 +143,7 @@ class OpenApiRouter
      */
     public function handle()
     {
-        $openApi = $this->makeOpenapi();
+        $openApi = $this->makeOpenApi();
         $basepaths = $this->parseBasepaths($openApi);
         $groups = $this->parseGroups($openApi);
         $routers = [];
@@ -542,7 +542,7 @@ class OpenApiRouter
      *
      * @return \OpenApi\Annotations\OpenApi
      */
-    protected function makeOpenapi(): OpenApi
+    protected function makeOpenApi(): OpenApi
     {
         if (!function_exists('\\OpenApi\\scan')) {
             require_once dirname(__DIR__, 5).'/zircote/swagger-php/src/functions.php';

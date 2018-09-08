@@ -199,9 +199,9 @@ class RouterTest extends TestCase
      */
     public function testNodeNotFound(string $method, string $action)
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\Leevel\Router\RouterNotFoundException::class);
         $this->expectExceptionMessage(
-            sprintf('The node App\App\Controller\Home->%s() is not found.', $action)
+            sprintf('The router App\App\Controller\Home::%s() was not found.', $action)
         );
 
         $pathInfo = '/';

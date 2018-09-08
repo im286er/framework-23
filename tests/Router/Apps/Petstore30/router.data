@@ -1,10 +1,30 @@
 array (
   'basepaths' => 
   array (
-    0 => '/api/v1',
-    1 => '/api/v2',
-    2 => '/web/v1',
-    3 => '/web/v2',
+    '/api/v1' => 
+    array (
+      'middlewares' => 
+      array (
+      ),
+    ),
+    '/web/v1' => 
+    array (
+      'middlewares' => 
+      array (
+      ),
+    ),
+    '/api/v2' => 
+    array (
+      'middlewares' => 
+      array (
+      ),
+    ),
+    '/web/v2' => 
+    array (
+      'middlewares' => 
+      array (
+      ),
+    ),
   ),
   'groups' => 
   array (
@@ -40,12 +60,6 @@ array (
             'bind' => '/PetLeevel/show/?query1=foo&query2=bar',
             'middlewares' => 
             array (
-              'handle' => 
-              array (
-              ),
-              'terminate' => 
-              array (
-              ),
             ),
             'domain_regex' => '/^([A-Za-z]+)\\-vip\\.(\\S+)\\.queryphp\\.cn$/',
             'domain_var' => 
