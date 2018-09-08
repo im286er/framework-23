@@ -91,24 +91,13 @@ abstract class RouterProvider extends Provider
     }
 
     /**
-     * 全局中间件.
-     *
-     * @return array
-     */
-    public function getMiddlewares()
-    {
-        return [];
-    }
-
-    /**
      * 导入路由缓存.
      */
     protected function importCachedRouters()
     {
         $routers = include $this->getRouterCachePath();
 
-        $this->setGlobalMiddlewares($routers['middlewares']);
-
+        //$this->setGlobalMiddlewares($routers['middlewares']);
         $this->setRoutersData($routers);
     }
 
@@ -119,11 +108,7 @@ abstract class RouterProvider extends Provider
     {
         $routers = $this->getRouters();
 
-        $middlewares = $this->getMiddlewares();
-        $middlewares = $this->makeMiddlewareParser()->handle($middlewares);
-
-        $this->setGlobalMiddlewares($middlewares);
-
+        //$this->setGlobalMiddlewares($middlewares);
         $this->setRoutersData($routers);
     }
 

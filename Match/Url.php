@@ -56,6 +56,13 @@ class Url implements IMatch
     protected $matchedBasepath;
 
     /**
+     * 匹配基础路径配置.
+     *
+     * @var array
+     */
+    protected $matchedBaseOptions = [];
+
+    /**
      * 匹配变量.
      *
      * @var array
@@ -96,10 +103,11 @@ class Url implements IMatch
         $basepaths = $router->getBasepaths();
         $pathInfoSource = $pathInfo = rtrim($request->getPathInfo(), '/').'/';
 
-        foreach ($basepaths as $path) {
+        foreach ($basepaths as $path => $option) {
             if (0 === strpos($pathInfo, $path)) {
                 $pathInfo = substr($pathInfo, strlen($path));
                 $this->matchedBasepath = $path;
+                $this->matchedBaseOptions = $option;
 
                 break;
             }
@@ -178,7 +186,7 @@ class Url implements IMatch
             return false;
         }
 
-        $result = $this->router->matchePath($routers['bind']);
+        $result = $this->router->matchePath($routers['bind'], true);
         $exendParams = $result['params'] ?? [];
         $result['params'] = [];
 
@@ -209,12 +217,35 @@ class Url implements IMatch
         unset($result['params']);
 
         // 中间件
-        $result[IRouter::MIDDLEWARES] = $routers['middlewares'] ?? [];
+        $result[IRouter::MIDDLEWARES] = $this->parseMiddleware($routers['middlewares'] ?? []);
 
         // 匹配的变量
         $result[IRouter::VARS] = $this->matchedVars;
 
         return $result;
+    }
+
+    /**
+     * 获取绑定的中间件.
+     *
+     * @param array $middlewares
+     *
+     * @return array
+     */
+    protected function parseMiddleware(array $middlewares)
+    {
+        $baseMiddlewares = $this->matchedBaseOptions['middlewares'] ?? [];
+
+        return [
+            'handle'    => array_merge(
+                $baseMiddlewares['handle'] ?? [],
+                $middlewares['handle'] ?? []
+            ),
+            'terminate' => array_merge(
+                $baseMiddlewares['terminate'] ?? [],
+                $middlewares['terminate'] ?? []
+            ),
+        ];
     }
 
     /**
