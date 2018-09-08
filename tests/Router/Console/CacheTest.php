@@ -24,7 +24,7 @@ use Leevel\Di\IContainer;
 use Leevel\Filesystem\Fso;
 use Leevel\Kernel\IProject;
 use Leevel\Router\Console\Cache;
-use Leevel\Router\IRouter;
+use Leevel\Router\RouterProvider;
 use Tests\Console\BaseCommand;
 use Tests\TestCase;
 
@@ -65,10 +65,7 @@ class CacheTest extends TestCase
         $cacheFile = __DIR__.'/router_cache.php';
 
         $routerData = [
-            'basepaths' => [
-                'foo',
-                'bar',
-            ],
+            'basepaths'   => [],
             'groups'      => [],
             'routers'     => [],
             'middlewares' => [],
@@ -106,10 +103,7 @@ class CacheTest extends TestCase
         $cacheFile = __DIR__.'/dirNotExists/router_cache.php';
 
         $routerData = [
-            'basepaths' => [
-                'foo',
-                'bar',
-            ],
+            'basepaths'   => [],
             'groups'      => [],
             'routers'     => [],
             'middlewares' => [],
@@ -149,10 +143,7 @@ class CacheTest extends TestCase
         $cacheFile = $dirname.'/router_cache.php';
 
         $routerData = [
-            'basepaths' => [
-                'foo',
-                'bar',
-            ],
+            'basepaths'   => [],
             'groups'      => [],
             'routers'     => [],
             'middlewares' => [],
@@ -199,10 +190,7 @@ class CacheTest extends TestCase
         $cacheFile = $dirname.'/router_cache.php';
 
         $routerData = [
-            'basepaths' => [
-                'foo',
-                'bar',
-            ],
+            'basepaths'   => [],
             'groups'      => [],
             'routers'     => [],
             'middlewares' => [],
@@ -257,23 +245,14 @@ class CacheTest extends TestCase
 
         $container->singleton(IProject::class, $project);
 
-        // 注册 router
-        $router = $this->createMock(IRouter::class);
+        // 注册 routerProvider
+        $router = $this->createMock(RouterProvider::class);
 
-        $this->assertInstanceof(IRouter::class, $router);
+        $this->assertInstanceof(RouterProvider::class, $router);
 
-        $router->method('getBasepaths')->willReturn($routerData['basepaths']);
-        $this->assertEquals($routerData['basepaths'], $router->getBasepaths());
+        $router->method('getRouters')->willReturn($routerData);
+        $this->assertEquals($routerData, $router->getRouters());
 
-        $router->method('getGroups')->willReturn($routerData['groups']);
-        $this->assertEquals($routerData['groups'], $router->getGroups());
-
-        $router->method('getRouters')->willReturn($routerData['routers']);
-        $this->assertEquals($routerData['routers'], $router->getRouters());
-
-        $router->method('getGlobalMiddlewares')->willReturn($routerData['middlewares']);
-        $this->assertEquals($routerData['middlewares'], $router->getGlobalMiddlewares());
-
-        $container->singleton(IRouter::class, $router);
+        $container->singleton(RouterProvider::class, $router);
     }
 }

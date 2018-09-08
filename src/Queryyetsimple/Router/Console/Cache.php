@@ -23,7 +23,7 @@ namespace Leevel\Router\Console;
 use InvalidArgumentException;
 use Leevel\Console\Command;
 use Leevel\Kernel\IProject;
-use Leevel\Router\IRouter;
+use Leevel\Router\RouterProvider;
 
 /**
  * openapi 路由缓存.
@@ -53,19 +53,14 @@ class Cache extends Command
     /**
      * 响应命令.
      *
-     * @param \Leevel\Kernel\IProject $project
-     * @param \Leevel\Router\IRouter  $router
+     * @param \Leevel\Kernel\IProject       $project
+     * @param \Leevel\Router\RouterProvider $routerProvider
      */
-    public function handle(IProject $project, IRouter $router)
+    public function handle(IProject $project, RouterProvider $routerProvider)
     {
         $this->line('Start to cache router.');
 
-        $data = [
-            'basepaths'   => $router->getBasepaths(),
-            'groups'      => $router->getGroups(),
-            'routers'     => $router->getRouters(),
-            'middlewares' => $router->getGlobalMiddlewares(),
-        ];
+        $data = $routerProvider->getRouters();
 
         $cachePath = $project->routerCachedPath();
 

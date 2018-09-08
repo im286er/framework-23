@@ -78,6 +78,19 @@ abstract class RouterProvider extends Provider
      */
     public function register()
     {
+        $this->container->singleton(self::class, $this);
+    }
+
+    /**
+     * 可用服务提供者.
+     *
+     * @return array
+     */
+    public static function providers(): array
+    {
+        return [
+            'Leevel\\Router\\RouterProvider',
+        ];
     }
 
     /**
@@ -85,9 +98,9 @@ abstract class RouterProvider extends Provider
      *
      * @return array
      */
-    public function getRouters()
+    public function getRouters(): array
     {
-        return [];
+        return (new ScanRouter($this->makeMiddlewareParser()))->handle();
     }
 
     /**
