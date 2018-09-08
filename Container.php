@@ -524,7 +524,10 @@ class Container implements IContainer, ArrayAccess
 
         if ($args) {
             $result = array_values($result);
-            $min = count($result);
+
+            // 定义函数 function(IFoo $foo)，调用方法 call([1, 2])，则进行基本的 count($result) 逻辑
+            // 定义函数 function($foo)，调用方法 call([1, 2])，则进行 -($required-$validArgs) 填充 null
+            $min = count($result) - ($required - $validArgs);
 
             foreach ($args as $k => $value) {
                 if (is_int($k)) {
