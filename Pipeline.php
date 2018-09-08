@@ -148,7 +148,16 @@ class Pipeline implements IPipeline
             return $this->traverseGenerator(...func_get_args());
         });
 
-        return $this->generator->current()(...$args);
+        $current = $this->generator->current();
+
+        // Pipeline 内部创建 [stage, method, params]
+        if (is_array($current) && 3 === count($current)) {
+            $params = array_pop($current);
+        } else {
+            $params = [];
+        }
+
+        return $current(...$args, ...$params);
     }
 
     /**
@@ -193,13 +202,14 @@ class Pipeline implements IPipeline
             $method = 'handle';
         }
 
-        if (!is_object($stage = $this->container->make($stage, $params))) {
+        if (!is_object($stage = $this->container->make($stage))) {
             throw new InvalidArgumentException('Stage is invalid.');
         }
 
         return [
             $stage,
             $method,
+            $params,
         ];
     }
 
@@ -217,6 +227,10 @@ class Pipeline implements IPipeline
         if (is_string($args)) {
             $args = explode(',', $args);
         }
+
+        $args = array_map(function (string $item) {
+            return ctype_digit($item) ? (int) $item : $item;
+        }, $args);
 
         return [
             $name,
