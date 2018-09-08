@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Leevel\Router;
 
 use InvalidArgumentException;
+use Leevel\Support\Arr;
 use OpenApi\Annotations\OpenApi;
 use OpenApi\Context;
 
@@ -174,11 +175,6 @@ class OpenApiRouter
                         $routerTmp['bind'] = $this->parseBindBySource($method->_context);
                     }
 
-                    // 解析中间件
-                    if (!empty($routerTmp['middlewares'])) {
-                        $routerTmp['middlewares'] = $this->middlewareParser->handle($routerTmp['middlewares']);
-                    }
-
                     // 解析基础路径和分组
                     // 基础路径如 /api/v1、/web/v2 等等
                     // 分组例如 goods、orders
@@ -186,10 +182,10 @@ class OpenApiRouter
                     $basepathPrefix = '';
 
                     if ($basepaths) {
-                        foreach ($basepaths as $bp) {
-                            if (0 === strpos($routerPath, $bp)) {
-                                $basepathPrefix = $bp;
-                                $routerPath = substr($routerPath, strlen($bp));
+                        foreach ($basepaths as $basepath => $item) {
+                            if (0 === strpos($routerPath, $basepath)) {
+                                $basepathPrefix = $basepath;
+                                $routerPath = substr($routerPath, strlen($basepath));
 
                                 break;
                             }
@@ -210,6 +206,13 @@ class OpenApiRouter
 
                             break;
                         }
+                    }
+
+                    // 解析中间件
+                    if (!empty($routerTmp['middlewares'])) {
+                        $routerTmp['middlewares'] = $this->middlewareParser->handle(
+                            Arr::normalize($routerTmp['middlewares'])
+                        );
                     }
 
                     // 解析域名
@@ -513,12 +516,23 @@ class OpenApiRouter
         }
 
         $basepaths = $externalDocs->leevelBasepaths;
-
         $basepaths = is_array($basepaths) ? $basepaths : [$basepaths];
 
-        $basepaths = array_map(function (string $path) {
-            return '/'.trim($path, '/');
-        }, $basepaths);
+        foreach ($basepaths as $key => $value) {
+            $newKey = '/'.trim($key, '/');
+
+            if (!empty($value['middlewares'])) {
+                $value['middlewares'] = $this->middlewareParser->handle(
+                    Arr::normalize($value['middlewares'])
+                );
+            }
+
+            $basepaths[$newKey] = $value;
+
+            if ($newKey !== $key) {
+                unset($basepaths[$key]);
+            }
+        }
 
         return $basepaths;
     }

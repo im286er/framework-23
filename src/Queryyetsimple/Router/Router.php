@@ -20,7 +20,6 @@ declare(strict_types=1);
 
 namespace Leevel\Router;
 
-use InvalidArgumentException;
 use Leevel\Di\IContainer;
 use Leevel\Http\IRequest;
 use Leevel\Http\IResponse;
@@ -385,10 +384,11 @@ class Router implements IRouter
      * 匹配路径.
      *
      * @param string $path
+     * @param bool   $ignoreMiddleware
      *
      * @return array
      */
-    public function matchePath(string $path): array
+    public function matchePath(string $path, bool $ignoreMiddleware = false): array
     {
         $result = [];
 
@@ -405,11 +405,13 @@ class Router implements IRouter
 
         // 匹配基础路径
         $basepath = '';
+        $baseOptions = [];
 
-        foreach ($this->getBasepaths() as $item) {
+        foreach ($this->getBasepaths() as $item => $option) {
             if (0 === strpos($path, $item)) {
                 $path = substr($path, strlen($item) + 1);
                 $basepath = $item;
+                $baseOptions = $option;
 
                 break;
             }
@@ -459,6 +461,10 @@ class Router implements IRouter
         $result[static::PARAMS] = array_merge($result[static::PARAMS] ?? [], $params);
 
         $result[static::PARAMS][static::BASEPATH] = $basepath ?: null;
+
+        if (false === $ignoreMiddleware) {
+            $result[IRouter::MIDDLEWARES] = $baseOptions['middlewares'] ?? [];
+        }
 
         return $result;
     }
@@ -582,7 +588,7 @@ class Router implements IRouter
     protected function findRouterBind()
     {
         if (false === ($bind = $this->normalizeRouterBind())) {
-            $this->nodeNotFound();
+            $this->routerNotFound();
         }
 
         return $bind;
@@ -634,25 +640,25 @@ class Router implements IRouter
     }
 
     /**
-     * 节点资源未注册异常.
+     * 路由未找到异常.
      */
-    protected function nodeNotFound()
+    protected function routerNotFound()
     {
-        $message = sprintf('The node %s is not found.', $this->makeNode());
+        $message = sprintf('The router %s was not found.', $this->makeRouterNode());
 
-        throw new InvalidArgumentException($message);
+        throw new RouterNotFoundException($message);
     }
 
     /**
-     * 生成节点资源.
+     * 生成路由节点资源.
      *
      * @return string
      */
-    protected function makeNode()
+    protected function makeRouterNode()
     {
         return $this->matchedApp().'\\'.
             $this->parseControllerDir().'\\'.
-            $this->matchedController().'->'.
+            $this->matchedController().'::'.
             $this->matchedAction().'()';
     }
 
