@@ -188,7 +188,7 @@ abstract class Runtime implements IRuntime
      */
     protected function makeHttpResponse(Exception $e): IResponse
     {
-        if (!$this->isHttpException($e) && $this->container->debug()) {
+        if ($this->container->debug()) {
             return $this->convertExceptionToResponse($e);
         }
 
