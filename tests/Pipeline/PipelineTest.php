@@ -36,7 +36,7 @@ use Tests\TestCase;
  */
 class PipelineTest extends TestCase
 {
-    public function testPipelineBasic()
+    public function te2stPipelineBasic()
     {
         $result = (new Pipeline(new Container()))->
 
@@ -249,16 +249,9 @@ class Second
 
 class WithArgs
 {
-    protected $args = [];
-
-    public function __construct($one = null, $two = null)
+    public function handle(Closure $next, $one, $two)
     {
-        $this->args = [$one, $two];
-    }
-
-    public function handle(Closure $next)
-    {
-        $_SERVER['test.WithArgs'] = $this->args;
+        $_SERVER['test.WithArgs'] = [$one, $two];
 
         $next();
     }
