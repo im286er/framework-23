@@ -36,7 +36,7 @@ use Tests\TestCase;
  */
 class PipelineTest extends TestCase
 {
-    public function te2stPipelineBasic()
+    public function testPipelineBasic()
     {
         $result = (new Pipeline(new Container()))->
 
