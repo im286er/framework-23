@@ -278,7 +278,7 @@ class RuntimeTest extends TestCase
 
         $option = new Option([
             'app' => [
-                'debug' => true,
+                'debug' => false,
             ],
         ]);
 
@@ -306,7 +306,7 @@ class RuntimeTest extends TestCase
 
         $option = new Option([
             'app' => [
-                'debug' => true,
+                'debug' => false,
             ],
         ]);
 
@@ -391,6 +391,41 @@ class RuntimeTest extends TestCase
         $this->assertSame(500, $resultResponse->getStatusCode());
     }
 
+    public function testRenderWithDebugIsOn()
+    {
+        $project = new Project($appPath = __DIR__.'/app');
+
+        $request = $this->createMock(IRequest::class);
+
+        $request->method('isAcceptJson')->willReturn(false);
+        $this->assertFalse($request->isAcceptJson());
+
+        $project->singleton('request', function () use ($request) {
+            return $request;
+        });
+
+        $option = new Option([
+            'app' => [
+                'debug' => true,
+            ],
+        ]);
+
+        $project->singleton('option', function () use ($option) {
+            return $option;
+        });
+
+        $runtime = new Runtime2($project);
+
+        $e = new Exception1('hello world');
+
+        $this->assertInstanceof(IResponse::class, $resultResponse = $runtime->render($request, $e));
+
+        $content = $resultResponse->getContent();
+
+        $this->assertContains('Tests\\Bootstrap\\Runtime\\Exception1: hello world', $content);
+        $this->assertSame(500, $resultResponse->getStatusCode());
+    }
+
     public function testRendorWithHttpExceptionViewButNotFoundViewAndWithDefaultView()
     {
         $project = new Project($appPath = __DIR__.'/app');
@@ -460,7 +495,7 @@ class RuntimeTest extends TestCase
 
         $option = new Option([
             'app' => [
-                'debug' => true,
+                'debug' => false,
             ],
         ]);
 
