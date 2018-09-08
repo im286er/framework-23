@@ -46,7 +46,7 @@ QueryPHP was based on the DoYouHaoBaby framework，we have a large code refactor
 
 <p>
   <a href="https://github.com/hunzhiwange/leevel">
-    <img alt="Leevel Version" src="https://img.shields.io/badge/leevel=1.0.0-brightgreen.svg" /></a>
+    <img alt="Leevel Version" src="https://img.shields.io/badge/leevel-=1.0.0-brightgreen.svg" /></a>
   <a href="http://pecl.php.net/package/swoole">
     <img alt="Swoole Version" src="https://img.shields.io/badge/swoole-%3E=4.1.0-brightgreen.svg" /></a>
   <a href="https://github.com/apache/thrift/tree/master/lib/php">
