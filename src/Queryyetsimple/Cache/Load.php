@@ -282,6 +282,10 @@ class Load
             $args = explode(',', $args);
         }
 
+        $args = array_map(function (string $item) {
+            return ctype_digit($item) ? (int) $item : $item;
+        }, $args);
+
         return [
             $name,
             $args,
