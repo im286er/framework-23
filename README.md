@@ -50,7 +50,7 @@ QueryPHP was based on the DoYouHaoBaby framework，we have a large code refactor
   <a href="http://pecl.php.net/package/swoole">
     <img alt="Swoole Version" src="https://img.shields.io/badge/swoole-%3E=4.1.0-brightgreen.svg" /></a>
   <a href="https://github.com/apache/thrift/tree/master/lib/php">
-    <img alt="Thrift Version" src="https://img.shields.io/badge/thrift-%3E=0.10.0-brightgreen.svg" /></a>
+    <img alt="Thrift Version" src="https://img.shields.io/badge/thrift-=0.10.0-brightgreen.svg" /></a>
   <a href="http://pecl.php.net/package/inotify">
     <img alt="Inotify Version" src="https://img.shields.io/badge/inotify-%3E=2.0.0-brightgreen.svg" /></a>
   <a href="http://pecl.php.net/package/v8js">
