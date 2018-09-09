@@ -354,12 +354,12 @@ class Project extends Projects
         $this->cacheFile = $cacheFile;
     }
 
-    public function i18nCachedPath(string $i18n): string
+    public function i18nCachedPath($i18n): string
     {
         return str_replace('[i18n]', $i18n, $this->cacheFile);
     }
 
-    public function i18nPath(string $path = '')
+    public function i18nPath($path = null)
     {
         return __DIR__.'/i18n';
     }
