@@ -201,7 +201,7 @@ abstract class Make extends Command
 
         if (!is_file($templateSource)) {
             throw new RuntimeException(
-                'Template not found.'.PHP_EOL.
+                'Stub not found.'.PHP_EOL.
                 $this->formatFile($templateSource)
             );
         }
