@@ -248,7 +248,7 @@ interface IProject extends IContainer
      *
      * @return string
      */
-    public function i18nPath(string $path = '');
+    public function i18nPath($path = null);
 
     /**
      * 设置环境变量路径.
@@ -296,7 +296,7 @@ interface IProject extends IContainer
      *
      * @return string
      */
-    public function i18nCachedPath(string $i18n): string;
+    public function i18nCachedPath($i18n): string;
 
     /**
      * 是否存在语言包缓存.

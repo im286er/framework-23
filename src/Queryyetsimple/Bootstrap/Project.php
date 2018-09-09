@@ -449,10 +449,10 @@ class Project extends Container implements IProject
      *
      * @return string
      */
-    public function i18nPath(string $path = '')
+    public function i18nPath($path = null)
     {
         return ($this->i18nPath ?? $this->path.DIRECTORY_SEPARATOR.'i18n').
-            $this->normalizePath($path);
+            $this->normalizePath($path ?: '');
     }
 
     /**
@@ -512,7 +512,7 @@ class Project extends Container implements IProject
      *
      * @return string
      */
-    public function i18nCachedPath(string $i18n): string
+    public function i18nCachedPath($i18n): string
     {
         return $this->runtimePath().'/i18n/'.$i18n.'.php';
     }
