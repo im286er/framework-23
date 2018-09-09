@@ -79,7 +79,7 @@ EOF;
 
         // 设置模板路径
         $this->setTemplatePath(
-            __DIR__.'/template/'.
+            __DIR__.'/stub/'.
             ($this->option('extend') ? 'action' : 'action_without_extend')
         );
 
