@@ -123,7 +123,7 @@ class MakeTest extends TestCase
             'template'        => 'notFound',
         ]);
 
-        $this->assertContains('Template not found.', $result);
+        $this->assertContains('Stub not found.', $result);
     }
 
     public function testFileParentDirIsNotWritable()
