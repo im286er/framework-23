@@ -21,10 +21,11 @@ declare(strict_types=1);
 namespace Leevel\I18n\Console;
 
 use InvalidArgumentException;
+use Leevel\Bootstrap\Bootstrap\LoadI18n;
 use Leevel\Console\Command;
-use Leevel\I18n\II18n;
+use Leevel\Filesystem\Fso;
+use Leevel\I18n\Load;
 use Leevel\Kernel\IProject;
-use Leevel\Option\IOption;
 
 /**
  * 语言包缓存.
@@ -52,25 +53,74 @@ class Cache extends Command
     protected $description = 'Cache i18n to a file';
 
     /**
+     * IOC 容器.
+     *
+     * @var \Leevel\Kernel\IProject
+     */
+    protected $project;
+
+    /**
+     * 扩展语言包目录.
+     *
+     * @var array
+     */
+    protected $extends;
+
+    /**
      * 响应命令.
      *
      * @param \Leevel\Kernel\IProject $project
-     * @param \Leevel\I18n\II18n      $i18n
-     * @param \Leevel\Option\IOption  $option
      */
-    public function handle(IProject $project, II18n $i18n, IOption $option)
+    public function handle(IProject $project)
     {
+        $this->project = $project;
+        $this->extends = $this->extends();
+
         $this->line('Start to cache i18n.');
 
-        $data = $i18n->all();
+        Fso::listDirectory($project->i18nPath(), false, function ($item) use ($project) {
+            if ($item->isDir()) {
+                $i18n = $item->getFilename();
 
-        $i18nDefault = $option->get('i18n\\default');
+                $data = $this->data($i18n);
 
-        $cachePath = $project->i18nCachedPath($i18nDefault);
+                $cachePath = $project->i18nCachedPath($i18n);
 
-        $this->writeCache($cachePath, $data);
+                $this->writeCache($cachePath, $data);
 
-        $this->info(sprintf('I18n file %s cache successed.', $cachePath));
+                $this->info(sprintf('I18n file %s cache successed.', $cachePath));
+            }
+        });
+
+        $this->info('I18n files cache successed.');
+    }
+
+    /**
+     * 获取语言包扩展.
+     *
+     * @return array
+     */
+    protected function extends(): array
+    {
+        return (new LoadI18n())->getExtend($this->project);
+    }
+
+    /**
+     * 获取语言数据.
+     *
+     * @param string $i18n
+     *
+     * @return array
+     */
+    protected function data(string $i18n): array
+    {
+        $load = (new Load([$this->project->i18nPath()]))->
+
+        setI18n($i18n)->
+
+        addDir($this->extends);
+
+        return $load->loadData();
     }
 
     /**
