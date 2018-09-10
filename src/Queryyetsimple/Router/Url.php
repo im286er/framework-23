@@ -174,7 +174,7 @@ class Url implements IUrl
             return $url;
         }
 
-        return $this->isSecure() ? 'https://' : 'http://'.
+        return ($this->isSecure() ? 'https://' : 'http://').
             ($domain && '*' !== $domain ? $domain.'.' : '').
             $this->option['domain_top'].
             $url;

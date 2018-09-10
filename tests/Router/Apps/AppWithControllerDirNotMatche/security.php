@@ -18,8 +18,6 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Petstore30;
-
 /**
  * @OA\SecurityScheme(
  *     type="oauth2",
@@ -41,6 +39,6 @@ namespace Petstore30;
  *     name="api_key"
  * )
  */
-class security
+class Foobar
 {
 }

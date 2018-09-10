@@ -18,22 +18,22 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Tests\Router\Apps\App1\Controllers;
+namespace Tests\Router\Apps\Petstore30\Controllers;
 
 /**
- * Class Pet.
+ * Class HomeIgnore.
  *
  *
- * @author  Donii Sergii <doniysa@gmail.com>
+ * @author  Xiangmin Liu <635750556@qq.com>
  */
-class Pet
+class HomeIgnore
 {
     /**
      * @OA\Get(
-     *     path="/api/v1/petLeevel/{petId:[A-Za-z]+}/",
+     *     path="/",
      *     tags={"pet"},
-     *     summary="Just test the router",
-     *     operationId="petLeevel",
+     *     summary="Will be ignore",
+     *     operationId="petLeevelForApi",
      *     @OA\Parameter(
      *         name="petId",
      *         in="path",
@@ -50,25 +50,19 @@ class Pet
      *     ),
      *     security={
      *         {"petstore_auth": {"write:pets", "read:pets"}}
-     *     },
-     *     requestBody={"$ref": "#/components/requestBodies/Pet"},
-     *     leevelScheme="https",
-     *     leevelDomain="{subdomain:[A-Za-z]+}-vip.{domain}",
-     *     leevelParams={"args1": "hello", "args2": "world"},
-     *     leevelBind="/PetLeevel/show/?query1=foo&query2=bar",
-     *     leevelMiddlewares="api"
+     *     }
      * )
      */
-    public function petLeevel()
+    public function Home1()
     {
     }
 
     /**
      * @OA\Get(
-     *     path="/api/v2/petLeevelIgnore/",
+     *     path="",
      *     tags={"pet"},
-     *     summary="Just test ignore the router",
-     *     operationId="petLeevelIgnore",
+     *     summary="Will be ignore",
+     *     operationId="petLeevelV2Api",
      *     @OA\Parameter(
      *         name="petId",
      *         in="path",
@@ -89,7 +83,7 @@ class Pet
      *     leevelIgnore=true
      * )
      */
-    public function petLeevelIgnore()
+    public function home2()
     {
     }
 }

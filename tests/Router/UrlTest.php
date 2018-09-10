@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace Tests\Router;
 
-use Leevel\Http\Request;
+use Leevel\Http\IRequest;
 use Leevel\Router\Url;
 use Tests\TestCase;
 
@@ -37,8 +37,10 @@ class UrlTest extends TestCase
 {
     public function testMakeUrl()
     {
-        $request = Request::createFromGlobals();
+        $request = $this->makeRequest();
         $url = new Url($request);
+
+        $this->assertInstanceof(IRequest::class, $url->getRequest());
 
         // 开始不带斜线，自动添加
         $this->assertSame($url->make('/'), '/');
@@ -56,25 +58,74 @@ class UrlTest extends TestCase
         $this->assertSame($url->make('/new-{id}-{name}', ['id' => 5, 'name' => 'tom', 'arg1' => '5']), '/new-5-tom?arg1=5');
         $this->assertSame($url->make('/new-{id}-{name}?hello=world', ['id' => 5, 'name' => 'tom', 'arg1' => '5']), '/new-5-tom?hello=world&arg1=5');
         $this->assertSame($url->make('/new-{id}-{name}?hello={foo}', ['id' => 5, 'name' => 'tom', 'foo' => 'bar', 'arg1' => '5']), '/new-5-tom?hello=bar&arg1=5');
+    }
 
-        $urlDomain = new Url($request, [
+    public function testWithDomainTop()
+    {
+        $request = $this->makeRequest();
+        $url = new Url($request, [
             'domain_top' => 'queryphp.com',
         ]);
 
-        $this->assertSame($urlDomain->make('hello/world'), 'http://www.queryphp.com/hello/world');
-        $this->assertSame($urlDomain->make('hello/world', [], 'vip'), 'http://vip.queryphp.com/hello/world');
-        $this->assertSame($urlDomain->make('hello/world', [], 'defu.vip'), 'http://defu.vip.queryphp.com/hello/world');
-        $this->assertSame($urlDomain->make('hello/world', [], '*'), 'http://queryphp.com/hello/world');
+        $this->assertSame($url->make('hello/world'), 'http://www.queryphp.com/hello/world');
+        $this->assertSame($url->make('hello/world', [], 'vip'), 'http://vip.queryphp.com/hello/world');
+        $this->assertSame($url->make('hello/world', [], 'defu.vip'), 'http://defu.vip.queryphp.com/hello/world');
+        $this->assertSame($url->make('hello/world', [], '*'), 'http://queryphp.com/hello/world');
     }
 
     public function testSetOption()
     {
-        $request = Request::createFromGlobals();
+        $request = $this->makeRequest();
         $url = new Url($request);
 
         $this->assertSame($url->make('hello/world'), '/hello/world');
 
         $url->setOption('domain_top', 'queryphp.cn');
         $this->assertSame($url->make('hello/world'), 'http://www.queryphp.cn/hello/world');
+    }
+
+    public function testSecure()
+    {
+        $request = $this->makeRequest(true);
+        $url = new Url($request);
+
+        $this->assertInstanceof(IRequest::class, $url->getRequest());
+
+        $this->assertSame($url->make('hello/world'), '/hello/world');
+    }
+
+    public function testWithVarButNotMatche()
+    {
+        $request = $this->makeRequest();
+        $url = new Url($request);
+
+        $this->assertInstanceof(IRequest::class, $url->getRequest());
+
+        $this->assertSame('/hello/{foo}', $url->make('hello/{foo}', []));
+    }
+
+    public function testSecureWithDomainTop()
+    {
+        $request = $this->makeRequest(true);
+        $url = new Url($request, [
+            'domain_top' => 'queryphp.cn',
+        ]);
+
+        $this->assertInstanceof(IRequest::class, $url->getRequest());
+
+        $this->assertSame($url->make('hello/world'), 'https://www.queryphp.cn/hello/world');
+    }
+
+    protected function makeRequest(bool $isSecure = false): IRequest
+    {
+        $request = $this->createMock(IRequest::class);
+
+        $request->method('getEnter')->willReturn('');
+        $this->assertSame('', $request->getEnter());
+
+        $request->method('isSecure')->willReturn($isSecure);
+        $this->assertSame($isSecure, $request->isSecure($isSecure));
+
+        return $request;
     }
 }

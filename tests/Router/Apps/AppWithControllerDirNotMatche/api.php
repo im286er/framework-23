@@ -18,8 +18,6 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Petstore30;
-
 /**
  * @OA\Info(
  *     description="This is a sample Petstore server.  You can find

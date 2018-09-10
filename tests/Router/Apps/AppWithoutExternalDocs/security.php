@@ -18,43 +18,27 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Petstore30;
-
 /**
- * Class Category.
- *
- *
- * @author  Donii Sergii <doniysa@gmail.com>
- *
- * @OA\Schema(
- *     type="object",
- *     description="Pets Category",
- *     title="Pets Category",
- *     @OA\Xml(
- *         name="Category"
+ * @OA\SecurityScheme(
+ *     type="oauth2",
+ *     name="petstore_auth",
+ *     securityScheme="petstore_auth",
+ *     @OA\Flow(
+ *         flow="implicit",
+ *         authorizationUrl="http://petstore.swagger.io/oauth/dialog",
+ *         scopes={
+ *             "write:pets": "modify pets in your account",
+ *             "read:pets": "read your pets",
+ *         }
  *     )
  * )
+ * @OA\SecurityScheme(
+ *     type="apiKey",
+ *     in="header",
+ *     securityScheme="api_key",
+ *     name="api_key"
+ * )
  */
-class Category
+class Foobar
 {
-    /**
-     * @OA\Property(
-     *     title="ID",
-     *     description="ID",
-     *     format="int64",
-     * )
-     *
-     * @var int
-     */
-    private $id;
-
-    /**
-     * @OA\Property(
-     *     title="Category name",
-     *     description="Category name"
-     * )
-     *
-     * @var string
-     */
-    private $name;
 }

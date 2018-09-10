@@ -125,8 +125,6 @@ class Url implements IMatch
 
         if (isset($urlRouters[$firstLetter])) {
             $urlRouters = $urlRouters[$firstLetter];
-        } elseif (isset($urlRouters['_'])) {
-            $urlRouters = $urlRouters['_'];
         } else {
             return [];
         }

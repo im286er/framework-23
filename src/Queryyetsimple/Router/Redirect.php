@@ -63,19 +63,16 @@ class Redirect
      *
      * @param string $url
      * @param array  $params
-     * @param array  $option
-     * @sub boolean suffix 是否包含后缀
-     * @sub boolean normal 是否为普通 url
-     * @sub string subdomain 子域名
-     *
-     * @param int   $status
-     * @param array $headers
+     * @param string $subdomain
+     * @param mixed  $suffix
+     * @param int    $status
+     * @param array  $headers
      *
      * @return \Leevel\Http\RedirectResponse
      */
-    public function url(?string $url, $params = [], $option = [], int $status = 302, array $headers = [])
+    public function url(?string $url, $params = [], string $subdomain = 'www', $suffix = null, int $status = 302, array $headers = []): RedirectResponse
     {
-        $url = $this->url->make($url, $params, $option);
+        $url = $this->url->make($url, $params, $subdomain, $suffix);
 
         return $this->createRedirectResponse($url, $status, $headers);
     }
@@ -99,7 +96,7 @@ class Redirect
      *
      * @return \Leevel\Router\Url
      */
-    public function getUrl()
+    public function getUrl(): Url
     {
         return $this->url;
     }

@@ -178,8 +178,13 @@ class OpenApiRouter
                     // 解析基础路径和分组
                     // 基础路径如 /api/v1、/web/v2 等等
                     // 分组例如 goods、orders
+                    // 首页 `/` 默认提供 Home::show 需要过滤
                     $routerPath = '/'.trim($path->path, '/').'/';
                     $basepathPrefix = '';
+
+                    if ('//' === $routerPath) {
+                        continue;
+                    }
 
                     if ($basepaths) {
                         foreach ($basepaths as $basepath => $item) {
@@ -192,12 +197,7 @@ class OpenApiRouter
                         }
                     }
 
-                    if (strlen($routerPath) > 1) {
-                        $prefix = $routerPath[1];
-                    } else {
-                        $prefix = '_';
-                    }
-
+                    $prefix = $routerPath[1];
                     $groupPrefix = '_';
 
                     foreach ($groups as $g) {
@@ -505,7 +505,7 @@ class OpenApiRouter
      */
     protected function parseBasepaths(OpenApi $openApi): array
     {
-        if (!$openApi->externalDocs) {
+        if (\OpenApi\UNDEFINED === $openApi->externalDocs) {
             return [];
         }
 
@@ -544,9 +544,11 @@ class OpenApiRouter
      */
     protected function makeOpenApi(): OpenApi
     {
+        // @codeCoverageIgnoreStart
         if (!function_exists('\\OpenApi\\scan')) {
             require_once dirname(__DIR__, 5).'/zircote/swagger-php/src/functions.php';
         }
+        // @codeCoverageIgnoreEnd
 
         return \OpenApi\scan($this->scandirs);
     }
