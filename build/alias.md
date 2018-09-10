@@ -159,15 +159,13 @@ The code below need to be add.
     stpull = !git subtree pull --prefix=src/Queryyetsimple/$1 $1 master \
         && :
 
-    stpush = !git subtree split --rejoin --prefix=src/Queryyetsimple/$1 master \
-        && git subtree push --prefix=src/Queryyetsimple/$1 $1 master \
+    stpush = git subtree push --prefix=src/Queryyetsimple/$1 $1 master \
         && :
 
     testspull = !git subtree pull --prefix=tests tests master \
         && :
 
-    testspush = !git subtree split --rejoin --prefix=tests master \
-        && git subtree push --prefix=tests tests master \
+    testspush = git subtree push --prefix=tests tests master \
         && :
 ```
 
